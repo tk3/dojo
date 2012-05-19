@@ -14,7 +14,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(INCLUDES) $(CFLAGS) -c $<
 
 debug:
-	make -f Makefile CFLAGS+="-g" LDFLAGS+="-g"
+	make -f Makefile CFLAGS="-g $(CFLAGS)" LDFLAGS="-g $(LDFLAGS)"
 
 clean:
 	rm -f $(TARGET) $(OBJS)
