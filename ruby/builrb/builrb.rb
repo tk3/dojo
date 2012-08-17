@@ -48,6 +48,10 @@ module Builrb
         :remove => lambda {|opts, argvs|
           puts ">> remove"
           opts[:remove] = {}
+          opts[:remove][:app_name] = argvs[1]
+
+          return false  unless opts[:remove][:app_name]
+
           true
         },
       }
@@ -74,6 +78,7 @@ module Builrb
       self.config(arg[:config])  unless arg[:config].nil?
       self.list(arg[:list])  unless arg[:list].nil?
       self.install(arg[:install])  unless arg[:install].nil?
+      self.remove(arg[:remove])  unless arg[:remove].nil?
 
     end
 
@@ -193,6 +198,62 @@ module Builrb
         else
           FileUtils.ln_s(f, "#{install_dir}#{n}")
           puts "ln: #{f} -> #{install_dir}#{n}"
+        end
+      end
+    end
+
+    def remove(options)
+      app_name = options[:app_name]
+      puts "remove> app_name=#{app_name}"
+
+      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
+      tool_db = "#{tool_home}/db"
+
+      return  unless FileTest.exist?("#{tool_home}/db")
+
+      yaml = YAML.load_file(tool_db)
+      return  unless yaml.key?("config")
+      install_dir = yaml["config"]["install_dir"] || "/usr/local"
+      puts "remove> install_dir=#{install_dir}"
+
+      return  unless yaml.key?("installed")
+      return  unless yaml["installed"].key?(app_name)
+      return  unless yaml["installed"][app_name].key?("files")
+
+      src_files = yaml["installed"][app_name]["files"]
+
+      return  if check_if_link_files_exist(src_files, install_dir) == false
+
+      remove_link_files(src_files, install_dir)
+
+      yaml["installed"].delete(app_name)
+
+      File.open("#{tool_home}/db", "w") do |fout|
+        YAML.dump(yaml, fout)
+      end
+    end
+
+    def check_if_link_files_exist(files, install_dir)
+      base = File.dirname(files[0])
+
+      files.all? do |f|
+        if FileTest.directory?(f)
+          true
+        else
+          n = f.sub(/^#{base}/, '')
+          FileTest.symlink?("#{install_dir}#{n}")
+        end
+      end
+    end
+
+    def remove_link_files(files, install_dir)
+      base = File.dirname(files[0])
+
+      files.each do |f|
+        n = f.sub(/^#{base}/, '')
+        if FileTest.symlink?("#{install_dir}#{n}")
+#         puts "remove ... #{install_dir}#{n}"
+          FileUtils.rm("#{install_dir}#{n}")
         end
       end
     end
