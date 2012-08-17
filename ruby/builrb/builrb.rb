@@ -49,7 +49,34 @@ module Builrb
     end
 
     def start(argv)
-      p Builrb::Argv.parse(argv)
+      arg = Builrb::Argv.parse(argv)
+      return  if arg.nil?
+
+      unless arg[:init].nil?
+        self.init
+      end
+
+    end
+
+    def init
+      require "yaml"
+
+      ENV["BUILRB_HOME"] = "conf"
+      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
+
+      FileUtils.mkdir_p(tool_home)  unless FileTest.exist?(tool_home)
+
+      unless FileTest.exist?("#{tool_home}/db")
+        yaml = {}
+        yaml["version"] = "1.0"
+        yaml["installed"] = {}
+
+        File.open("#{tool_home}/db", "w") do |fout|
+          YAML.dump(yaml, fout)
+        end
+      end
+
+      true
     end
   end
 end
