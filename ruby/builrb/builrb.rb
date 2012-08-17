@@ -1,6 +1,7 @@
 #!/bin/env ruby
 
 require "fileutils"
+require "yaml"
 
 module Builrb
   class Argv
@@ -61,8 +62,6 @@ module Builrb
     end
 
     def init(options)
-      require "yaml"
-
       ENV["BUILRB_HOME"] = "conf"
       tool_home = options[:tool_home] || ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
       puts ">> tool_home = #{tool_home}"
@@ -83,7 +82,6 @@ module Builrb
     end
 
     def list(options)
-      require "yaml"
 
       tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
       tool_db = "#{tool_home}/db"
@@ -100,8 +98,6 @@ module Builrb
     end
 
     def install(path)
-      require "yaml"
-
       src_files = Dir.glob("#{path}/**/*")
       appname = File.basename(path)
     end
