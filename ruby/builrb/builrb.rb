@@ -52,9 +52,8 @@ module Builrb
       arg = Builrb::Argv.parse(argv)
       return  if arg.nil?
 
-      unless arg[:init].nil?
-        self.init
-      end
+      self.init  unless arg[:init].nil?
+      self.list  unless arg[:list].nil?
 
     end
 
@@ -77,6 +76,25 @@ module Builrb
       end
 
       true
+    end
+
+    def list
+      require "yaml"
+
+      ENV["BUILRB_HOME"] = "conf"
+      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
+      tool_db = "#{tool_home}/db"
+
+      return  unless FileTest.exist?("#{tool_home}/db")
+
+      yaml = YAML.load_file(tool_db)
+
+      return  unless yaml.key?("installed")
+
+      yaml["installed"].keys.each do |appname|
+        puts "    #{appname}"
+      end
+
     end
   end
 end
