@@ -39,6 +39,10 @@ module Builrb
         :install => lambda {|opts, argvs|
           puts ">> install"
           opts[:install] = {}
+          opts[:install][:path] = argvs[1]
+
+          return false  unless opts[:install][:path]
+
           true
         },
         :remove => lambda {|opts, argvs|
@@ -69,6 +73,7 @@ module Builrb
       self.init(arg[:init])  unless arg[:init].nil?
       self.config(arg[:config])  unless arg[:config].nil?
       self.list(arg[:list])  unless arg[:list].nil?
+      self.install(arg[:install])  unless arg[:install].nil?
 
     end
 
@@ -121,14 +126,75 @@ module Builrb
 
       return  unless yaml.key?("installed")
 
-      yaml["installed"].keys.each do |appname|
-        puts "    #{appname}"
+      yaml["installed"].keys.each do |app_name|
+        puts "    #{app_name}"
       end
     end
 
-    def install(path)
+    def install(options)
+      path = options[:path]
+      puts "install> path=#{path}"
+
       src_files = Dir.glob("#{path}/**/*")
-      appname = File.basename(path)
+      return  if src_files.empty?
+
+      app_name = File.basename(path)
+      puts "install> app_name=#{app_name}"
+
+      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
+      tool_db = "#{tool_home}/db"
+
+      return  unless FileTest.exist?("#{tool_home}/db")
+
+      yaml = YAML.load_file(tool_db)
+      return  unless yaml.key?("config")
+      install_dir = yaml["config"]["install_dir"] || "/usr/local"
+      puts "install> install_dir=#{install_dir}"
+
+      FileUtils.mkdir_p(install_dir)  unless FileTest.directory?(install_dir)
+
+      return  if check_if_already_installed(src_files, install_dir) == false
+
+      link_files(src_files, install_dir)
+
+      yaml["installed"][app_name] = {}
+      yaml["installed"][app_name]["files"] = src_files
+
+      File.open("#{tool_home}/db", "w") do |fout|
+        YAML.dump(yaml, fout)
+      end
+    end
+
+    def check_if_already_installed(files, install_dir)
+      base = File.dirname(files[0])
+
+      files.all? do |f|
+        if FileTest.directory?(f)
+          true
+        else
+          n = f.sub(/^#{base}/, '')
+          if FileTest.exist?("#{install_dir}#{n}")
+            false
+          else
+            true
+          end
+        end
+      end
+    end
+
+    def link_files(files, install_dir)
+      base = File.dirname(files[0])
+
+      files.each do |f|
+        n = f.sub(/^#{base}/, '')
+        if FileTest.directory?(f)
+          FileUtils.mkdir_p("#{install_dir}#{n}")
+          puts "mkdir_p: #{install_dir}#{n}"
+        else
+          FileUtils.ln_s(f, "#{install_dir}#{n}")
+          puts "ln: #{f} -> #{install_dir}#{n}"
+        end
+      end
     end
   end
 end
