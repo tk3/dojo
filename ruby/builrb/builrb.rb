@@ -16,9 +16,19 @@ module Builrb
     def self.parse(argvs)
       option_spec = {
         :init => lambda {|opts, argvs|
-          puts ">> list"
+          puts ">> init"
           opts[:init] = {}
           opts[:init][:tool_home] = argvs[1]
+          true
+        },
+        :config => lambda {|opts, argvs|
+          puts ">> config"
+          opts[:config] = {}
+          opts[:config][:name] = argvs[1]
+          opts[:config][:value] = argvs[2]
+
+          return false  unless opts[:config][:name] && opts[:config][:value]
+
           true
         },
         :list => lambda {|opts, argvs|
@@ -57,12 +67,12 @@ module Builrb
       return  if arg.nil?
 
       self.init(arg[:init])  unless arg[:init].nil?
+      self.config(arg[:config])  unless arg[:config].nil?
       self.list(arg[:list])  unless arg[:list].nil?
 
     end
 
     def init(options)
-      ENV["BUILRB_HOME"] = "conf"
       tool_home = options[:tool_home] || ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
       puts ">> tool_home = #{tool_home}"
 
@@ -71,6 +81,7 @@ module Builrb
       unless FileTest.exist?("#{tool_home}/db")
         yaml = {}
         yaml["version"] = "1.0"
+        yaml["config"] = {}
         yaml["installed"] = {}
 
         File.open("#{tool_home}/db", "w") do |fout|
@@ -81,8 +92,26 @@ module Builrb
       true
     end
 
-    def list(options)
+    def config(options)
+#     puts "config: #{options[:name]}=#{options[:value]}"
 
+      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
+      tool_db = "#{tool_home}/db"
+
+      return  unless FileTest.exist?("#{tool_home}/db")
+
+      yaml = YAML.load_file(tool_db)
+
+      yaml["config"] = {}  unless yaml.key?("config")
+
+      yaml["config"][options[:name]] = options[:value]
+
+      File.open("#{tool_home}/db", "w") do |fout|
+        YAML.dump(yaml, fout)
+      end
+    end
+
+    def list(options)
       tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
       tool_db = "#{tool_home}/db"
 
