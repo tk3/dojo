@@ -2,6 +2,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace System::Collections;
 
 Foo::Foo()
 {
@@ -55,6 +56,17 @@ int Foo::TestObject(... array<Object^>^ arr)
         Object^ obj = arr[i];
 
         Console::WriteLine("TestObject: {0}", obj->GetType()->ToString());
+    }
+
+    return 0;
+}
+
+int Foo::TestArrayList(ArrayList^ arr)
+{
+    for (int i = 0; i < arr->Count; i++) {
+        Object^ obj = arr[i];
+
+        Console::WriteLine("TestArrayList: {0}", obj->GetType()->ToString());
     }
 
     return 0;

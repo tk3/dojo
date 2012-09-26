@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 class Program
 {
@@ -11,6 +12,13 @@ class Program
         f.TestString("aaa", "bbb", "ccc");
 
         f.TestObject(1, "aaa");
+
+        ArrayList arr = new ArrayList();
+        arr.Add("abcd");
+        arr.Add(200);
+        arr.Add('p');
+        f.TestArrayList(arr);
+
     }
 }
 
