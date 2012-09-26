@@ -71,3 +71,12 @@ int Foo::TestArrayList(ArrayList^ arr)
 
     return 0;
 }
+
+int Foo::TestHashtable(Hashtable^ ht)
+{
+    for each (DictionaryEntry entry in ht) {
+        Console::WriteLine("TestHashTable: {0} = {1}", entry.Key, entry.Value);
+    }
+
+    return 0;
+}

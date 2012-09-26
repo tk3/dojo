@@ -19,6 +19,12 @@ class Program
         arr.Add('p');
         f.TestArrayList(arr);
 
+        Hashtable ht = new Hashtable();
+        ht.Add("one", "100");
+        ht.Add("two", "200");
+        ht.Add("three", "300");
+        f.TestHashtable(ht);
+
     }
 }
 

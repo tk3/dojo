@@ -17,5 +17,6 @@ public:
     int TestString(... array<String^>^ arr);
     int TestObject(... array<Object^>^ arr);
     int TestArrayList(ArrayList^ arr);
+    int TestHashtable(Hashtable^ ht);
 };
 
