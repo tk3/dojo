@@ -39,7 +39,7 @@ int Foo::TestString(... array<String^>^ arr)
 
         ptr = Marshal::StringToHGlobalAnsi(arr[i]);
 
-        cout << "TestString [" << i << "]: " << (char *)ptr.ToPointer() << endl; 
+        cout << "TestString[" << i << "]: " << (char *)ptr.ToPointer() << endl; 
 
         Marshal::FreeHGlobal(ptr);
     }
@@ -49,6 +49,13 @@ int Foo::TestString(... array<String^>^ arr)
 
 int Foo::TestObject(... array<Object^>^ arr)
 {
+    int n = arr->GetLength(0);
+
+    for (int i = 0; i < n; i++) {
+        Object^ obj = arr[i];
+
+        Console::WriteLine("TestObject: {0}", obj->GetType()->ToString());
+    }
 
     return 0;
 }

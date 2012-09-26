@@ -10,6 +10,7 @@ class Program
 
         f.TestString("aaa", "bbb", "ccc");
 
+        f.TestObject(1, "aaa");
     }
 }
 
