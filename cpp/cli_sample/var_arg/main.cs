@@ -8,6 +8,7 @@ class Program
         Foo f = new Foo();
 
         Console.WriteLine("TestInt = {0}", f.TestInt(1, 2, 3, 4, 5));
+        Console.WriteLine("TestInt = {0}", f.TestInt());
 
         f.TestString("aaa", "bbb", "ccc");
 
