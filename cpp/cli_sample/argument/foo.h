@@ -9,14 +9,14 @@ public ref class Foo
 private:
 
 public:
-    Foo();
-    ~Foo();
-    !Foo();
+//    Foo();
+//    ~Foo();
+//    !Foo();
 
-    int TestInt(... array<Int32>^ arr);
-    int TestString(... array<String^>^ arr);
-    int TestObject(... array<Object^>^ arr);
-    int TestArrayList(ArrayList^ arr);
-    int TestHashtable(Hashtable^ ht);
+    static int TestInt(... array<Int32>^ arr);
+    static int TestString(... array<String^>^ arr);
+    static int TestObject(... array<Object^>^ arr);
+    static int TestArrayList(ArrayList^ arr);
+    static int TestHashtable(Hashtable^ ht);
 };
 

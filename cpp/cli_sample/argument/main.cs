@@ -5,27 +5,24 @@ class Program
 {
     static void Main(string[] arg)
     {
-        Foo f = new Foo();
+        Console.WriteLine("TestInt = {0}", Foo.TestInt(1, 2, 3, 4, 5));
+        Console.WriteLine("TestInt = {0}", Foo.TestInt());
 
-        Console.WriteLine("TestInt = {0}", f.TestInt(1, 2, 3, 4, 5));
-        Console.WriteLine("TestInt = {0}", f.TestInt());
+        Foo.TestString("aaa", "bbb", "ccc");
 
-        f.TestString("aaa", "bbb", "ccc");
-
-        f.TestObject(1, "aaa");
+        Foo.TestObject(1, "aaa");
 
         ArrayList arr = new ArrayList();
         arr.Add("abcd");
         arr.Add(200);
         arr.Add('p');
-        f.TestArrayList(arr);
+        Foo.TestArrayList(arr);
 
         Hashtable ht = new Hashtable();
         ht.Add("one", "100");
         ht.Add("two", "200");
         ht.Add("three", "300");
-        f.TestHashtable(ht);
-
+        Foo.TestHashtable(ht);
     }
 }
 

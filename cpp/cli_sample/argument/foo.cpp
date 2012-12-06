@@ -4,6 +4,7 @@
 using namespace std;
 using namespace System::Collections;
 
+/*
 Foo::Foo()
 {
     return;
@@ -18,6 +19,7 @@ Foo::!Foo()
 {
     return;
 }
+*/
 
 int Foo::TestInt(... array<Int32>^ arr)
 {
