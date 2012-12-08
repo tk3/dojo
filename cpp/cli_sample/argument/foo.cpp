@@ -4,23 +4,6 @@
 using namespace std;
 using namespace System::Collections;
 
-/*
-Foo::Foo()
-{
-    return;
-}
-
-Foo::~Foo()
-{
-    this->!Foo();
-}
-
-Foo::!Foo()
-{
-    return;
-}
-*/
-
 int Foo::TestInt(... array<Int32>^ arr)
 {
     int sum = 0;
@@ -56,6 +39,9 @@ int Foo::TestObject(... array<Object^>^ arr)
 
     for (int i = 0; i < n; i++) {
         Object^ obj = arr[i];
+        
+//        Type^ t = obj->GetType();
+//        if (t == String::typeid) {
 
         Console::WriteLine("TestObject: {0}", obj->GetType()->ToString());
     }
