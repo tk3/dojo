@@ -1,0 +1,9 @@
+
+
+パッケージをインストールする
+$ apt-get install <name>
+
+
+キーワードに一致するインストール可能なパッケージを表示する
+$ apt-cache search <keyword>
+

@@ -1,0 +1,39 @@
+Installing Ruby 1.9.3 on Ubuntu 12.04.1 LTS with RVM
+
+
+[RVM: Ruby Version Manager - Installing RVM](https://rvm.io/rvm/install/ "RVM: Ruby Version Manager - Installing RVM")
+
+
+$ ruby
+The program 'ruby' can be found in the following packages:
+ * ruby1.8
+ * ruby1.9.1
+Try: sudo apt-get install <selected package>
+
+
+
+$ curl -L https://get.rvm.io | bash -s stable
+
+$ source ~/.bashrc
+
+$ rvm requirements
+
+Requirements for Linux "Ubuntu 12.04.1 LTS"
+
+...
+
+Additional Dependencies:
+# For Ruby / Ruby HEAD (MRI, Rubinius, & REE), install the following:
+  ruby: /usr/bin/apt-get install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion pkg-config
+...
+
+
+インストール可能なバージョンの一覧が表示される
+$ rvm list known
+
+$ rvm install 1.9.3
+
+インストールされているバージョンを表示する
+$ rvm list
+
+$ rvm use 1.9.3

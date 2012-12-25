@@ -1,0 +1,28 @@
+
+$ ssh-keygen -t rsa -C "foo@example.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/foo/.ssh/id_rsa):
+Created directory '/home/foo/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/foo/.ssh/id_rsa.
+Your public key has been saved in /home/foo/.ssh/id_rsa.pub.
+
+$ cat /home/foo/.ssh/id_rsa.pub.
+
+
+$ ssh -T git@github.com
+
+--------
+
+	touch README.md
+	git init
+	git add README.md
+	git commit -m "first commit"
+	git remote add origin git@github.com:qtakamitsu/prefarb.git
+	git push -u origin master
+	
+	Push an existing repository from the command line
+	git remote add origin https://github.com/qtakamitsu/prefarb.git
+	git push -u origin master
+
