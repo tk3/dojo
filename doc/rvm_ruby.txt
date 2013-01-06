@@ -27,7 +27,17 @@ Additional Dependencies:
   ruby: /usr/bin/apt-get install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion pkg-config
 ...
 
+--------------------------------------------------------------------------------
+Installing Ruby 1.9.3 on Mac with RVM
 
+$ curl -L https://get.rvm.io | bash -s stable
+
+$ source ~/.bashrc
+
+$ rvm use 1.9.3
+
+
+--------------------------------------------------------------------------------
 インストール可能なバージョンの一覧が表示される
 $ rvm list known
 
@@ -36,4 +46,9 @@ $ rvm install 1.9.3
 インストールされているバージョンを表示する
 $ rvm list
 
+指定したバージョンのRubyを使う
 $ rvm use 1.9.3
+
+デフォルトで使用するバージョンを指定する
+$ rvm use 1.9.3 --default
+
