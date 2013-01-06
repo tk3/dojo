@@ -1,0 +1,13 @@
+
+
+mod_mruby インストールする
+
+./configure  \
+--with-apxs=`which apxs`  \
+--with-apachectl=`which apachectl`  \
+--with-mruby-root=$HOME/build/mruby
+
+make
+
+make install
+

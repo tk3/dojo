@@ -1,0 +1,7 @@
+
+
+sqlite> .exit
+sqlite> .quit
+
+sqlite> .schema
+
