@@ -21,21 +21,16 @@ git checkout master
 
 
 ================================================================================
-  488  git clone git@github.com:qtakamitsu/mruby-sqlite3.git
-  489  cd mruby-sqlite3
-  490  git checkout -b execute_fix_block
-  491  ls
-  492  cd src/
-  493  cp ~/mrb_sqlite3.c .
-  494  ls
-  495  vi mrb_sqlite3.c
-  496  pwd
-  497  ls
-  498  git add mrb_sqlite3.c
-  499  git commit -m "fix block"
-  500  git push origin execute_fix_block
+Pull request 
 
-
+	$ git clone git@github.com:qtakamitsu/mruby-sqlite3.git
+	$ cd mruby-sqlite3
+	$ git checkout -b execute_fix_block
+	$ cd src/
+	$ vi mrb_sqlite3.c
+	$ git add mrb_sqlite3.c
+	$ git commit -m "fix block"
+	$ git push origin execute_fix_block
 
 ================================================================================
 
