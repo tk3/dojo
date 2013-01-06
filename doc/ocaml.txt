@@ -1,0 +1,16 @@
+
+
+型
+	int
+		# let a = 123;;
+		val a : int = 123
+
+		# let b = 0b0101;;
+		val b : int = 5
+
+		# let c = 0o077;;
+		val c : int = 63
+
+		# let d = 0xAE;;
+		val d : int = 174
+
