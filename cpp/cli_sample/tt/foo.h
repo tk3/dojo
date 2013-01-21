@@ -5,13 +5,13 @@ using namespace System::Runtime::InteropServices;
 
 public ref class Foo
 {
-private:
+//private:
 
 public:
     Foo();
     ~Foo();
     !Foo();
 
-    void Sample(String ^s);
+    static void Func(String ^s);
 };
 

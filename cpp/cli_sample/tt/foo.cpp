@@ -1,30 +1,27 @@
-#include "foo.h"
 #include <iostream>
 
+#include "foo.h"
+
 using namespace std;
+using namespace System;
+using namespace System::Runtime::InteropServices;
 
 Foo::Foo()
 {
-    return;
+    cout << "Foo> StudentWrapper#constructor\n";
 }
 
 Foo::~Foo()
 {
-    this->!Foo();
+    cout << "Foo> StudentWrapper#constructor\n";
 }
 
 Foo::!Foo()
 {
-    return;
+    cout << "Foo> StudentWrapper#constructor\n";
 }
 
-void Foo::Sample(String^ s)
+void Foo::Func(String ^s)
 {
-    IntPtr ptr;
-
-    ptr = Marshal::StringToHGlobalAnsi(s);
-
-    cout << "sample: " << (char *)ptr.ToPointer();
-
-    Marshal::FreeHGlobal(ptr);
 }
+
