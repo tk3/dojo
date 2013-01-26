@@ -1,0 +1,11 @@
+
+NET_FRAMEWORK = %q{C:\Windows\Microsoft.NET\Framework\v4.0.30319}
+
+ENV['PATH'] += ";#{NET_FRAMEWORK}"
+
+task :default => 'hello.exe'
+
+rule '.exe' => '.cs' do |t|
+  sh %Q{csc /nologo /t:exe /out:#{t.name} #{t.source}}
+end
+
