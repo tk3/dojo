@@ -1,0 +1,31 @@
+
+require "rake/clean"
+
+
+#-L$JAVA_HOME/jre/lib/server -ljvm
+
+task :default => 'Example'
+
+file 'Example' => ['Example.class', :libfoo]
+
+task :run do
+  sh %Q{java -Djava.library.path=./ Example}
+end
+
+rule '.class' => '.java' do |t|
+  sh %Q{javac #{t.source}}
+end
+
+# I$JAVA_HOME/include  -I$JAVA_HOME/include/darwin
+INCLUDES = %W(#{ENV['JAVA_HOME']}/include #{ENV['JAVA_HOME']}/include/darwin)
+
+CLEAN.include(%w(Foo.o Foo.class Example.class))
+
+file :libfoo => ['Foo.o', 'Foo.class'] do |t|
+  sh %Q{gcc -shared -o #{t.name}.dylib #{t.prerequisites.grep(/\.o$/).join(' ')}}
+end
+
+rule '.o' => '.c' do |t|
+  sh %Q{gcc #{INCLUDES.map{|s| '-I'+s}.join(' ')} -c #{t.source}}
+end
+
