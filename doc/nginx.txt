@@ -1,0 +1,27 @@
+nginx
+
+
+install
+	$ tar zxf nginx-1.4.2.tar.gz
+	$ cd nginx-1.4.2
+	$ ./configure --prefix=$HOME/opt/nginx-1.4.2
+	$ make
+	$ make instal
+
+start
+	$ nginx
+
+stop
+	$ nginx -s stop
+
+configファイル確認
+	$ nginx -t
+
+ngx_mruby
+	$ git clone git://github.com/matsumoto-r/ngx_mruby.git
+	$ cd ngx_mruby
+	$ git submodule init
+	$ git submodule update
+	$ cd mruby
+	$ rake
+
