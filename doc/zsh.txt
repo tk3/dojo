@@ -1,0 +1,35 @@
+zsh
+
+installation basename     : zsh
+binary install path       : /usr/local/bin
+man page install path     : ${prefix}/share/man
+info install path         : ${prefix}/share/info
+functions install path    : ${prefix}/share/zsh/5.0.2/functions
+
+
+$ tar jxf zsh-5.0.2.tar.bz2
+$ cd zsh-5.0.2
+$ ./configure
+$ make
+$ sudo make install
+$ /usr/local/bin/zsh --version
+zsh 5.0.2 (x86_64-unknown-linux-gnu)
+
+$ sudo vim /etc/shells
+/usr/local/bin/zsh を追加する
+
+$ chsh --list-shells
+/bin/sh
+/bin/bash
+/sbin/nologin
+/bin/zsh
+/bin/dash
+/usr/local/bin/zsh
+
+$ chsh -s /usr/local/bin/zsh
+foo のシェルを変更します。
+パスワード:
+シェルを変更しました。
+
+一度ログインしなおす。
+
