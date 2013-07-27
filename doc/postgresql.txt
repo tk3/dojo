@@ -1,0 +1,14 @@
+PostgreSQL 9.2.4
+
+% tar jxf postgresql-9.2.4.tar.bz2
+% cd postgresql-9.2.4
+
+./configure --prefix=$HOME/opt/postgresql-9.2.4 --with-openssl
+
+% mkdir -p $HOME/var/pgsql/data
+% initdb --encoding=UTF8 --no-locale -D $HOME/var/pgsql/data
+% pg_ctl -D /home/foo/var/pgsql/data -l /home/foo/var/pgsql/data/psql.log
+% start
+% createdb test
+% psql test
+
