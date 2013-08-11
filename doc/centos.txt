@@ -1,0 +1,23 @@
+CentOS
+
+
+ $ sudo yum install gcc
+ $ sudo yum install make
+ $ sudo yum install bison
+
+ホスト名を変更する
+変更後に、再起動する
+
+# vi /etc/sysconfig/network
+HOSTNAME=centos64
+
+SELinux を無効にする
+# vi /etc/sysconfig/selinux
+SELINUX=disabled
+
+
+foo ユーザーで sudo を使えるようにする
+# usermod -G wheel foo
+# visudo
+%wheel  ALL=(ALL)       ALL
+

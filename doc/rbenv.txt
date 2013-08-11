@@ -1,0 +1,49 @@
+rbenv
+
+[sstephenson/rbenv · GitHub](https://github.com/sstephenson/rbenv "sstephenson/rbenv · GitHub")
+
+% git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+Cloning into '/Users/qtakamitsu/.rbenv'...
+remote: Counting objects: 1642, done.
+remote: Compressing objects: 100% (675/675), done.
+remote: Total 1642 (delta 1054), reused 1464 (delta 935)
+Receiving objects: 100% (1642/1642), 238.93 KiB | 114 KiB/s, done.
+Resolving deltas: 100% (1054/1054), done.
+% echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.zshrc
+% echo 'eval "$(rbenv init -)"' >> ~/.zshrc
+% exec $SHELL -l
+% rbenv -v
+rbenv 0.4.0-52-g1cc7536
+
+
+install プラグインをインストールする
+
+$ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+% rbenv install -l
+Available versions:
+  1.8.6-p383
+  1.8.6-p420
+  1.8.7-p249
+  1.8.7-p302
+...(省略)
+
+% rbenv install 2.0.0-p247
+Downloading openssl-1.0.1e.tar.gz...
+-> https://www.openssl.org/source/openssl-1.0.1e.tar.gz
+Installing openssl-1.0.1e...
+Installed openssl-1.0.1e to /Users/qtakamitsu/.rbenv/versions/2.0.0-p247
+
+Downloading ruby-2.0.0-p247.tar.gz...
+-> ftp://ftp.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p247.tar.gz
+Installing ruby-2.0.0-p247...
+Installed ruby-2.0.0-p247 to /Users/qtakamitsu/.rbenv/versions/2.0.0-p247
+
+% rbenv rehash
+% rbenv versions
+* system (set by /Users/qtakamitsu/.rbenv/version)
+  2.0.0-p247
+% rbenv global 2.0.0-p247
+% ruby -v
+ruby 2.0.0p247 (2013-06-27 revision 41674) [x86_64-darwin12.4.0]
+

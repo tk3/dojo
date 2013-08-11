@@ -1,0 +1,5 @@
+vagrant
+
+% gem install vagrant
+
+
