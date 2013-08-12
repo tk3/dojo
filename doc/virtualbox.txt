@@ -1,0 +1,10 @@
+VirtualBox
+
+% VBoxManage --version
+4.2.16r86992
+% VBoxManage list vms
+"centos64" {c77c81b9-1dc6-4145-9c60-01af1ec8bd21}
+% VBoxManage startvm centos64
+Waiting for VM "centos64" to power on...
+VM "centos64" has been successfully started.
+
