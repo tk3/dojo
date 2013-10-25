@@ -1,5 +1,10 @@
 PostgreSQL 9.2.4
 
+
+% sudo yum install readline-devel
+% sudo yum install openssl-devel
+
+
 % tar jxf postgresql-9.2.4.tar.bz2
 % cd postgresql-9.2.4
 

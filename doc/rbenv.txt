@@ -18,7 +18,7 @@ rbenv 0.4.0-52-g1cc7536
 
 install プラグインをインストールする
 
-$ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+% git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 
 % rbenv install -l
 Available versions:
