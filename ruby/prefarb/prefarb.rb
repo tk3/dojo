@@ -180,7 +180,7 @@ module Builrb
     end
 
     def install(options)
-      path = options[:path]
+      path = File.expand_path(options[:path])
       puts "install> path=#{path}"
 
       src_files = Dir.glob("#{path}/**/*")
