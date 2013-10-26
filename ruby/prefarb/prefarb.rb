@@ -173,6 +173,7 @@ module Builrb
 
     def list(options)
       conf = Config.load
+      puts "List of All:"
       conf.list_apps.keys.each do |app_name|
         puts "    #{app_name}"
       end
