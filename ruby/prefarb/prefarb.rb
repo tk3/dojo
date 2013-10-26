@@ -1,4 +1,4 @@
-#!/bin/env ruby
+#!/usr/bin/env ruby
 
 require "fileutils"
 require "yaml"
@@ -16,47 +16,50 @@ module Builrb
     def self.parse(argvs)
       option_spec = {
         :init => lambda {|opts, argvs|
-          puts ">> init"
-          opts[:init] = {}
-          opts[:init][:tool_home] = argvs[1]
+#         puts ">> init"
+          return false  unless argvs[1]
+
+          opts[:type] = :init
+          opts[:args][:install_path] = argvs[1]
           true
         },
         :config => lambda {|opts, argvs|
-          puts ">> config"
-          opts[:config] = {}
-          opts[:config][:name] = argvs[1]
-          opts[:config][:value] = argvs[2]
+#         puts ">> config"
+          return false  unless argvs[1] && argvs[2]
 
-          return false  unless opts[:config][:name] && opts[:config][:value]
+          opts[:type] = :config
+          opts[:args][:name] = argvs[1]
+          opts[:args][:value] = argvs[2]
+
 
           true
         },
         :list => lambda {|opts, argvs|
-          puts ">> list"
-          opts[:list] = {}
+#         puts ">> list"
+          opts[:type] = :list
           true
         },
         :install => lambda {|opts, argvs|
-          puts ">> install"
-          opts[:install] = {}
-          opts[:install][:path] = argvs[1]
+#         puts ">> install"
+          return false  unless argvs[1]
 
-          return false  unless opts[:install][:path]
+          opts[:type] = :install
+          opts[:args][:path] = argvs[1]
 
           true
         },
         :remove => lambda {|opts, argvs|
-          puts ">> remove"
-          opts[:remove] = {}
-          opts[:remove][:app_name] = argvs[1]
+#         puts ">> remove"
+          return false  unless argvs[1]
 
-          return false  unless opts[:remove][:app_name]
+          opts[:type] = :remove
+          opts[:args][:app_name] = argvs[1]
 
           true
         },
       }
 
-      options = {}
+      options = {:type => nil, :args => {}}
 
       return nil  if argvs.length < 1
       return nil  unless option_spec.key?(argvs[0].to_sym)
@@ -66,72 +69,111 @@ module Builrb
     end
   end
 
-  class Runner
+  class Config
     def initialize
+      @yaml = {}
+      @conf_file = "#{ENV['HOME']}/.prefarb"
     end
 
+    def self.load
+      conf = Config.new
+      conf.load_file
+      conf
+    end
+
+    def []=(key, value)
+      @yaml["config"][key] = value
+    end
+
+    def [](key)
+      @yaml["config"][key]
+    end
+
+    def list_apps
+      @yaml["apps"]
+    end
+
+    def get_app(name)
+      @yaml["apps"].key?(name) ? @yaml["apps"][name] : {}
+    end
+
+    def add_app(name, files)
+      @yaml["apps"][name] = {}
+      @yaml["apps"][name]["files"] = files
+      @yaml["apps"][name]["date"] = DateTime.now
+    end
+
+    def remove_app(name)
+      @yaml["apps"].delete(name)
+    end
+
+    def save
+      File.open(@conf_file, "w") do |fout|
+        YAML.dump(@yaml, fout)
+      end
+    end
+
+    def load_file
+      if FileTest.exist?(@conf_file)
+        @yaml = YAML.load_file(@conf_file)
+        # TODO: validate
+      else
+        yaml = {}
+        yaml["version"] = "1.0"
+        yaml["config"] = {}
+        yaml["apps"] = {}
+
+        File.open(@conf_file, "w") do |fout|
+          YAML.dump(yaml, fout)
+        end
+        @yaml = yaml
+      end
+    end
+  end
+
+  class Runner
     def start(argv)
       arg = Builrb::Argv.parse(argv)
-      return  if arg.nil?
+      raise ArgumentError  if arg.nil?
 
-      self.init(arg[:init])  unless arg[:init].nil?
-      self.config(arg[:config])  unless arg[:config].nil?
-      self.list(arg[:list])  unless arg[:list].nil?
-      self.install(arg[:install])  unless arg[:install].nil?
-      self.remove(arg[:remove])  unless arg[:remove].nil?
+      case arg[:type]
+      when :init
+        self.init(arg[:args])
+      when :config
+        self.config(arg[:args])
+      when :list
+        self.list(arg[:args])
+      when :install
+        self.install(arg[:args])
+      when :remove
+        self.remove(arg[:args])
+      else
+      end
 
     end
 
     def init(options)
-      tool_home = options[:tool_home] || ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
-      puts ">> tool_home = #{tool_home}"
+      install_path = File.expand_path(options[:install_path])
 
-      FileUtils.mkdir_p(tool_home)  unless FileTest.exist?(tool_home)
-
-      unless FileTest.exist?("#{tool_home}/db")
-        yaml = {}
-        yaml["version"] = "1.0"
-        yaml["config"] = {}
-        yaml["installed"] = {}
-
-        File.open("#{tool_home}/db", "w") do |fout|
-          YAML.dump(yaml, fout)
-        end
+      if FileTest.exist?(install_path) && !FileTest.directory?(install_path)
+        raise Errno::EEXIST
       end
+      FileUtils.mkdir_p(install_path)
+
+      conf = Config.load
+      conf["install_path"] = install_path
+      conf.save
 
       true
     end
 
     def config(options)
-#     puts "config: #{options[:name]}=#{options[:value]}"
-
-      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
-      tool_db = "#{tool_home}/db"
-
-      return  unless FileTest.exist?("#{tool_home}/db")
-
-      yaml = YAML.load_file(tool_db)
-
-      yaml["config"] = {}  unless yaml.key?("config")
-
-      yaml["config"][options[:name]] = options[:value]
-
-      File.open("#{tool_home}/db", "w") do |fout|
-        YAML.dump(yaml, fout)
-      end
+      true
     end
 
     def list(options)
-      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
-      tool_db = "#{tool_home}/db"
-
-      return  unless FileTest.exist?("#{tool_home}/db")
-
-      yaml = YAML.load_file(tool_db)
-
-      return  unless yaml.key?("installed")
-
-      yaml["installed"].keys.each do |app_name|
+      conf = Config.load
+      conf.list_apps.keys.each do |app_name|
         puts "    #{app_name}"
       end
     end
@@ -141,36 +183,41 @@ module Builrb
       puts "install> path=#{path}"
 
       src_files = Dir.glob("#{path}/**/*")
-      return  if src_files.empty?
+      if src_files.empty?
+        STDERR.puts "Error: cannot install files."
+        return false
+      end
 
       app_name = File.basename(path)
       puts "install> app_name=#{app_name}"
 
-      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
-      tool_db = "#{tool_home}/db"
+      conf = Config.load
+      install_path = conf["install_path"]
 
-      return  unless FileTest.exist?("#{tool_home}/db")
-
-      yaml = YAML.load_file(tool_db)
-      return  unless yaml.key?("config")
-      install_dir = yaml["config"]["install_dir"] || "/usr/local"
-      puts "install> install_dir=#{install_dir}"
-
-      FileUtils.mkdir_p(install_dir)  unless FileTest.directory?(install_dir)
-
-      return  if check_if_already_installed(src_files, install_dir) == false
-
-      link_files(src_files, install_dir)
-
-      yaml["installed"][app_name] = {}
-      yaml["installed"][app_name]["files"] = src_files
-
-      File.open("#{tool_home}/db", "w") do |fout|
-        YAML.dump(yaml, fout)
+      if install_path.start_with?(File.expand_path(path))
+        STDERR.puts "Error: Overlap path."
+        return false
       end
+
+      unless conf.get_app(app_name).empty?
+        STDERR.puts "Error: already installed."
+        return false
+      end
+
+      unless check_if_already_installed(src_files, install_path)
+        STDERR.puts "Error: already installed."
+        return false
+      end
+
+      link_files(src_files, install_path)
+
+      conf.add_app(app_name, src_files)
+      conf.save
+
+      return true
     end
 
-    def check_if_already_installed(files, install_dir)
+    def check_if_already_installed(files, install_path)
       base = File.dirname(files[0])
 
       files.all? do |f|
@@ -178,7 +225,7 @@ module Builrb
           true
         else
           n = f.sub(/^#{base}/, '')
-          if FileTest.exist?("#{install_dir}#{n}")
+          if FileTest.exist?("#{install_path}#{n}")
             false
           else
             true
@@ -187,17 +234,17 @@ module Builrb
       end
     end
 
-    def link_files(files, install_dir)
+    def link_files(files, install_path)
       base = File.dirname(files[0])
 
       files.each do |f|
         n = f.sub(/^#{base}/, '')
         if FileTest.directory?(f)
-          FileUtils.mkdir_p("#{install_dir}#{n}")
-          puts "mkdir_p: #{install_dir}#{n}"
+          FileUtils.mkdir_p("#{install_path}#{n}")
+          puts "mkdir_p: #{install_path}#{n}"
         else
-          FileUtils.ln_s(f, "#{install_dir}#{n}")
-          puts "ln: #{f} -> #{install_dir}#{n}"
+          FileUtils.ln_s(f, "#{install_path}#{n}")
+          puts "ln: #{f} -> #{install_path}#{n}"
         end
       end
     end
@@ -206,34 +253,28 @@ module Builrb
       app_name = options[:app_name]
       puts "remove> app_name=#{app_name}"
 
-      tool_home = ENV["BUILRB_HOME"] || "#{ENV['HOME']}/.builrb"
-      tool_db = "#{tool_home}/db"
+      conf = Config.load
+      install_path = conf["install_path"]
 
-      return  unless FileTest.exist?("#{tool_home}/db")
-
-      yaml = YAML.load_file(tool_db)
-      return  unless yaml.key?("config")
-      install_dir = yaml["config"]["install_dir"] || "/usr/local"
-      puts "remove> install_dir=#{install_dir}"
-
-      return  unless yaml.key?("installed")
-      return  unless yaml["installed"].key?(app_name)
-      return  unless yaml["installed"][app_name].key?("files")
-
-      src_files = yaml["installed"][app_name]["files"]
-
-      return  if check_if_link_files_exist(src_files, install_dir) == false
-
-      remove_link_files(src_files, install_dir)
-
-      yaml["installed"].delete(app_name)
-
-      File.open("#{tool_home}/db", "w") do |fout|
-        YAML.dump(yaml, fout)
+      app_info = conf.get_app(app_name)
+      if app_info.empty?
+        STDERR.puts "Error: not installed."
+        return false
       end
+
+      src_files = app_info["files"]
+      unless check_if_link_files_exist(src_files, install_path)
+        STDERR.puts "Error: not installed."
+        return false
+      end
+
+      remove_link_files(src_files, install_path)
+
+      conf.remove_app(app_name)
+      conf.save
     end
 
-    def check_if_link_files_exist(files, install_dir)
+    def check_if_link_files_exist(files, install_path)
       base = File.dirname(files[0])
 
       files.all? do |f|
@@ -241,19 +282,19 @@ module Builrb
           true
         else
           n = f.sub(/^#{base}/, '')
-          FileTest.symlink?("#{install_dir}#{n}")
+          FileTest.symlink?("#{install_path}#{n}")
         end
       end
     end
 
-    def remove_link_files(files, install_dir)
+    def remove_link_files(files, install_path)
       base = File.dirname(files[0])
 
       files.each do |f|
         n = f.sub(/^#{base}/, '')
-        if FileTest.symlink?("#{install_dir}#{n}")
-#         puts "remove ... #{install_dir}#{n}"
-          FileUtils.rm("#{install_dir}#{n}")
+        if FileTest.symlink?("#{install_path}#{n}")
+#         puts "remove ... #{install_path}#{n}"
+          FileUtils.rm("#{install_path}#{n}")
         end
       end
     end
@@ -262,8 +303,6 @@ end
 
 
 if $0 == __FILE__
-  ENV["BUILRB_HOME"] = "conf"
-
   Builrb::Runner.new.start(ARGV.clone)
 end
 
