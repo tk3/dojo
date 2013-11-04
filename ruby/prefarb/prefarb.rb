@@ -21,6 +21,7 @@ module Builrb
 
           opts[:type] = :init
           opts[:args][:install_path] = argvs[1]
+
           true
         },
         :config => lambda {|opts, argvs|
@@ -31,12 +32,12 @@ module Builrb
           opts[:args][:name] = argvs[1]
           opts[:args][:value] = argvs[2]
 
-
           true
         },
         :list => lambda {|opts, argvs|
 #         puts ">> list"
           opts[:type] = :list
+
           true
         },
         :install => lambda {|opts, argvs|
@@ -149,7 +150,6 @@ module Builrb
         self.remove(arg[:args])
       else
       end
-
     end
 
     def init(options)
@@ -168,6 +168,15 @@ module Builrb
     end
 
     def config(options)
+      puts ">> #{options[:name]} = #{options[:value]}"
+
+      name = options[:name]
+      value = options[:value]
+
+      conf = Config.load
+      conf[name] = [value]
+      conf.save
+
       true
     end
 
@@ -194,6 +203,20 @@ module Builrb
 
       conf = Config.load
       install_path = conf["install_path"]
+
+      exclude = conf["exclude"]
+      if !exclude.nil?
+        src_files = src_files.delete_if {|file|
+          target = false
+          exclude.each {|cond|
+            if file =~ /#{cond}/
+              target = true
+              break
+            end
+          }
+          target
+        }
+      end
 
       if install_path.start_with?(File.expand_path(path))
         STDERR.puts "Error: Overlap path."
