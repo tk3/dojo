@@ -1,10 +1,6 @@
 #include <stdio.h>
-#include <string.h>
-
-#include "mruby.h"
-#include "mruby/proc.h"
-#include "mruby/compile.h"
-#include "mruby/array.h"
+#include <mruby.h>
+#include <mruby/proc.h>
 
 #define p(mrb,obj) mrb_p(mrb,obj)
 
