@@ -1,13 +1,12 @@
-
-MRUBY_PREFIX = $(HOME)/build/mruby
+MRUBY = $(HOME)/apps/mruby
 
 CC       = gcc
 SOURCES  = sample.c
 OBJS     = $(SOURCES:.c=.o)
-INCLUDES = -I. -I$(MRUBY_PREFIX)/include
-CFLAGS   = -Wall -Wwrite-strings -Werror
+INCLUDES = -I. -I$(MRUBY)/include
+CFLAGS   = -Wall -Werror-implicit-function-declaration
 LDFLAGS  =
-LIBS     = $(MRUBY_PREFIX)/lib/libmruby.a -lm
+LIBS     = $(MRUBY)/lib/libmruby.a -lm
 TARGET   = main
 
 $(TARGET): $(OBJS)

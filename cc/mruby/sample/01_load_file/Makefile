@@ -1,4 +1,3 @@
-
 MRUBY = $(HOME)/apps/mruby
 
 CC       = gcc
