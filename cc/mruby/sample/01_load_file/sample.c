@@ -53,6 +53,6 @@ int main(int argc, char **argv)
     fclose(fp);
     mrb_close(mrb);
 
-    return r;
+    return 0;
 }
 
