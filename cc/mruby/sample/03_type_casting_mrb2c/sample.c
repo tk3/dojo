@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <string.h>
-
-#include "mruby.h"
-#include "mruby/proc.h"
-#include "mruby/compile.h"
-#include "mruby/string.h"
-#include "mruby/array.h"
-#include "mruby/hash.h"
-#include "mruby/khash.h"
+#include <mruby.h>
+#include <mruby/proc.h>
+#include <mruby/array.h>
+#include <mruby/string.h>
+#include <mruby/hash.h>
 
 #define p(mrb,obj) mrb_p(mrb,obj)
 
@@ -74,6 +71,12 @@ int main(int argc, char **argv)
 
 
     strcpy(script, "[10, [\"aa\", \"bb\"], true]");
+    ret = mrb_load_string(mrb, script);
+    mrb2c(mrb, ret);
+    puts("");
+
+
+    strcpy(script, "{\"a\" => 100, \"b\" => 200, \"c\" => 300}");
     ret = mrb_load_string(mrb, script);
     mrb2c(mrb, ret);
     puts("");
