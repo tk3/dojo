@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <stdio.h>
 #include <mruby.h>
 #include <mruby/proc.h>
 
