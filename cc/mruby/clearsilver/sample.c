@@ -167,6 +167,33 @@ static mrb_value mrb_hdf_remove_tree(mrb_state *mrb, mrb_value self)
     return mrb_fixnum_value(0);
 }
 
+// CS
+static mrb_value mrb_cs_init(mrb_state *mrb, mrb_value self)
+{
+    // NEOERR *cs_init (CSPARSE **parse, HDF *hdf);
+    // void cs_destroy (CSPARSE **parse);
+    return self;
+}
+
+static mrb_value mrb_cs_parse_file(mrb_state *mrb, mrb_value self)
+{
+    // NEOERR *cs_parse_file (CSPARSE *parse, const char *path);
+    return mrb_fixnum_value(0);
+}
+
+static mrb_value mrb_cs_parse_string(mrb_state *mrb, mrb_value self)
+{
+    // NEOERR *cs_parse_string (CSPARSE *parse, char *buf, size_t blen);
+    return mrb_fixnum_value(0);
+}
+
+static mrb_value mrb_cs_render(mrb_state *mrb, mrb_value self)
+{
+    // NEOERR *cs_render (CSPARSE *parse, void *ctx, CSOUTFUNC cb);
+    return mrb_fixnum_value(0);
+}
+
+
 int define_clearsilver_class(mrb_state *mrb)
 {
     struct RClass *module_clearsilver;
@@ -181,6 +208,10 @@ int define_clearsilver_class(mrb_state *mrb)
     mrb_define_method(mrb, class_hdf, "remove_tree", mrb_hdf_remove_tree, MRB_ARGS_OPT(1));
 
     class_cs = mrb_define_class(mrb, "CS", mrb->object_class);
+    mrb_define_method(mrb, class_hdf, "initialize", mrb_cs_init, MRB_ARGS_NONE());
+    mrb_define_method(mrb, class_hdf, "parse_file", mrb_cs_parse_file, MRB_ARGS_OPT(1));
+    mrb_define_method(mrb, class_hdf, "parse_string", mrb_cs_parse_string, MRB_ARGS_OPT(1));
+    mrb_define_method(mrb, class_hdf, "render", mrb_cs_render, MRB_ARGS_OPT(1));
 
     return 0;
 }
