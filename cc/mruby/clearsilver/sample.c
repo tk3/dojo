@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <ClearSilver.h>
+
 #include <mruby.h>
 #include <mruby/proc.h>
 #include <mruby/compile.h>
@@ -67,67 +69,29 @@ int main(int argc, char **argv)
     return r;
 }
 
-/*--
-typedef struct {
-    int val;
-} foo_t;
-
-static foo_t *mrb_foo_alloc(void)
+// HDF
+static void mrb_hdf_free(mrb_state *mrb, void *p)
 {
-    foo_t *f;
+    HDF *hdf = (HDF *)p;
 
-    f = (foo_t *)malloc(sizeof(foo_t));
-    if (f == NULL) {
-        return NULL;
+    if (hdf != NULL) {
+        hdf_destroy(&hdf);
     }
-    memset(f, 0, sizeof(foo_t));
-
-    return f;
 }
 
-static void mrb_foo_free(mrb_state *mrb, void *p)
-{
-    foo_t *f = (foo_t *)p;
-
-    if (f != NULL) {
-        free(f);
-    }
-    fprintf(stderr, "pass: mrb_foo_free()\n");
-}
-
-static const mrb_data_type mrb_foo_type = {
-  "mrb_foo", mrb_foo_free,
+static const mrb_data_type mrb_hdf_type = {
+  "mrb_clearsilver_hdf", mrb_hdf_free,
 };
 
-static mrb_value mrb_foo_init(mrb_state *mrb, mrb_value self)
-{
-    foo_t *f;
-    static int v = 100;
-
-    f = mrb_foo_alloc();
-    f->val = v++;
-    fprintf(stderr, "init >> foo = [%p]\n", f); 
-
-    DATA_PTR(self) = f;
-    DATA_TYPE(self) = &mrb_foo_type;
-
-    return self;
-}
-
-static mrb_value mrb_foo_set(mrb_state *mrb, mrb_value self)
-{
-    foo_t *f = mrb_get_datatype(mrb, self, &mrb_foo_type);
-
-    fprintf(stderr, "set >> [%p]\n", f);
-    fprintf(stderr, "set >> [%d]\n", f->val);
-
-    return mrb_fixnum_value(0);
-}
---*/
-
-// HDF
 static mrb_value mrb_hdf_init(mrb_state *mrb, mrb_value self)
 {
+    HDF *hdf;
+
+    hdf_init(&hdf);
+
+    DATA_PTR(self) = hdf;
+    DATA_TYPE(self) = &mrb_hdf_type;
+
     return self;
 }
 
@@ -142,10 +106,12 @@ static mrb_value mrb_hdf_set_value(mrb_state *mrb, mrb_value self)
         mrb_raise(mrb, E_ARGUMENT_ERROR, "argument");
     }
 
+    HDF *hdf = mrb_get_datatype(mrb, self, &mrb_hdf_type);
+
     struct RString *name = mrb_str_ptr(argv1);
     struct RString *val = mrb_str_ptr(argv2);
 
-    printf("set_value: %s=%s\n", name->ptr, val->ptr);
+    hdf_set_value(hdf, name->ptr, val->ptr);
 
     return mrb_fixnum_value(0);
 }
@@ -160,18 +126,58 @@ static mrb_value mrb_hdf_remove_tree(mrb_state *mrb, mrb_value self)
         mrb_raise(mrb, E_ARGUMENT_ERROR, "argument");
     }
 
+    HDF *hdf = mrb_get_datatype(mrb, self, &mrb_hdf_type);
+
     struct RString *name = mrb_str_ptr(argv1);
 
-    printf("remove_tree: %s\n", name->ptr);
+    hdf_remove_tree(hdf, name->ptr);
+
+    return mrb_fixnum_value(0);
+}
+
+static mrb_value mrb_hdf_dump(mrb_state *mrb, mrb_value self)
+{
+    mrb_value argv1;
+    int arg;
+    char *prefix = NULL;
+
+    arg = mrb_get_args(mrb, "|S", &argv1);
+    if (arg == 1) {
+        prefix = RSTRING_PTR(argv1);
+    }
+
+    HDF *hdf = mrb_get_datatype(mrb, self, &mrb_hdf_type);
+
+    hdf_dump(hdf, prefix);
 
     return mrb_fixnum_value(0);
 }
 
 // CS
+static void mrb_cs_free(mrb_state *mrb, void *p)
+{
+    CSPARSE *cs = (CSPARSE *)p;
+
+    if (cs != NULL) {
+        cs_destroy(&cs);
+    }
+}
+
+static const mrb_data_type mrb_cs_type = {
+  "mrb_clearsilver_cs", mrb_cs_free,
+};
+
 static mrb_value mrb_cs_init(mrb_state *mrb, mrb_value self)
 {
     // NEOERR *cs_init (CSPARSE **parse, HDF *hdf);
-    // void cs_destroy (CSPARSE **parse);
+
+    CSPARSE *cs;
+
+    cs_init(&cs, NULL);
+
+    DATA_PTR(self) = cs;
+    DATA_TYPE(self) = &mrb_cs_type;
+
     return self;
 }
 
@@ -193,7 +199,6 @@ static mrb_value mrb_cs_render(mrb_state *mrb, mrb_value self)
     return mrb_fixnum_value(0);
 }
 
-
 int define_clearsilver_class(mrb_state *mrb)
 {
     struct RClass *module_clearsilver;
@@ -203,15 +208,18 @@ int define_clearsilver_class(mrb_state *mrb)
     module_clearsilver = mrb_define_module(mrb, "ClearSilver");
 
     class_hdf = mrb_define_class(mrb, "HDF", mrb->object_class);
+    MRB_SET_INSTANCE_TT(class_hdf, MRB_TT_DATA);
     mrb_define_method(mrb, class_hdf, "initialize", mrb_hdf_init, MRB_ARGS_NONE());
     mrb_define_method(mrb, class_hdf, "set_value", mrb_hdf_set_value, MRB_ARGS_OPT(2));
     mrb_define_method(mrb, class_hdf, "remove_tree", mrb_hdf_remove_tree, MRB_ARGS_OPT(1));
+    mrb_define_method(mrb, class_hdf, "dump", mrb_hdf_dump, MRB_ARGS_ANY());
 
     class_cs = mrb_define_class(mrb, "CS", mrb->object_class);
-    mrb_define_method(mrb, class_hdf, "initialize", mrb_cs_init, MRB_ARGS_NONE());
-    mrb_define_method(mrb, class_hdf, "parse_file", mrb_cs_parse_file, MRB_ARGS_OPT(1));
-    mrb_define_method(mrb, class_hdf, "parse_string", mrb_cs_parse_string, MRB_ARGS_OPT(1));
-    mrb_define_method(mrb, class_hdf, "render", mrb_cs_render, MRB_ARGS_OPT(1));
+    MRB_SET_INSTANCE_TT(class_cs, MRB_TT_DATA);
+    mrb_define_method(mrb, class_cs, "initialize", mrb_cs_init, MRB_ARGS_NONE());
+    mrb_define_method(mrb, class_cs, "parse_file", mrb_cs_parse_file, MRB_ARGS_OPT(1));
+    mrb_define_method(mrb, class_cs, "parse_string", mrb_cs_parse_string, MRB_ARGS_OPT(1));
+    mrb_define_method(mrb, class_cs, "render", mrb_cs_render, MRB_ARGS_NONE());
 
     return 0;
 }
