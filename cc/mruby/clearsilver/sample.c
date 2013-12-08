@@ -116,6 +116,27 @@ static mrb_value mrb_hdf_set_value(mrb_state *mrb, mrb_value self)
     return mrb_fixnum_value(0);
 }
 
+static mrb_value mrb_hdf_get_value(mrb_state *mrb, mrb_value self)
+{
+    mrb_value argv1;
+    mrb_value argv2;
+    int arg;
+
+    arg = mrb_get_args(mrb, "SS", &argv1, &argv2);
+    if (arg != 2) {
+        mrb_raise(mrb, E_ARGUMENT_ERROR, "argument");
+    }
+
+    HDF *hdf = mrb_get_datatype(mrb, self, &mrb_hdf_type);
+
+    struct RString *name = mrb_str_ptr(argv1);
+    struct RString *def_val = mrb_str_ptr(argv2);
+
+    char *value = hdf_get_value(hdf, name->ptr, def_val->ptr);
+
+    return mrb_str_new(mrb, value, strlen(value));
+}
+
 static mrb_value mrb_hdf_remove_tree(mrb_state *mrb, mrb_value self)
 {
     mrb_value argv1;
@@ -172,8 +193,20 @@ static mrb_value mrb_cs_init(mrb_state *mrb, mrb_value self)
     // NEOERR *cs_init (CSPARSE **parse, HDF *hdf);
 
     CSPARSE *cs;
+    mrb_value argv1;
+    int arg;
 
-    cs_init(&cs, NULL);
+    arg = mrb_get_args(mrb, "o", &argv1);
+    if (arg != 1) {
+        mrb_raise(mrb, E_ARGUMENT_ERROR, "argument");
+    }
+
+    HDF *hdf = mrb_get_datatype(mrb, argv1, &mrb_hdf_type);
+    if (hdf == NULL) {
+        mrb_raise(mrb, E_ARGUMENT_ERROR, "argument");
+    }
+
+    cs_init(&cs, hdf);
 
     DATA_PTR(self) = cs;
     DATA_TYPE(self) = &mrb_cs_type;
@@ -184,19 +217,67 @@ static mrb_value mrb_cs_init(mrb_state *mrb, mrb_value self)
 static mrb_value mrb_cs_parse_file(mrb_state *mrb, mrb_value self)
 {
     // NEOERR *cs_parse_file (CSPARSE *parse, const char *path);
+
+    mrb_value argv1;
+    int arg;
+
+    arg = mrb_get_args(mrb, "S", &argv1);
+    if (arg != 1) {
+        mrb_raise(mrb, E_ARGUMENT_ERROR, "argument");
+    }
+
+    CSPARSE *cs = mrb_get_datatype(mrb, self, &mrb_cs_type);
+
+    cs_parse_file(cs, RSTRING_PTR(argv1));
+
     return mrb_fixnum_value(0);
 }
 
 static mrb_value mrb_cs_parse_string(mrb_state *mrb, mrb_value self)
 {
     // NEOERR *cs_parse_string (CSPARSE *parse, char *buf, size_t blen);
+
+    mrb_value argv1;
+    int arg;
+
+    arg = mrb_get_args(mrb, "S", &argv1);
+    if (arg != 1) {
+        mrb_raise(mrb, E_ARGUMENT_ERROR, "argument");
+    }
+
+    CSPARSE *cs = mrb_get_datatype(mrb, self, &mrb_cs_type);
+
+    cs_parse_string(cs, RSTRING_PTR(argv1), RSTRING_LEN(argv1));
+
     return mrb_fixnum_value(0);
+}
+
+NEOERR *render_string(void *ctx, char *s)
+{
+    STRING *out = (STRING *)ctx;
+
+    string_append(out, s);
+
+    return STATUS_OK;
 }
 
 static mrb_value mrb_cs_render(mrb_state *mrb, mrb_value self)
 {
     // NEOERR *cs_render (CSPARSE *parse, void *ctx, CSOUTFUNC cb);
-    return mrb_fixnum_value(0);
+
+    CSPARSE *cs = mrb_get_datatype(mrb, self, &mrb_cs_type);
+
+    STRING render_result;
+
+    string_init(&render_result);
+
+    cs_render(cs, &render_result, render_string);
+
+    mrb_value ret = mrb_str_new(mrb, render_result.buf, render_result.len);
+
+    string_clear(&render_result);
+
+    return ret;
 }
 
 int define_clearsilver_class(mrb_state *mrb)
@@ -211,12 +292,13 @@ int define_clearsilver_class(mrb_state *mrb)
     MRB_SET_INSTANCE_TT(class_hdf, MRB_TT_DATA);
     mrb_define_method(mrb, class_hdf, "initialize", mrb_hdf_init, MRB_ARGS_NONE());
     mrb_define_method(mrb, class_hdf, "set_value", mrb_hdf_set_value, MRB_ARGS_OPT(2));
+    mrb_define_method(mrb, class_hdf, "get_value", mrb_hdf_get_value, MRB_ARGS_OPT(2));
     mrb_define_method(mrb, class_hdf, "remove_tree", mrb_hdf_remove_tree, MRB_ARGS_OPT(1));
     mrb_define_method(mrb, class_hdf, "dump", mrb_hdf_dump, MRB_ARGS_ANY());
 
     class_cs = mrb_define_class(mrb, "CS", mrb->object_class);
     MRB_SET_INSTANCE_TT(class_cs, MRB_TT_DATA);
-    mrb_define_method(mrb, class_cs, "initialize", mrb_cs_init, MRB_ARGS_NONE());
+    mrb_define_method(mrb, class_cs, "initialize", mrb_cs_init, MRB_ARGS_OPT(1));
     mrb_define_method(mrb, class_cs, "parse_file", mrb_cs_parse_file, MRB_ARGS_OPT(1));
     mrb_define_method(mrb, class_cs, "parse_string", mrb_cs_parse_string, MRB_ARGS_OPT(1));
     mrb_define_method(mrb, class_cs, "render", mrb_cs_render, MRB_ARGS_NONE());
