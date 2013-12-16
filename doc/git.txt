@@ -1,12 +1,9 @@
 
-
-
   $ sudo yum install zlib-devel
   $ sudo yum install perl
   $ sudo yum install perl-devel
   $ sudo yum install gettext
   $ sudo yum install libcurl-devel
-
 
    53  tar zxf git-1.8.3.4.tar.gz
    54  cd git-1.8.3.4

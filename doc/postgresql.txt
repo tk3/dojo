@@ -1,3 +1,22 @@
+PostgreSQL 9.3.2
+
+  tar jxf postgresql-9.3.2.tar.bz2
+  cd postgresql-9.3.2
+  ./configure --prefix=$HOME/opt/postgresql-9.3.2 --with-openssl
+  make
+  make install
+
+.zshrc
+  export PATH=$HOME/opt/postgresql-9.3.2/bin:$PATH
+  export PKG_CONFIG_PATH=$HOME/opt/postgresql-9.3.2/lib/pkgconfig
+
+
+  mkdir -p $HOME/var/pgsql/data
+  initdb --encoding=UTF8 --no-locale -D $HOME/var/pgsql/data
+  pg_ctl -D $HOME/var/pgsql/data -l $HOME/var/pgsql/data/psql.log start
+
+
+========
 PostgreSQL 9.2.4
 
 
@@ -17,7 +36,6 @@ PostgreSQL 9.2.4
 % psql test
 
 % pg_ctl -D /home/foo/var/pgsql/data stop
-
 
 
 CREATE TABLE sample (
