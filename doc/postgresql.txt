@@ -16,6 +16,25 @@ PostgreSQL 9.3.2
   pg_ctl -D $HOME/var/pgsql/data -l $HOME/var/pgsql/data/psql.log start
 
 
+psql> create role dbuser with login;
+CREATE ROLE
+psql> alter user dbuser with encrypted password 'dbpass';
+ALTER ROLE
+
+$ createdb --owner=dbuser testdb
+
+CREATE TABLE books (
+  id            int PRIMARY KEY,
+  title         varchar(32),
+  release_date  date
+);
+
+INSERT INTO books VALUES (1, 'book 01', '2013-02-05');
+INSERT INTO books VALUES (2, 'book 02', '2013-01-09');
+INSERT INTO books VALUES (3, 'book 03', '2013-10-26');
+
+
+
 ========
 PostgreSQL 9.2.4
 
