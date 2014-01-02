@@ -58,6 +58,10 @@ int main()
 
     hdf_dump(hdf, "sample");
 
+    char *s = NULL;
+    hdf_write_string(hdf, &s);
+    printf("[%s]\n", s);
+
     hdf_destroy(&hdf);
 
     return 0;
