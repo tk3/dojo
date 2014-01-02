@@ -108,6 +108,18 @@ ctemplate)
     make
     make install
     ;;
+mod_mruby)
+    [ -d mod_mruby ] || git clone git://github.com/matsumoto-r/mod_mruby.git
+    cd mod_mruby
+    git submodule init
+    git submodule update
+    # vi build_config.rb
+    cp build_config.rb mruby/build_config.rb
+    (cd mruby && rake)
+    APACHECTL_PATH=`which apachectl` APXS_PATH=`which apxs` RAKE_PATH=`which rake` ./configure
+    make
+    make install
+    ;;
 *)
     echo "-> not "
     ;;
