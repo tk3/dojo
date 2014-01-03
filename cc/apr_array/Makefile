@@ -20,5 +20,6 @@ clean:
 	rm -f $(TARGET) $(OBJS)
 
 run:
-	@LD_LIBRARY_PATH=/home/foo/opt/lib  ./$(TARGET)
+	@export LD_LIBRARY_PATH=`pkg-config --libs-only-L apr-1 | sed -e 's/-L\|\ -L/:/g' -e 's/\ \+$$//'`;  \
+	./$(TARGET)
 
