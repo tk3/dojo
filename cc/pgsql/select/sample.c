@@ -44,8 +44,8 @@ int main(int argc, char **argv)
         }
         puts("");
     }
-
     PQclear(result);
+
     PQfinish(pgconn);
 
     return 0;
