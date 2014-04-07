@@ -1,0 +1,22 @@
+require 'rake/clean'
+
+CC = "gcc"
+INCLUDES = [ "../mruby/include", "./" ]
+SOURCES = FileList["*.c"]
+OBJECTS = SOURCES.map{|f| File.basename(f).ext('o')}
+LIBMRUBY = "../mruby/build/host/lib/libmruby.a"
+LIBS = "-lm #{LIBMRUBY}"
+
+task :default => :main
+
+CLEAN.include(OBJECTS)
+
+task :main => OBJECTS do |task|
+  sh "#{CC} -o #{task.name} #{task.prerequisites.join(' ')} #{LIBS}"
+end
+
+rule '.o' => '.c' do |task|
+  include_files = INCLUDES.map{|f| "-I#{f}" }.join(' ')
+  sh "#{CC} #{include_files} -c #{task.source}"
+end
+

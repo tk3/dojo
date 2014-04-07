@@ -2,6 +2,8 @@
 #include <mruby.h>
 #include <mruby/proc.h>
 
+#include "example.h"
+
 #define p(mrb,obj) mrb_p(mrb,obj)
 
 int main(int argc, char **argv)
@@ -36,6 +38,8 @@ int main(int argc, char **argv)
         mrb_close(mrb);
         return -1;
     }
+
+    mrb_c_extension_example_gem_init(mrb);
 
     mrbc_filename(mrb, ctx, argv[1]);
     mrb_load_file_cxt(mrb, fp, ctx);
