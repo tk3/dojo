@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     int num_cols = PQnfields(result);
     int i, j;
 
-    for (i = 0; i < num_rows; i++) {
+    for (i = 0; i < num_cols; i++) {
         printf("%s  ", PQfname(result, i));
     }
     puts("");
