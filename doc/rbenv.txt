@@ -1,5 +1,15 @@
 rbenv
 
+--------
+rbenv, rbenv plugin を最新に更新する
+
+$ cd ~/.rbenv
+$ git pull origin master
+$ cd ~/.rbenv/plugins/ruby-build
+$ git pull origin master
+
+--------
+
 [sstephenson/rbenv · GitHub](https://github.com/sstephenson/rbenv "sstephenson/rbenv · GitHub")
 
 % git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
