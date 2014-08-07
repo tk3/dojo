@@ -6,7 +6,7 @@ OBJS     = $(SOURCES:.c=.o)
 INCLUDES = -I. -I$(MRUBY)/include
 CFLAGS   = -Wall -Werror-implicit-function-declaration
 LDFLAGS  =
-LIBS     = $(MRUBY)/lib/libmruby.a -lm
+LIBS     = $(MRUBY)/build/host/lib/libmruby.a -lm
 TARGET   = main
 
 $(TARGET): $(OBJS)
