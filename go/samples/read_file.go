@@ -1,6 +1,7 @@
 package main
 
 import "os"
+import "io/ioutil"
 import "fmt"
 
 func main() {
@@ -9,6 +10,10 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	buf, err := ioutil.ReadAll(file)
+
+	fmt.Println(buf)
 
 	file.Close()
 }
