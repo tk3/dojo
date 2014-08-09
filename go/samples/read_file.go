@@ -12,8 +12,13 @@ func main() {
 	}
 
 	buf, err := ioutil.ReadAll(file)
-
 	fmt.Println(buf)
+
+	s := string(buf)
+	fmt.Println(s)
+
+	b := []byte(s)
+	fmt.Println(b)
 
 	file.Close()
 }
