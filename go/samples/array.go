@@ -12,6 +12,10 @@ func main() {
 	fmt.Printf("len: %d\n", len(arr_str))
 	fmt.Printf("cap: %d\n", cap(arr_str))
 
+	for i, val := range arr_str {
+		fmt.Printf("%d: %s\n", i, val)
+	}
+
 	fmt.Println(arr_str)
 }
 
