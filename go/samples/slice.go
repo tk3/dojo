@@ -13,6 +13,11 @@ func main() {
 	s[0] = 10
 	fmt.Println(s)
 
-	fmt.Println(append(s, 99))
+	s1 := append(s, 99)
+	fmt.Println(s)
+	fmt.Println(s1)
+
+	fmt.Printf("len: %d\n", len(s1))
+	fmt.Printf("cap: %d\n", cap(s1))
 }
 
