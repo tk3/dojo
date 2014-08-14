@@ -5,6 +5,13 @@ import "fmt"
 func sample1() {
 	val := []int{10, 20, 30, 40}
 
+	fmt.Println(val)
+	fmt.Printf("len: %d\n", len(val))
+	fmt.Printf("cap: %d\n", cap(val))
+
+	s := val[:]
+
+	fmt.Println(s)
 	fmt.Printf("len: %d\n", len(val))
 	fmt.Printf("cap: %d\n", cap(val))
 }
