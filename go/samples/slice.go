@@ -2,7 +2,14 @@ package main
 
 import "fmt"
 
-func main() {
+func sample1() {
+	val := []int{10, 20, 30, 40}
+
+	fmt.Printf("len: %d\n", len(val))
+	fmt.Printf("cap: %d\n", cap(val))
+}
+
+func sample2() {
 	s := make([]int, 8, 16)
 
 	fmt.Printf("len: %d\n", len(s))
@@ -19,5 +26,9 @@ func main() {
 
 	fmt.Printf("len: %d\n", len(s1))
 	fmt.Printf("cap: %d\n", cap(s1))
+}
+
+func main() {
+	sample1()
 }
 
