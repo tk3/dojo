@@ -3,6 +3,8 @@ package main
 import "fmt"
 
 func sample1() {
+	fmt.Println("sample1 --------")
+
 	val := []int{10, 20, 30, 40}
 
 	fmt.Println(val)
@@ -17,6 +19,18 @@ func sample1() {
 }
 
 func sample2() {
+	fmt.Println("sample2 --------")
+
+	val := []int{10, 20, 30, 40}
+
+	s1 := val[2:]
+	fmt.Println(s1)
+
+	s2 := val[2:3]
+	fmt.Println(s2)
+}
+
+func sample3() {
 	s := make([]int, 8, 16)
 
 	fmt.Printf("len: %d\n", len(s))
@@ -37,5 +51,6 @@ func sample2() {
 
 func main() {
 	sample1()
+	sample2()
 }
 
