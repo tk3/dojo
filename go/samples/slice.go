@@ -21,13 +21,11 @@ func sample1() {
 func sample2() {
 	fmt.Println("sample2 --------")
 
-	val := []int{10, 20, 30, 40}
+	val := []int{10, 20, 30, 40, 50}
+	fmt.Println(val)
 
-	s1 := val[2:]
-	fmt.Println(s1)
-
-	s2 := val[2:3]
-	fmt.Println(s2)
+	fmt.Println(val[1:])
+	fmt.Println(val[1:4])
 }
 
 func sample3() {
