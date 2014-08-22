@@ -18,6 +18,12 @@ func main() {
 		}
 	}
 
+	query_handler := func(w http.ResponseWriter, r *http.Request) {
+		for name, value := range r.URL.Query() {
+			fmt.Fprintf(w, "%s=%s\n", name, value)
+		}
+	}
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "root")
 	})
@@ -25,6 +31,8 @@ func main() {
 	http.HandleFunc("/hello", HelloHandler)
 
 	http.HandleFunc("/echo", echo_handler)
+
+	http.HandleFunc("/query", query_handler)
 
 	http.ListenAndServe(":8080", nil)
 }
