@@ -9,9 +9,12 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	echo_handler := func(w http.ResponseWriter, r *http.Request) {
-		for name, value := range r.Header {
-			fmt.Fprintf(w, "%s=%s\n", name, value[0])
-			fmt.Println(value[0])
+		for name, values := range r.Header {
+			fmt.Fprintf(w, "%s:\n", name)
+			for _, value := range values {
+				fmt.Fprintf(w, "  [%s]\n", value)
+			}
+			fmt.Fprintln(w, "")
 		}
 	}
 
