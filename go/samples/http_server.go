@@ -8,7 +8,7 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	echo_handler := func(w http.ResponseWriter, r *http.Request) {
+	echoHandler := func(w http.ResponseWriter, r *http.Request) {
 		for name, values := range r.Header {
 			fmt.Fprintf(w, "%s:\n", name)
 			for _, value := range values {
@@ -18,7 +18,7 @@ func main() {
 		}
 	}
 
-	query_handler := func(w http.ResponseWriter, r *http.Request) {
+	queryHandler := func(w http.ResponseWriter, r *http.Request) {
 		for name, value := range r.URL.Query() {
 			fmt.Fprintf(w, "%s=%s\n", name, value)
 		}
@@ -30,9 +30,9 @@ func main() {
 
 	http.HandleFunc("/hello", HelloHandler)
 
-	http.HandleFunc("/echo", echo_handler)
+	http.HandleFunc("/echo", echoHandler)
 
-	http.HandleFunc("/query", query_handler)
+	http.HandleFunc("/query", queryHandler)
 
 	http.ListenAndServe(":8080", nil)
 }
