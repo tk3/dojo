@@ -1,8 +1,9 @@
 def basic_auth
   r = Nginx::Request.new
-  r.headers_out["WWW-Authenticate"] = 'Basic realm="Private Page"'
+  relm_name = r.var.relm_name
 
   if r.headers_in["Authorization"].nil?
+    r.headers_out["WWW-Authenticate"] = %Q(Basic realm="#{relm_name}")
     return Nginx::HTTP_UNAUTHORIZED
   end
 
@@ -10,6 +11,7 @@ def basic_auth
   params = Base64::decode(auth.split(" ")[1]).split(":")
 
   unless yield(params[0], params[1])
+    r.headers_out["WWW-Authenticate"] = %Q(Basic realm="#{relm_name}")
     return Nginx::HTTP_UNAUTHORIZED
   end
 
