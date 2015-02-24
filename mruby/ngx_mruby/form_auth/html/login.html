@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+form {
+    width: 270px;
+}
+form > input, button {
+    display: block;
+    width: 100%;
+}
+form input[type="text"],
+form input[type="password"] {
+    padding: 0 8px;
+    height: 44px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+form input[type="password"] {
+    margin-top: -1px;
+    margin-bottom: 10px;
+}
+form button[type="submit"] {
+    background-color: #5580af;
+    color: #fff;
+    border: 0;
+    padding: 0 8px;
+    height: 44px;
+}
+</style>
+</head>
+<body>
+<h1>Login page</h1>
+<form method="post" action="/login">
+    <input type="text" name="id" placeholder="id"></input>
+    <input type="password" name="password" placeholder="password"></input>
+    <button type="submit">Login</button>
+</form>
+</body>
+</html>
