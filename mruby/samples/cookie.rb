@@ -2,12 +2,11 @@
 class Cookie
   def self.parse(cookie)
     c = {}
-    cookie.split(/;\s*/).each {|item|
+    cookie.split(/;\s*/).each do |item|
       params = item.split("=")
       next  if params.size == 0 || params[0].empty?
-      puts "[#{params[0]}] = [#{params[1]}]"
       c[params[0]] = params[1]
-    }
+    end
     c
   end
 end
@@ -28,7 +27,7 @@ data = [
 ]
 
 data.each {|d|
-  Cookie.parse(d)
+  c = Cookie.parse(d)
   #puts d
 }
 

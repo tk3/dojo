@@ -2,12 +2,11 @@
 class QueryString
   def self.parse(query_string)
     qs = {}
-    query_string.split('&').each {|item|
+    query_string.split('&').each do |item|
       params = item.split("=")
       next  if params.size == 0 || params[0].empty?
-      puts "[#{params[0]}] = [#{params[1]}]"
       qs[params[0]] = params[1]
-    }
+    end
     qs
   end
 end
