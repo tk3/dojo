@@ -2,6 +2,7 @@
 class QueryString
   def self.parse(query_string)
     qs = {}
+    return qs  if query_string.nil?
     query_string.split('&').each do |item|
       params = item.split("=")
       next  if params.size == 0 || params[0].empty?
@@ -12,6 +13,7 @@ class QueryString
 end
 
 data = [
+  nil,
   '',
   'name',
   'name=',
@@ -27,7 +29,7 @@ data = [
 ]
 
 data.each {|d|
-  QueryString.parse(d)
+  puts QueryString.parse(d)
   #puts d
 }
 
