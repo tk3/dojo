@@ -20,18 +20,18 @@ end
 
 def load_user_list(file)
   users = {}
-  IO.open(IO.sysopen((file))) {|io|
-    io.each {|line|
+  IO.open(IO.sysopen((file))) do |io|
+    io.each do |line|
       params = line.chomp.split("\t")
       users[params[0]] = params[1] if 1 < params.size
-    }
-  }
+    end
+  end
   users
 end
 
 r = Nginx::Request.new
 users = load_user_list(r.var.user_list)
 
-Nginx.return basic_auth {|id, password|
+Nginx.return basic_auth do |id, password|
   users.key?(id) && users[id] == password
-}
+end
