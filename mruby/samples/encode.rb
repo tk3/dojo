@@ -38,7 +38,6 @@ def encode64(s)
     tbl_index = bitstring_to_int("00" + item)
     r << ascii_tbl[tbl_index]
   end
-pp r
 
   r
 end
