@@ -1,4 +1,7 @@
 
+#  conf.gem :github => 'iij/mruby-digest'
+#  conf.gem :github => 'iij/mruby-pack'
+
 def to_crypto(crypto)
   if crypto == 'hmacsha256'
     Digest::SHA256
@@ -12,11 +15,12 @@ end
 
 def generate_otp(key, time, return_digits, crypto)
   packed_time_fmt = '%%0%dX'%(return_digits * 2)
+  packed_time_fmt = '%%0%dX'%(8 * 2)
   packed_time = [packed_time_fmt%time].pack('H*')
   packed_key = [key].pack('H*')
   hash = Digest::HMAC.digest(packed_time, packed_key, to_crypto(crypto))
 
-  offset = hash[hash.length - 1].unpack('C')[0] & 0xf
+  offset = hash[-1].unpack('C')[0] & 0xf
 
   bin = 
     ((hash[offset].unpack('C')[0] & 0x7f) << 24) |
@@ -94,4 +98,10 @@ test_data.each do |data|
   puts otp_512 == data[:otp_sha512] ? 'OK' : 'NG'
   puts '========'
 end
+
+seed = 'JBSWY3DPEHPK3PXP'
+seed = '48656c6c6f21deadbeef'
+to = 0
+t = (Time.now.gmtime.to_i / time_step).floor
+puts generate_otp seed, t, 6, 'hmacsha1'
 
