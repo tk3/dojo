@@ -12,22 +12,21 @@ end
 
 def generate_otp(key, time, return_digits, crypto)
   packed_time_fmt = '%%0%dX'%16
+  otp_fmt = '%%0%dd'%return_digits
+
   packed_time = [packed_time_fmt%time].pack('H*')
   packed_key = [key].pack('H*')
-  hash = Digest::HMAC.digest(packed_time, packed_key, to_crypto_type(crypto))
+  digest = Digest::HMAC.digest(packed_time, packed_key, to_crypto_type(crypto))
+  digest_bin = digest.unpack('C*')
+  offset = digest_bin[-1] & 0xf
 
-  offset = hash[-1].unpack('C')[0] & 0xf
+  otp_bin =
+    ((digest_bin[offset] & 0x7f) << 24) |
+    ((digest_bin[offset + 1] & 0xff) << 16) |
+    ((digest_bin[offset + 2] & 0xff) << 8) |
+    (digest_bin[offset + 3] & 0xff)
 
-  bin =
-    ((hash[offset].unpack('C')[0] & 0x7f) << 24) |
-    ((hash[offset + 1].unpack('C')[0] & 0xff) << 16) |
-    ((hash[offset + 2].unpack('C')[0] & 0xff) << 8) |
-    (hash[offset + 3].unpack('C')[0] & 0xff)
-
-  otp = bin % (10 ** return_digits)
-
-  otp_fmt = '%%0%dd'%return_digits
-  otp_fmt%otp
+  otp_fmt%(otp_bin % (10 ** return_digits))
 end
 
 test_data = [
