@@ -59,26 +59,54 @@ class Base32
       bin << ((keys[i+6] & 0x7) << 5 | keys[i+7])
     end
 
+    null_index = bin.index(0)
+    if !null_index.nil?
+      bin = bin.slice(0, null_index)
+    end
     bin.pack('C*')
   end
 end
 
-d = [
-  'ME======',
-  'MFQQ====',
-  'MFQWC===',
-  'MFQWCYI=',
-  'MFQWCYLB',
-  'MFQWCYLBME======'
-]
+def test_encode
+  test = [
+    {:data => '', :expect => '' },
+    {:data => 'a', :expect => 'ME======'},
+    {:data => 'ab', :expect => 'MFRA====' },
+    {:data => 'abc', :expect => 'MFRGG===' },
+    {:data => 'abcd', :expect => 'MFRGGZA=' },
+    {:data => 'abcde', :expect => 'MFRGGZDF' },
+    {:data => 'abcdef', :expect => 'MFRGGZDFMY======' },
+    {:data => 'abcdefg', :expect => 'MFRGGZDFMZTQ====' },
+    {:data => 'abcdefg', :expect => 'MFRGGZDFMZTQ====' },
+    {:data => 'aBcDeFg', :expect => 'MFBGGRDFIZTQ====' },
+  ]
 
-#puts Base32.encode 'a'
-#puts Base32.encode 'a' * 2
-#puts Base32.encode 'a' * 3
-#puts Base32.encode 'a' * 4
-#puts Base32.encode 'a' * 5
-#puts Base32.encode 'a' * 6
+  test.each do |t|
+    r = Base32.encode t[:data]
+    puts "#{t[:data]} | #{r} | #{r == t[:expect]}"
+  end
+end
 
-puts Base32.decode 'MFQWCYLB'
-puts Base32.decode 'MFQWC==='
+def test_decode
+  test = [
+    {:data => '',                 :expect => '' },
+    {:data => 'ME======',         :expect => 'a' },
+    {:data => 'MFRA====',         :expect => 'ab' },
+    {:data => 'MFRGG===',         :expect => 'abc' },
+    {:data => 'MFRGGZA=',         :expect => 'abcd' },
+    {:data => 'MFRGGZDF',         :expect => 'abcde' },
+    {:data => 'MFRGGZDFMY======', :expect => 'abcdef'  },
+    {:data => 'MFRGGZDFMZTQ====', :expect => 'abcdefg' },
+    {:data => 'MFRGGZDFMZTQ====', :expect => 'abcdefg' },
+    {:data => 'MFBGGRDFIZTQ====', :expect => 'aBcDeFg' },
+  ]
+
+  test.each do |t|
+    r = Base32.decode t[:data]
+    puts "#{t[:data]} | #{r} | #{r == t[:expect]}"
+  end
+end
+
+test_encode
+test_decode
 
