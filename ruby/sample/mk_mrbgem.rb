@@ -2,8 +2,18 @@
 
 require 'fileutils'
 
+if ARGV.length < 1
+  exit 1
+end
+
+library_name = ARGV[0]
+mgem_name = "mruby-#{library_name}"
+
+puts library_name
+puts mgem_name
+
 readme = <<README_TEMPLATE
-mruby-foo
+#{mgem_name}
 =========
 
 Dependences
@@ -19,7 +29,7 @@ MIT License
 README_TEMPLATE
 
 mrbgem_rake = <<MRBGEMS_RAKE_TEMPLATE
-MRuby::Gem::Specification.new('mruby-foo') do |spec|
+MRuby::Gem::Specification.new('#{mgem_name}') do |spec|
   spec.license = 'MIT'
   spec.author  = 'mruby developers'
   spec.summary = 'This is a template'
@@ -32,21 +42,21 @@ c_source = <<C_SOURCE_TEMPLATE
 #include <stdio.h>
 
 static mrb_value
-mrb_foo_method(mrb_state *mrb, mrb_value self)
+mrb_#{library_name}_method(mrb_state *mrb, mrb_value self)
 {
   puts("Foo> Hello!");
   return self;
 }
 
 void
-mrb_mruby_foo_gem_init(mrb_state* mrb)
+mrb_mruby_#{library_name}_gem_init(mrb_state* mrb)
 {
-  struct RClass *foo_class = mrb_define_module(mrb, "Foo");
-  mrb_define_class_method(mrb, foo_class, "call", mrb_foo_method, MRB_ARGS_NONE());
+  struct RClass *#{library_name}_class = mrb_define_module(mrb, "#{library_name}");
+  mrb_define_class_method(mrb, #{library_name}_class, "call", mrb_#{library_name}_method, MRB_ARGS_NONE());
 }
 
 void
-mrb_mruby_foo_gem_final(mrb_state* mrb)
+mrb_mruby_#{library_name}_gem_final(mrb_state* mrb)
 {
   /* finalizer */
 }
@@ -57,9 +67,6 @@ assert('C Extension Example') do
   Foo.respond_to? :call
 end
 MRB_TEST_TEMPLATE
-
-
-mgem_name = 'mruby-aaa'
 
 FileUtils.mkdir_p mgem_name
 FileUtils.mkdir_p "#{mgem_name}/src"
