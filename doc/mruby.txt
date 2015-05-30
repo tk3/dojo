@@ -1,25 +1,15 @@
+= mruby Github
+https://github.com/mruby/mruby.git
 
- 1145  git clone https://github.com/mruby/mruby.git
- 1151  git clone https://github.com/mattn/mruby-sqlite3.git
- 1158  cd mruby
- 1163  cp -R mruby-sqlite3 mruby/mrbgems/g
- 1167  cd mruby
- 1169  vi mrbgems/GEMS.active 
- 1171  ENABLE_GEMS=true rake
+= mrb_value mrb_obj_value(void *p);
 
+= mrb_value mrb_fixnum_value(mrb_int i);
 
-===========
+= mrb_value mrb_float_value(mrb_float f);
 
+= mrb_value mrb_true_value(void);
 
+= mrb_value mrb_false_value(void);
 
-
-gcc -o /Users/qtakamitsu/build/mruby.mrbgems/bin/mruby  /Users/qtakamitsu/build/mruby.mrbgems/src/../tools/mruby/mruby.o /Users/qtakamitsu/build/mruby.mrbgems/lib/libmruby.a /Users/qtakamitsu/build/mruby.mrbgems/mrbgems/gem_init.a /Users/qtakamitsu/build/mruby/mrbgems/g/mruby-sqlite3/mrb-mruby-sqlite3-gem.a   -lm -lsqlite3
-	-all_load
-
-
-= mruby ビルド mrbgems
-
-        $ vi mrbgems/GEMS.active
-        /Users/qtakamitsu/build/mruby/mrbgems/g/mruby-sqlite3
-        $ ENABLE_GEMS=true rake
+= mrb_value mrb_nil_value(void);
 
