@@ -1,0 +1,20 @@
+# gem のひな形を作成する
+
+    $ bundle gem hogehoge
+
+# gem ファイルを作成する
+
+    $ bundle exec rake build
+
+# gem をリリースする
+
+    $ bundle exec rake release
+
+$ bundle exec rake release
+fooo 0.0.1 built to pkg/fooo-0.0.1.gem.
+Tagged v0.0.1.
+Enter passphrase for key '/home/vagrant/.ssh/github_id_rsa':
+Enter passphrase for key '/home/vagrant/.ssh/github_id_rsa':
+Pushed git commits and tags.
+Pushed fooo 0.0.1 to rubygems.org.
+
