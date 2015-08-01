@@ -1,0 +1,45 @@
+-------
+# Docker コンテナに入り、コマンドを実行する
+docker run --rm centos uname -a
+
+$ docker run --rm centos cat /etc/redhat-release
+CentOS Linux release 7.0.1406 (Core)
+$ docker run --rm centos:centos6 cat /etc/redhat-release
+CentOS release 6.5 (Final)
+
+# Docker コンテナから新しい Docker イメージを作成する
+# ubuntu1 コンテナから foo/app イメージを作成する
+$ docker commit ubuntu1 foo/app
+
+
+# バックグラウンドで実行する -> -d オプション
+docker run -d ...
+
+% docker run -d -i -t centos:centos6 /bin/bash
+
+
+# Docker コンテナを停止する
+docker stop [コンテナ名、コンテナID]
+
+# Docker コンテナを起動する
+docker start [コンテナ名、コンテナID]
+
+$ docker rm [コンテナ名、コンテナーID]
+$ docker rmi [イメージ名、イメージID]
+
+
+# 停止しているコンテナを削除する
+docker rm `docker ps -a -q`
+
+# 不要なイメージを削除する
+docker rmi $(docker images | awk '/^<none>/ { print $3 }')
+
+---
+wwq% docker run -d -i -t centos:centos6 /bin/bash
+3d9f755c9790f37d76e8ca61612ddcb791b68fec533f249235b0392bb45084dc
+wwq% docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+3d9f755c9790        centos:centos6      "/bin/bash"         5 seconds ago       Up 4 seconds                            sick_wozniak
+wwq% docker attach 3d9f755c9790
+---
+
