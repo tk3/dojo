@@ -1,5 +1,3 @@
 vagrant
 
-% gem install vagrant
-
 
