@@ -1,0 +1,4 @@
+
+# パッケージをインストールする
+apt install <package 名>
+
