@@ -1,0 +1,22 @@
+# パッケージをインストールする
+brew install formula
+
+# インストール可能なパッケージを検索する
+brew search text
+brew search /text/
+
+# パッケージをアンインストールする
+brew remove formula
+
+# Homebrew をアップデートする
+brew update
+
+# インストール済みのパッケージを表示する
+brew list
+
+# インストール済みのパッケージを更新する
+brew upgrade fomula
+
+# パッケージ情報を見る
+brew info fomula
+
