@@ -1,0 +1,7 @@
+
+# インストール済みのシェルを表示する
+cat /etc/shells
+
+# シェルを変更する
+chsh -s /usr/local/bin/zsh
+
