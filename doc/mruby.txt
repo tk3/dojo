@@ -5,15 +5,19 @@ https://github.com/mruby/mruby.git
 
 = mrb_value mrb_obj_value(void *p);
 
-= mrb_value mrb_fixnum_value(mrb_int i);
-
 = mrb_value mrb_float_value(mrb_float f);
 
-= mrb_value mrb_true_value(void);
+= Fixnum に変換する
+mrb_value this_is_fixnum = mrb_fixnum_value(22);
 
-= mrb_value mrb_false_value(void);
+= true を生成する
+mrb_value this_is_true = mrb_true_value();
 
-= mrb_value mrb_nil_value(void);
+= false を生成する
+mrb_value this_is_false = mrb_false_value();
+
+= nil を生成する
+mrb_value this_is_nil = mrb_nil_value();
 
 = void *mrb_get_datatype(mrb_state *mrb, mrb_value obj, const struct mrb_data_type *type);
 
@@ -22,4 +26,10 @@ struct RClass *module = mrb_define_module(mrb, "Sample");
 
 = クラスを定義する
 struct RClass *class = mrb_define_class(mrb, "Sample", mrb->object_class);
+
+= メソッドをコールする
+mrb_state *mrb;
+mrb_value ret;
+...
+ret = mrb_funcall(mrb, mrb_top_self(mrb), "foo", 1, mrb_fixnum_value(10));
 
