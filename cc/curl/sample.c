@@ -4,7 +4,7 @@
 #include "curl/curl.h"
 
 typedef struct {
-    char *m;
+	char *m;
 	size_t size;
 } Memory;
 
@@ -41,11 +41,13 @@ int main(int argc, char **argv)
 
 	printf("response: [%s]\n", response_body.m);
 
+	free(response_body.m);
+
 	curl_easy_cleanup(curl);
 
 	curl_global_cleanup();
 
-    return 0;
+	return 0;
 }
 
 size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
