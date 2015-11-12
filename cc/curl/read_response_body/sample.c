@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 {
 	CURL *curl;
 	CURLcode ret;
-	Memory response_body;
+	Memory body;
 
 	curl_global_init(CURL_GLOBAL_ALL);
 
@@ -24,12 +24,12 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	response_body.m = (char *)malloc(1);
-	response_body.m[0] = '\0';
-	response_body.size = 0;
+	body.m = (char *)malloc(1);
+	body.m[0] = '\0';
+	body.size = 0;
 
 	curl_easy_setopt(curl, CURLOPT_URL, "http://localhost/");
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_body);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &body);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 
@@ -39,9 +39,9 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	printf("response: \n%s\n", response_body.m);
+	printf("response: \n%s\n", body.m);
 
-	free(response_body.m);
+	free(body.m);
 
 	curl_easy_cleanup(curl);
 
