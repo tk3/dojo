@@ -19,7 +19,7 @@ int test_call_strcpy(void)
     char *dl_error;
     void *func;
 
-    handle = dlopen("/lib64/libc.so.6", RTLD_LAZY);
+    handle = dlopen("libc.so.6", RTLD_LAZY);
     if (handle == NULL) {
         fprintf(stderr, "Error: dlopen() failed. [%s]\n", dlerror());
         return -1;
