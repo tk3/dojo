@@ -2,7 +2,6 @@
 
 require "thor"
 
-
 class MyCLI < Thor
   desc "hello NAME", "say hello to NAME"
   options :from => :required, :yell => :boolean
@@ -14,4 +13,6 @@ class MyCLI < Thor
 	  puts options[:yell] ? output.upcase : output
 	end
 end
+
+MyCLI.start(ARGV)
 

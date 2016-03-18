@@ -13,4 +13,8 @@ class MyCLI < Thor
 		output = output.join("\n")
 		puts options[:yell] ? output.upcase : output
 	end
+	puts "aaa", @method_options
 end
+
+MyCLI.start(ARGV)
+

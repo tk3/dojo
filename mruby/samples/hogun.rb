@@ -1,31 +1,33 @@
-
-class Hogen
+class Hogun
 	def self.desc(usage, description)
 		@previous_defined ||= []
 		current_defined = instance_methods(false)
 		diff = current_defined - @previous_defined
-		if diff.length > 0 # TODO: 
+		if diff.length > 0    # TODO: 
 			@command_config ||= {}
 			@command_config[diff[0]] = @variables
-	  	@variables = {}
+			@variables = {}
 		end
-  	@variables ||= {}
-	  @variables[:desc] = {:usage => usage, :description => description}
+		@variables ||= {}
+		@variables[:desc] = {:usage => usage, :description => description}
 		@previous_defined = instance_methods(false)
 	end
 
 	def self.start(argv = ARGV)
 		current_defined = instance_methods(false)
 		diff = current_defined - @previous_defined
-		if diff.length > 0 # TODO: 
+		if diff.length > 0    # TODO: 
 			@command_config ||= {}
 			@command_config[diff[0]] = @variables
 		end
 
 		cmd = ARGV[0] || ""
-		if cmd.empty? || cmd == "help"
-			print_help
+		if cmd.empty? || (cmd == "help" && argv.length == 1)
+			print_usage
 			return 0
+		end
+		if cmd == "help" && argv.length > 1
+			return print_command_help(argv[1])
 		end
 
 		task = self.new
@@ -41,24 +43,35 @@ class Hogen
 	end
 
 private
-	def self.print_help
+	def self.print_usage
 		puts "Commands:"
-#	@@variables.each_key do |key|
-#	  puts "  #{__FILE__} #{desc[0]}  # #{des[1]}"
-#	end
-		puts @command_config
+
 		@command_config.each_key do |key|
-			puts key
-			puts %Q(  #{__FILE__} #{desc[:name]})
+			desc = @command_config[key][:desc]
+			puts "  %s" % [__FILE__ + " " + desc[:usage] +  "  # " + desc[:description]]
 		end
 
-		puts @command_config
 		puts "  #{__FILE__} help [COMMAND]  # Describe available commands or one specific command"
 		puts ""
 	end
+
+	def self.print_command_help(cmd)
+		unless @command_config.key?(cmd.to_sym)
+			$stderr.puts %Q(Could not find command "#{cmd}".)
+			return 1
+		end
+		desc = @command_config[cmd.to_sym][:desc]
+
+		puts "Usage:"
+		puts "  %s" % [__FILE__ + " " + desc[:usage]]
+		puts ""
+		puts "%s" % [desc[:description]]
+
+		return 0
+	end
 end
 
-class MyCLI < Hogen
+class MyCLI < Hogun
 	desc "hello NAME", "say hello to NAME"
 	def hello(name)
 		puts "Hello #{name}"

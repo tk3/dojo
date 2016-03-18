@@ -20,3 +20,6 @@ class MyCLI < Thor
     puts "Hello #{name}"
   end
 end
+
+MyCLI.start(ARGV)
+

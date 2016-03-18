@@ -25,3 +25,5 @@ class MyCLI < Thor
   end
 end
 
+MyCLI.start(ARGV)
+
