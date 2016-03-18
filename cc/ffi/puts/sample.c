@@ -22,7 +22,7 @@ int test_call_puts(void)
     char *dl_error;
     void *func;
 
-    handle = dlopen("/lib64/libc.so.6", RTLD_LAZY);
+    handle = dlopen("libc.so.6", RTLD_LAZY);
     if (handle == NULL) {
         fprintf(stderr, "Error: dlopen() failed. [%s]\n", dlerror());
         return -1;
@@ -77,7 +77,7 @@ int test_call_strcpy(void)
     char *dl_error;
     void *func;
 
-    handle = dlopen("/lib64/libc.so.6", RTLD_LAZY);
+    handle = dlopen("libc.so.6", RTLD_LAZY);
     if (handle == NULL) {
         fprintf(stderr, "Error: dlopen() failed. [%s]\n", dlerror());
         return -1;
@@ -110,7 +110,7 @@ int invoke_strcpy(void *func)
     char       *arg2;
 
     char       arg1_val[16] = "";
-    char       arg2_val[]   = "Hello world";
+    char       arg2_val[] = "Hello world";
 
     arg_types[0] = &ffi_type_pointer;
     arg_types[1] = &ffi_type_pointer;
