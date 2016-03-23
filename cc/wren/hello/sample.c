@@ -11,6 +11,7 @@ static const char *text =
 static void write_func(WrenVM* vm, const char *text);
 static void report_func(WrenErrorType type, const char* module, int line, const char *message);
 
+char *sample_load_module(WrenVM *vm, const char *name);
 WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature);
 WrenForeignClassMethods sample_forregn_class(WrenVM* vm, const char* module, const char* className);
 
@@ -23,6 +24,7 @@ int main(int argc, char **argv)
 
 	config.writeFn = write_func;
 	config.errorFn = report_func;
+	config.loadModuleFn = sample_load_module;
 	//config.bindForeignMethodFn = sample_foreign_method;
 	//config.bindForeignClassFn = NULL;
 
@@ -49,6 +51,14 @@ static void write_func(WrenVM *vm, const char *text)
 static void report_func(WrenErrorType type, const char* module, int line, const char *message)
 {
 	return;
+}
+
+char *sample_load_module(WrenVM *vm, const char *name)
+{
+	printf("WrenLoadModuleFn\n");
+	printf("name=[%s]\n", name);
+
+	return NULL;
 }
 
 WrenForeignMethodFn sample_foreign_method(WrenVM *vm, const char *module, const char *className, bool isStatic, const char *signature)
