@@ -13,7 +13,7 @@ static void report_func(WrenErrorType type, const char* module, int line, const 
 
 char *sample_load_module(WrenVM *vm, const char *name);
 WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature);
-WrenForeignClassMethods sample_forregn_class(WrenVM* vm, const char* module, const char* className);
+WrenForeignClassMethods sample_foreign_class(WrenVM* vm, const char* module, const char* className);
 
 int main(int argc, char **argv)
 {
@@ -25,8 +25,8 @@ int main(int argc, char **argv)
 	config.writeFn = write_func;
 	config.errorFn = report_func;
 	config.loadModuleFn = sample_load_module;
-	//config.bindForeignMethodFn = sample_foreign_method;
-	//config.bindForeignClassFn = NULL;
+	config.bindForeignMethodFn = sample_foreign_method;
+	config.bindForeignClassFn = sample_foreign_class;
 
 	vm = wrenNewVM(&config);
 
@@ -69,7 +69,7 @@ WrenForeignMethodFn sample_foreign_method(WrenVM *vm, const char *module, const 
 	return NULL;
 }
 
-WrenForeignClassMethods sample_forregn_class(WrenVM *vm, const char *module, const char *className)
+WrenForeignClassMethods sample_foreign_class(WrenVM *vm, const char *module, const char *className)
 {
 	WrenForeignClassMethods methods;
 
