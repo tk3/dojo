@@ -1,0 +1,30 @@
+
+NGINX_SRC="#{ENV['HOME']}/build/nginx-1.9.12"
+NGINX_HOME="#{ENV['HOME']}/opt/nginx"
+MODULE_HOME="/home/vagrant/g/dojo/cc/ngx/foo"
+
+task :default => :test
+
+task :build  do
+	Dir.chdir(NGINX_SRC) do
+		sh "./configure --prefix=#{NGINX_HOME} --add-module=#{MODULE_HOME}"
+		sh "make && make install"
+	end
+end
+
+task :start  do
+	sh "#{NGINX_HOME}/sbin/nginx"
+end
+
+task :stop  do
+	sh "#{NGINX_HOME}/sbin/nginx -s stop"
+end
+
+task :reload  do
+	sh "#{NGINX_HOME}/sbin/nginx -s reload"
+end
+
+task :test  do
+	sh "curl http://localhost:8080/foo"
+end
+
