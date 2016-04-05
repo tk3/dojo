@@ -24,6 +24,11 @@ task :reload  do
 	sh "#{NGINX_HOME}/sbin/nginx -s reload"
 end
 
+task "edit-config"  do
+	sh "vim #{NGINX_HOME}/conf/nginx.conf"
+end
+
+
 task :test  do
 	sh "curl http://localhost:8080/print"
 end
