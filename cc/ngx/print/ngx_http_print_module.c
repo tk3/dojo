@@ -49,13 +49,15 @@ static char html_content[] =
 "<body>nginx_print</body>\n"
 "</html>\n";
 
-static void ngx_print(ngx_http_request_t *r, ngx_chain_t* out, char* src, size_t n);
+//static void ngx_print(ngx_http_request_t *r, ngx_chain_t* out, char* src, size_t n);
+static ngx_chain_t *ngx_print(ngx_http_request_t *r, ngx_chain_t *last, char *src, size_t n, ngx_int_t *ret);
 
 static ngx_int_t
 ngx_http_print_handler(ngx_http_request_t *r)
 {
 	ngx_int_t rc;
-	ngx_chain_t out;
+	ngx_int_t err;
+	ngx_chain_t *out;
 
     if (!(r->method & (NGX_HTTP_GET|NGX_HTTP_HEAD))) {
         return NGX_HTTP_NOT_ALLOWED;
@@ -71,14 +73,20 @@ ngx_http_print_handler(ngx_http_request_t *r)
 	r->headers_out.content_type.data = (u_char *) "text/html";
 	r->headers_out.content_length_n = sizeof(html_content) - 1;
 
-	ngx_print(r, &out, html_content, sizeof(html_content) - 1);
+	//ngx_print(r, &out, html_content, sizeof(html_content) - 1);
+
+	out = ngx_print(r, NULL, html_content, sizeof(html_content) - 1, &err);
+	if (out == NULL) {
+		return NGX_ERROR;
+	}
 
 	rc = ngx_http_send_header(r);
 	if (rc == NGX_ERROR || rc > NGX_OK || r->header_only) {
 		return rc;
 	}
 
-    return ngx_http_output_filter(r, &out);
+    //return ngx_http_output_filter(r, &out);
+    return ngx_http_output_filter(r, out);
 }
 
 static char *
@@ -92,6 +100,7 @@ ngx_http_print(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     return NGX_CONF_OK;
 }
 
+#if 0
 static void
 ngx_print(ngx_http_request_t *r, ngx_chain_t* out, char* src, size_t n)
 {
@@ -120,3 +129,48 @@ ngx_print(ngx_http_request_t *r, ngx_chain_t* out, char* src, size_t n)
 
 	return;
 }
+#endif
+
+static ngx_chain_t *
+ngx_print(ngx_http_request_t *r, ngx_chain_t *last, char *src, size_t n, ngx_int_t *ret)
+{
+    u_char    *p;
+    ngx_buf_t *b;
+	ngx_chain_t *cl;
+
+	p = ngx_palloc(r->pool, n);
+	if (p == NULL) {
+		*ret = NGX_ERROR;
+		return NULL;
+	}
+	ngx_memcpy(p, src, n);
+
+	b = ngx_calloc_buf(r->pool);
+	if (b == NULL) {
+		*ret = NGX_ERROR;
+		return NULL;
+	}
+
+	cl = ngx_alloc_chain_link(r->pool);
+	if (cl == NULL) {
+		*ret = NGX_ERROR;
+		return NULL;
+	}
+
+	b->memory = 1;
+	b->last_buf = 1;
+	b->pos = p;
+	b->last = p + n;
+
+	cl->buf = b;
+	cl->next = NULL;
+
+	*ret = NGX_OK;
+
+	if (last != NULL) {
+		last->next = cl;
+	}
+
+	return cl;
+}
+
