@@ -5,6 +5,7 @@
 static const char* text =
 "import \"random\" for Random\n"
 "import \"foo\" for Foo\n"
+//"import \"bar\" for Bar\n"
 "\n"
 "System.print(\"abcd\".byteCount_)"
 "\n"
@@ -33,6 +34,8 @@ char* sample_load_module(WrenVM* vm, const char* name);
 WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature);
 WrenForeignClassMethods sample_foreign_class(WrenVM* vm, const char* module, const char* className);
 
+void foo_hey(WrenVM* vm);
+
 int main(int argc, char** argv)
 {
 	WrenConfiguration config; 
@@ -45,6 +48,7 @@ int main(int argc, char** argv)
 	config.loadModuleFn = sample_load_module;
 	config.bindForeignMethodFn = sample_foreign_method;
 	config.bindForeignClassFn = sample_foreign_class;
+	config.bindForeignClassFn = NULL;
 
 	vm = wrenNewVM(&config);
 
@@ -101,11 +105,9 @@ WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const 
 
 	printf("foreign method) module=[%s], className=[%s], signature=[%s]\n", module, className, signature);
 
-/*--
-	if (vm->config.bindForeignMethodFn != NULL) {
-		method = vm->config.bindForeignMethodFn(vm, module, className, isStatic, signature);
+	if (strcmp("foo", module) == 0 && strcmp("Foo", className) == 0 && strcmp("hey()", signature) == 0) {
+		return foo_hey;
 	}
---*/
 
 	return method;
 }
@@ -121,3 +123,9 @@ WrenForeignClassMethods sample_foreign_class(WrenVM* vm, const char* module, con
 
 	return methods;
 }
+
+void foo_hey(WrenVM* vm)
+{
+	printf("foo> Hey!!\n");
+}
+
