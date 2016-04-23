@@ -49,6 +49,13 @@ static char html_content[] =
 "<body>nginx_print</body>\n"
 "</html>\n";
 
+static char html_content0[] = "<html>\n";
+static char html_content1[] = "<head>\n";
+static char html_content2[] = "<title>print module</title>\n";
+static char html_content3[] = "</head>\n";
+static char html_content4[] = "<body>nginx_print</body>\n";
+static char html_content5[] = "</html>\n";
+
 //static void ngx_print(ngx_http_request_t *r, ngx_chain_t* out, char* src, size_t n);
 static ngx_chain_t *ngx_print(ngx_http_request_t *r, ngx_chain_t *last, char *src, size_t n, ngx_int_t *ret);
 
@@ -58,6 +65,8 @@ ngx_http_print_handler(ngx_http_request_t *r)
 	ngx_int_t rc;
 	ngx_int_t err;
 	ngx_chain_t *out;
+	ngx_chain_t *next;
+	ngx_chain_t *prev;
 
     if (!(r->method & (NGX_HTTP_GET|NGX_HTTP_HEAD))) {
         return NGX_HTTP_NOT_ALLOWED;
@@ -75,10 +84,24 @@ ngx_http_print_handler(ngx_http_request_t *r)
 
 	//ngx_print(r, &out, html_content, sizeof(html_content) - 1);
 
-	out = ngx_print(r, NULL, html_content, sizeof(html_content) - 1, &err);
-	if (out == NULL) {
-		return NGX_ERROR;
-	}
+	prev = NULL;
+
+	next = ngx_print(r, NULL, html_content0, sizeof(html_content0) - 1, &err);
+	out = prev = next;
+
+	next = ngx_print(r, prev, html_content1, sizeof(html_content1) - 1, &err);
+	prev = next;
+
+	next = ngx_print(r, prev, html_content2, sizeof(html_content2) - 1, &err);
+	prev = next;
+
+	next = ngx_print(r, prev, html_content3, sizeof(html_content3) - 1, &err);
+	prev = next;
+
+	next = ngx_print(r, prev, html_content4, sizeof(html_content4) - 1, &err);
+	prev = next;
+
+	next = ngx_print(r, prev, html_content5, sizeof(html_content5) - 1, &err);
 
 	rc = ngx_http_send_header(r);
 	if (rc == NGX_ERROR || rc > NGX_OK || r->header_only) {
