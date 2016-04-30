@@ -1,7 +1,9 @@
 
-NGINX_SRC="#{ENV['HOME']}/build/nginx-1.9.12"
-NGINX_HOME="#{ENV['HOME']}/opt/nginx"
-MODULE_HOME="/home/vagrant/g/dojo/cc/ngx/print"
+NGINX_VERSION = "1.9.12"
+NGINX_SRC = "#{ENV['HOME']}/build/nginx-#{NGINX_VERSION}"
+NGINX_HOME = "#{ENV['HOME']}/opt/nginx"
+MODULE_HOME = "/home/vagrant/g/dojo/cc/ngx/print"
+MODULE_NAME = "ngx_http_print_module"
 
 task :default => :test
 
@@ -40,7 +42,7 @@ end
 
 task :a do
   Dir.chdir(NGINX_SRC) do
-    sh "cc -c -pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g   -I src/core -I src/event -I src/event/modules -I src/os/unix -I objs -I src/http -I src/http/modules -o objs/addon/print/ngx_http_print_module.o /home/vagrant/g/dojo/cc/ngx/print/ngx_http_print_module.c"
+    sh "cc -c -pipe -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g -I src/core -I src/event -I src/event/modules -I src/os/unix -I objs -I src/http -I src/http/modules -o objs/addon/print/#{MODULE_NAME}.o /home/vagrant/g/dojo/cc/ngx/print/#{MODULE_NAME}.c"
   end
 end
 
