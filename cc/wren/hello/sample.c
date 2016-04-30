@@ -16,6 +16,7 @@ static const char* text =
 "\n"
 "Foo.say()\n"
 "Foo.hey()\n"
+"Foo.hey2(\"aa\")\n"
 ;
 
 static const char* foo_class_text = 
@@ -24,6 +25,7 @@ static const char* foo_class_text =
 "    System.print(\"foo!\")\n"
 "  }\n"
 "  foreign static hey()\n"
+"  foreign static hey2(s)\n"
 "}\n"
 ;
 
@@ -35,6 +37,7 @@ WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const 
 WrenForeignClassMethods sample_foreign_class(WrenVM* vm, const char* module, const char* className);
 
 void foo_hey(WrenVM* vm);
+void foo_hey2(WrenVM* vm);
 
 int main(int argc, char** argv)
 {
@@ -108,6 +111,9 @@ WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const 
 	if (strcmp("foo", module) == 0 && strcmp("Foo", className) == 0 && strcmp("hey()", signature) == 0) {
 		return foo_hey;
 	}
+	if (strcmp("foo", module) == 0 && strcmp("Foo", className) == 0 && strcmp("hey2(_)", signature) == 0) {
+		return foo_hey2;
+	}
 
 	return method;
 }
@@ -126,6 +132,17 @@ WrenForeignClassMethods sample_foreign_class(WrenVM* vm, const char* module, con
 
 void foo_hey(WrenVM* vm)
 {
+	int argc = wrenGetSlotCount(vm);
+
+	printf("foo> [%d]\n", argc);
 	printf("foo> Hey!!\n");
+}
+
+void foo_hey2(WrenVM* vm)
+{
+	int argc = wrenGetSlotCount(vm);
+
+	printf("foo2> [%d]\n", argc);
+	printf("foo2> Hey!!\n");
 }
 
