@@ -8,7 +8,12 @@ task :default => :test
 task :build  do
 	Dir.chdir(NGINX_SRC) do
 		sh "./configure --prefix=#{NGINX_HOME} --add-module=#{MODULE_HOME}"
-		sh "make && make install"
+	end
+end
+
+task :install  do
+	Dir.chdir(NGINX_SRC) do
+		sh "make install"
 	end
 end
 
