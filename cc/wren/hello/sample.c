@@ -16,7 +16,8 @@ static const char* text =
 "\n"
 "Foo.say()\n"
 "Foo.hey()\n"
-"Foo.hey2(\"aa\")\n"
+//"Foo.hey2(\"aa\")\n"
+"Foo.hey2(10)\n"
 ;
 
 static const char* foo_class_text = 
@@ -31,6 +32,7 @@ static const char* foo_class_text =
 
 static void write_func(WrenVM* vm, const char* text);
 static void report_func(WrenErrorType type, const char* module, int line, const char* message);
+static const char *wren_type2name(WrenType type);
 
 char* sample_load_module(WrenVM* vm, const char* name);
 WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature);
@@ -141,8 +143,43 @@ void foo_hey(WrenVM* vm)
 void foo_hey2(WrenVM* vm)
 {
 	int argc = wrenGetSlotCount(vm);
+	WrenType type;
+
+	type = wrenGetSlotType(vm, 1);
 
 	printf("foo2> [%d]\n", argc);
-	printf("foo2> Hey!!\n");
+	printf("foo2> argv[1] = [%s]\n", wren_type2name(type));
+}
+
+static const char *wren_type2name(WrenType type)
+{
+	char *name = NULL;
+	switch (type) {
+	case WREN_TYPE_BOOL:
+		name = "bool";
+		break;
+	case WREN_TYPE_NUM:
+		name = "num";
+		break;
+	case WREN_TYPE_FOREIGN:
+		name = "foreign";
+		break;
+	case WREN_TYPE_LIST:
+		name = "list";
+		break;
+	case WREN_TYPE_NULL:
+		name = "null";
+		break;
+	case WREN_TYPE_STRING:
+		name = "string";
+		break;
+	case WREN_TYPE_UNKNOWN:
+		name = "unknown";
+		break;
+	default:
+		break;
+	}
+
+	return name;
 }
 
