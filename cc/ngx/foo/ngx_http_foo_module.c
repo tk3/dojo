@@ -64,7 +64,6 @@ ngx_http_foo_handler(ngx_http_request_t *r)
 
     cv.value.len = sizeof(html_content) - 1;
     cv.value.data = html_content;
-    //r->headers_out.last_modified_time = 23349600;
 
     return ngx_http_send_response(r, NGX_HTTP_OK, &ngx_http_content_type, &cv);
 }
