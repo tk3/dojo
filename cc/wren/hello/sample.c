@@ -1,32 +1,30 @@
 #include "wren.h"
 #include <stdio.h>
 
-static const char *text =
-//"import \"foo\" for Foo\n"
-"import \"random\" for Random\n"
-"\n"
-"System.print(\"Hello world\")\n"
-"System.print(\"Hello world\")\n";
+static const char* text =
+"System.print(\"hello, world\")"
+;
 
-static void write_func(WrenVM* vm, const char *text);
-static void report_func(WrenErrorType type, const char* module, int line, const char *message);
+static void write_func(WrenVM* vm, const char* text);
+static void report_func(WrenErrorType type, const char* module, int line, const char* message);
 
-char *sample_load_module(WrenVM *vm, const char *name);
+char* sample_load_module(WrenVM* vm, const char* name);
 WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature);
-WrenForeignClassMethods sample_forregn_class(WrenVM* vm, const char* module, const char* className);
+WrenForeignClassMethods sample_foreign_class(WrenVM* vm, const char* module, const char* className);
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
 	WrenConfiguration config; 
-	WrenVM *vm;
+	WrenVM* vm;
 
 	wrenInitConfiguration(&config);
 
 	config.writeFn = write_func;
 	config.errorFn = report_func;
 	config.loadModuleFn = sample_load_module;
-	//config.bindForeignMethodFn = sample_foreign_method;
-	//config.bindForeignClassFn = NULL;
+	config.bindForeignMethodFn = sample_foreign_method;
+	config.bindForeignClassFn = sample_foreign_class;
+	config.bindForeignClassFn = NULL;
 
 	vm = wrenNewVM(&config);
 
@@ -42,42 +40,46 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-static void write_func(WrenVM *vm, const char *text)
+static void write_func(WrenVM* vm, const char* text)
 {
-	//puts(">>>>");
-	//puts(text);
+	printf("%s", text);
+	fflush(stdout);
 }
 
-static void report_func(WrenErrorType type, const char* module, int line, const char *message)
+static void report_func(WrenErrorType type, const char* module, int line, const char* message)
 {
-	return;
+	switch (type) {
+	case WREN_ERROR_COMPILE:
+		fprintf(stderr, "[%s line %d] %s\n", module, line, message);
+		break;
+    case WREN_ERROR_RUNTIME:
+		fprintf(stderr, "%s\n", message);
+		break;
+	case WREN_ERROR_STACK_TRACE:
+		fprintf(stderr, "[%s line %d] in %s\n", module, line, message);
+		break;
+	default:
+		break;
+	}
 }
 
-char *sample_load_module(WrenVM *vm, const char *name)
+char* sample_load_module(WrenVM* vm, const char* name)
 {
-	printf("WrenLoadModuleFn\n");
-	printf("name=[%s]\n", name);
-
 	return NULL;
 }
 
-WrenForeignMethodFn sample_foreign_method(WrenVM *vm, const char *module, const char *className, bool isStatic, const char *signature)
+WrenForeignMethodFn sample_foreign_method(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature)
 {
-	printf("WrenForeignMethodFn s\n");
-	printf("module=[%s], className=[%s], signature=[%s]\n", module, className, signature);
-
 	return NULL;
 }
 
-WrenForeignClassMethods sample_forregn_class(WrenVM *vm, const char *module, const char *className)
+WrenForeignClassMethods sample_foreign_class(WrenVM* vm, const char* module, const char* className)
 {
 	WrenForeignClassMethods methods;
-
-	printf("WrenForeignClassMethods\n");
-	printf("module=[%s], className=[%s]n", module, className);
 
 	methods.allocate = NULL;
 	methods.finalize = NULL;
 
 	return methods;
 }
+
