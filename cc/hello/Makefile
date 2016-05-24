@@ -8,7 +8,7 @@ LIBS     =
 TARGET   = main
 
 $(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+	$(CC) -o $@ $(OBJS) $(LDFLAGS) $(LIBS)
 
 .c.o:
 	$(CC) $(INCLUDES) $(CFLAGS) -c $<
