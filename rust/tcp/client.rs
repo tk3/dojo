@@ -7,21 +7,25 @@ fn main() {
 
     let _ = stream.write(b"OkOkOk");
 
-    let mut line;
-    line = [0; 128];
-    let _ = read_n_bytes(stream, &mut line);
+    let _ = read_n_bytes(stream, 10 as u64);
 }
 
-fn read_n_bytes(mut stream: TcpStream, buf: &mut [u8]) -> i32 {
-    let read_byte = stream.read(buf);
+fn read_n_bytes(stream: TcpStream, limit: u64) -> u64 {
+    //let mut buf = [0; 10];
+
+    // vec: Vec<u8>
+    let mut vec = Vec::with_capacity(limit);
+
+    let mut handle = stream.take(limit);
+    let read_byte = handle.read(&mut buf);
     match read_byte {
         Ok(n) => {
             println!("client) Received {} bytes", n);
             println!("client) >> [{}]", str::from_utf8(&buf[0..n]).unwrap());
-            return n as i32;
+            return n as u64;
         },
         _ => {
-            return -1;
+            return 0;
         },
     }
 }
