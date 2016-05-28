@@ -1,9 +1,9 @@
 CC       = gcc
 SOURCES  = sample.c
 OBJS     = $(SOURCES:.c=.o)
-INCLUDES =
-CFLAGS   = -Wall
-LDFLAGS  =
+INCLUDES = 
+CFLAGS   = -Wall `pkg-config --cflags MagickCore`
+LDFLAGS  = `pkg-config --libs MagickCore`
 LIBS     =
 TARGET   = main
 
