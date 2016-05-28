@@ -12,6 +12,7 @@ fn main() {
 
 fn read_n_bytes(stream: TcpStream, limit: u64) -> u64 {
     let mut buf = [0; 10];
+    // let mut buf: Vec<u8> = vec![];
 
     let mut handle = stream.take(limit);
     let read_byte = handle.read(&mut buf);
