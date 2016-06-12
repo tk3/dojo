@@ -15,13 +15,10 @@ git submodule update
 ./configure --with-ngx-src-root=${NGINX_SRC}
 make generate_gems_config
 make build_mruby
-NGINX_OPT_LDFLAGS="`./mruby/bin/mruby-config --ldflags`"
-NGINX_OPT_LIBS="`./mruby/bin/mruby-config --libs` `./mruby/bin/mruby-config --ldflags-before-libs` ${NGX_MRUBY_SRC}/mruby/build/host/lib/libmruby.a"
 
 cd ${NGINX_SRC}
 ./configure  \
   --prefix=$HOME/opt/nginx-${NGINX_VERSION}  \
-  --with-ld-opt="$NGINX_OPT_LDFLAGS $NGINX_OPT_LIBS"  \
   --with-http_ssl_module  \
   --add-module=${NGX_MRUBY_SRC}  \
   --add-module=${NGX_MRUBY_SRC}/dependence/ngx_devel_kit
