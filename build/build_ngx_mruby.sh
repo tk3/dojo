@@ -9,14 +9,14 @@ NGX_MRUBY_SRC=`pwd`/ngx_mruby
 
 tar zxf nginx-${NGINX_VERSION}.tar.gz
 
-cd ${NGX_MRUBY_SRC}
+cd $NGX_MRUBY_SRC
 git submodule init
 git submodule update
-./configure --with-ngx-src-root=${NGINX_SRC}
-make generate_gems_config
+./configure --with-ngx-src-root=$NGINX_SRC
 make build_mruby
+make generate_gems_config
 
-cd ${NGINX_SRC}
+cd $NGINX_SRC
 ./configure  \
   --prefix=$HOME/opt/nginx-${NGINX_VERSION}  \
   --with-http_ssl_module  \
@@ -25,5 +25,5 @@ cd ${NGINX_SRC}
 
 make
 
-#make install
+make install
 
