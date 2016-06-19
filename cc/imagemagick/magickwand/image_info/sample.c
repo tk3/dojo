@@ -4,8 +4,6 @@
 int main(int argc, char *argv[])
 {
 	MagickWand *wand = NULL;
-	int width;
-	int height;
 	MagickBooleanType ret;
 	char *description;
 	ExceptionType excep;
@@ -33,11 +31,12 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	width = MagickGetImageWidth(wand);
-	height = MagickGetImageHeight(wand);
-
-	printf("width: %d\n", width);
-	printf("height: %d\n", height);
+	printf("Format: %s\n", MagickGetImageFormat(wand));
+	printf("Filename: %s\n", MagickGetImageFilename(wand));
+	printf("Compression Quality: %ld\n", MagickGetCompressionQuality(wand));
+	printf("Signature: %s\n", MagickGetImageSignature(wand));
+	printf("Width: %ld\n", MagickGetImageWidth(wand));
+	printf("Height: %ld\n", MagickGetImageHeight(wand));
 
 	if (wand != NULL) {
 		DestroyMagickWand(wand);
