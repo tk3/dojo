@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <wand/magick_wand.h>
 
 int main(int argc, char *argv[])
@@ -7,6 +8,9 @@ int main(int argc, char *argv[])
 	int original_height;
 	int width;
 	int height;
+	MagickBooleanType ret;
+	char *description;
+	ExceptionType excep;
 
 	if (argc < 2) {
 		fprintf(stderr, "Usage: %s file\n", argv[0]);
@@ -16,8 +20,20 @@ int main(int argc, char *argv[])
 	MagickWandGenesis();
 
 	wand = NewMagickWand();
+	if (wand == NULL) {
+		description = MagickGetException(wand, &excep);
+		fprintf(stderr, "%s %s %lu %s\n", GetMagickModule(), description);
+		MagickRelinquishMemory(description);
+		return 1;
+	}
 
-	MagickReadImage(wand, argv[1]);
+	ret = MagickReadImage(wand, argv[1]);
+	if (ret != MagickTrue) {
+		description = MagickGetException(wand, &excep);
+		fprintf(stderr, "%s %s %lu %s\n", GetMagickModule(), description);
+		MagickRelinquishMemory(description);
+		return 1;
+	}
 
 	original_width = MagickGetImageWidth(wand);
 	original_height = MagickGetImageHeight(wand);
