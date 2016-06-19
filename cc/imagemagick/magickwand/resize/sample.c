@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	wand = NewMagickWand();
 	if (wand == NULL) {
 		description = MagickGetException(wand, &excep);
-		fprintf(stderr, "%s %s %lu %s\n", GetMagickModule(), description);
+		fprintf(stderr, "%s; %s\n", "NewMagickWand() failed", description);
 		MagickRelinquishMemory(description);
 		return 1;
 	}
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	ret = MagickReadImage(wand, argv[1]);
 	if (ret != MagickTrue) {
 		description = MagickGetException(wand, &excep);
-		fprintf(stderr, "%s %s %lu %s\n", GetMagickModule(), description);
+		fprintf(stderr, "%s; %s\n", "MagickReadImage() failed", description);
 		MagickRelinquishMemory(description);
 		return 1;
 	}
