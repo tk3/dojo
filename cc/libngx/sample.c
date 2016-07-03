@@ -24,29 +24,35 @@ char ** ngx_set_environment(ngx_cycle_t *cycle, ngx_uint_t *last);
 ngx_cpuset_t * ngx_get_cpu_affinity(ngx_uint_t n);
 ngx_pid_t ngx_exec_new_binary(ngx_cycle_t *cycle, char *const *argv);
 
+static void sample_time();
 static void sample_sha1();
 static void sample_md5();
 static void sample_base64();
 
 int main(int argc, char **argv)
 {
-	ngx_tm_t now;
-	u_char buf[64];
-
     ngx_time_init();
 
-    ngx_localtime(time(NULL), &now);
-
-	//u_char *ngx_http_time(u_char *buf, time_t t);
-	ngx_http_cookie_time(buf, time(NULL));
-
-	printf("ngx_http_cookie_time = %s\n", buf);
-
+	sample_time();
 	sample_sha1();
 	sample_md5();
 	sample_base64();
 
     return 0;
+}
+
+static void sample_time()
+{
+	u_char *p;
+	u_char buf[64];
+
+	p = ngx_http_cookie_time(buf, time(NULL));
+
+	puts("sample_time --------");
+	printf("ngx_time = %ld\n", ngx_time());
+	printf("ngx_http_cookie_time = %.*s\n", p - buf, buf);
+
+	return;
 }
 
 static void sample_sha1()
@@ -60,6 +66,7 @@ static void sample_sha1()
     ngx_sha1_update(&sha1, key, ngx_strlen(key));
     ngx_sha1_final(digest, &sha1);
 
+	puts("sample_sha1 --------");
 	printf("string = [%s]\n", key);
 	for (i = 0; i < sizeof(digest); i++) {
 		printf("%02x", digest[i]);
@@ -80,6 +87,7 @@ static void sample_md5()
     ngx_md5_update(&md5, key, ngx_strlen(key));
     ngx_md5_final(digest, &md5);
 
+	puts("sample_md5 --------");
 	printf("string = [%s]\n", key);
 	for (i = 0; i < sizeof(digest); i++) {
 		printf("%02x", digest[i]);
@@ -103,6 +111,7 @@ static void sample_base64()
 
 	ngx_encode_base64(&base64, &src);
 
+	puts("sample_base64 --------");
 	printf("string = [%.*s]\n", src.len, src.data);
 	printf("base64 = [%.*s]\n", base64.len, base64.data);
 
