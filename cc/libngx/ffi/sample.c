@@ -1,8 +1,12 @@
 #include <stdio.h>
 
+#include <ffi.h>
+
 #include <ngx_sha1.h>
 #include <ngx_md5.h>
 #include <ngx_times.h>
+#if 0
+#endif
 
 ngx_module_t  ngx_core_module = {
     NGX_MODULE_V1,
@@ -34,9 +38,12 @@ int main(int argc, char **argv)
     ngx_time_init();
 
 	sample_time();
+
+#if 0
 	sample_sha1();
 	sample_md5();
 	sample_base64();
+#endif
 
     return 0;
 }
@@ -45,10 +52,60 @@ static void sample_time()
 {
 	u_char *p;
 	u_char buf[64];
+    ffi_status status;
+    ffi_cif cif;
+    ffi_type *arg_types[2];
+
+    arg_types[0] = &ffi_type_pointer;
+    arg_types[1] = &ffi_type_uint64;  // size_t
+
+    status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 2, &ffi_type_pointer, arg_types);
+    if (status != FFI_OK) {
+       fprintf(stderr, "Error: ffi_prep_cif() failed\n");
+       return -1;
+	}
+
+
+	{
+    	void *arg_values[2];
+		char buf[64];
+		char *v;
+		time_t tm;
+		char *ret;
+
+		v = &buf;
+		tm = time(NULL);
+
+    	arg_values[0] = &v;
+    	arg_values[1] = &tm;
+
+    	ffi_call(&cif, FFI_FN(ngx_http_cookie_time), &ret, arg_values);
+
+		printf("ngx_http_cookie_time = %.*s\n", ret - buf, buf);
+	}
+
+	//p = ngx_http_cookie_time(buf, time(NULL));
+
+#if 0
+	puts("sample_time --------");
+	printf("sizeof(time_t) = %d\n", sizeof(time_t));
+	printf("ngx_time = %ld\n", ngx_time());
+	printf("ngx_http_cookie_time = %.*s\n", p - buf, buf);
+#endif
+
+	return;
+}
+
+#if 0
+static void sample_time()
+{
+	u_char *p;
+	u_char buf[64];
 
 	p = ngx_http_cookie_time(buf, time(NULL));
 
 	puts("sample_time --------");
+	printf("sizeof(time_t) = %d\n", sizeof(time_t));
 	printf("ngx_time = %ld\n", ngx_time());
 	printf("ngx_http_cookie_time = %.*s\n", p - buf, buf);
 
@@ -117,6 +174,7 @@ static void sample_base64()
 
 	return;
 }
+#endif
 
 char ** ngx_set_environment(ngx_cycle_t *cycle, ngx_uint_t *last)
 {

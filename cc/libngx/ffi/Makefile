@@ -126,11 +126,13 @@ INCLUDES =  \
    -I./nginx-1.11.1/src/core  \
    -I./nginx-1.11.1/objs  \
    -I./nginx-1.11.1/src/os/unix  \
-   -I./nginx-1.11.1/src/event
+   -I./nginx-1.11.1/src/event  \
+   $(shell pkg-config --cflags libffi)
 
 CFLAGS   = -Wall
 
-LDFLAGS  = -ldl -lpthread -lcrypt -lpcre -lssl -lcrypto -ldl -lz
+LDFLAGS  = -ldl -lpthread -lcrypt -lpcre -lssl -lcrypto -ldl -lz  \
+    $(shell pkg-config --libs libffi)
 
 LIBS     =
 
