@@ -8,7 +8,7 @@ INCLUDES = $(shell pkg-config --cflags libffi)
 
 CFLAGS   = -Wall
 
-LDFLAGS  = $(shell pkg-config --libs libffi) -lcrypto
+LDFLAGS  = $(shell pkg-config --libs libffi) -ldl -lcrypto
 
 LIBS     =
 

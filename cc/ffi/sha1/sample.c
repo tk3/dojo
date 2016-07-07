@@ -14,6 +14,27 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	void *handle;
+	void *func_sha_init;
+	void *func_sha_update;
+	void *func_sha_final;
+	char *error;
+
+	handle = dlopen("libcrypto.so", RTLD_LAZY);
+	if (handle == NULL) {
+		return 0;
+	}
+	dlerror();
+
+	func_sha_init = dlsym(handle, "SHA_Init");
+	if ((error = dlerror()) != NULL)  {
+		fprintf(stderr, "%s\n", error);
+		return 0;
+	}
+
+	func_sha_update = dlsym(handle, "SHA_Update");
+	func_sha_final = dlsym(handle, "SHA_Final");
+
 	{
 		ffi_cif cif;
 		ffi_type *args[1];
@@ -31,7 +52,8 @@ int main(int argc, char *argv[])
 
 		values[0] = &s;
 
-		ffi_call(&cif, FFI_FN(SHA_Init), &rc, values);
+		//ffi_call(&cif, FFI_FN(SHA_Init), &rc, values);
+		ffi_call(&cif, FFI_FN(func_sha_init), &rc, values);
 	}
 
 	{
@@ -60,7 +82,8 @@ int main(int argc, char *argv[])
 		values[1] = &d;
 		values[2] = &l;
 
-		ffi_call(&cif, FFI_FN(SHA_Update), &rc, values);
+		//ffi_call(&cif, FFI_FN(SHA_Update), &rc, values);
+		ffi_call(&cif, FFI_FN(func_sha_update), &rc, values);
 	}
 
 	unsigned char md[20];
@@ -86,7 +109,8 @@ int main(int argc, char *argv[])
 		values[0] = &m;
 		values[1] = &s;
 
-		ffi_call(&cif, FFI_FN(SHA_Final), &rc, values);
+		//ffi_call(&cif, FFI_FN(SHA_Final), &rc, values);
+		ffi_call(&cif, FFI_FN(func_sha_final), &rc, values);
 	}
 
 	{
@@ -96,6 +120,8 @@ int main(int argc, char *argv[])
 		}
 		puts("");
 	}
+
+	dlclose(handle);
 
 	return 0;
 }
