@@ -52,7 +52,6 @@ int main(int argc, char *argv[])
 
 		values[0] = &s;
 
-		//ffi_call(&cif, FFI_FN(SHA_Init), &rc, values);
 		ffi_call(&cif, FFI_FN(func_sha_init), &rc, values);
 	}
 
@@ -82,7 +81,6 @@ int main(int argc, char *argv[])
 		values[1] = &d;
 		values[2] = &l;
 
-		//ffi_call(&cif, FFI_FN(SHA_Update), &rc, values);
 		ffi_call(&cif, FFI_FN(func_sha_update), &rc, values);
 	}
 
@@ -109,7 +107,6 @@ int main(int argc, char *argv[])
 		values[0] = &m;
 		values[1] = &s;
 
-		//ffi_call(&cif, FFI_FN(SHA_Final), &rc, values);
 		ffi_call(&cif, FFI_FN(func_sha_final), &rc, values);
 	}
 
