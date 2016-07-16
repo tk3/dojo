@@ -3,6 +3,7 @@
 NGINX_VERSION=1.11.1 
 NGINX_SRC=`pwd`/nginx-${NGINX_VERSION}
 NGX_MRUBY_SRC=`pwd`/ngx_mruby
+NGINX_PREFIX="$HOME/opt/nginx-${NGINX_VERSION}"
 
 [ -f ./nginx-${NGINX_VERSION}.tar.gz ] || curl -O http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 [ -d ./ngx_mruby ] || git clone --depth=1 https://github.com/matsumoto-r/ngx_mruby.git
@@ -18,7 +19,7 @@ make generate_gems_config
 
 cd $NGINX_SRC
 ./configure  \
-  --prefix=$HOME/opt/nginx-${NGINX_VERSION}  \
+  --prefix=$NGINX_PREFIX  \
   --with-http_ssl_module  \
   --add-module=${NGX_MRUBY_SRC}  \
   --add-module=${NGX_MRUBY_SRC}/dependence/ngx_devel_kit
