@@ -2,6 +2,7 @@
 #include <mruby/variable.h>
 #include <mruby/class.h>
 #include <mruby/string.h>
+#include <mruby/array.h>
 #include <mruby/data.h>
 #include <sys/types.h>
 #include <dlfcn.h>
@@ -39,11 +40,20 @@ func_attach_function(mrb_state *mrb, mrb_value self)
 static mrb_value
 func1(mrb_state *mrb, mrb_value self)
 {
-  mrb_sym sym;
+  mrb_value ary;
+  mrb_value v;
+  int len;
 
-  mrb_get_args(mrb, "n", &sym);
+  mrb_get_args(mrb, "A", &ary);
 
-  printf("argv: %s\n", mrb_sym2name(mrb, sym));
+  len = mrb_ary_len(mrb, ary);
+
+  printf("len: %d\n", mrb_ary_len(mrb, ary));
+
+  for (int i = 0; i < len; i++) {
+    v = mrb_ary_ref(mrb, ary, i);
+    printf("%d) %d\n", i, mrb_type(v));
+  }
 
   return self;
 }
