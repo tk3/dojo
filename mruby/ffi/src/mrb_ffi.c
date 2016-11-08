@@ -66,10 +66,16 @@ func1(mrb_state *mrb, mrb_value self)
 
 void
 mrb_mruby_ffi_gem_init(mrb_state* mrb) {
-  mrb_define_global_const(mrb, "CURRENT_PROCESS", mrb_symbol_value(mrb_intern_cstr(mrb, "current_process")));
+  struct RClass *ffi;
+  struct RClass *library;
 
-  mrb_define_method(mrb, mrb->kernel_module, "ffi_lib", func_ffi_lib, MRB_ARGS_REQ(1));
-  mrb_define_method(mrb, mrb->kernel_module, "attach_function", func_attach_function, MRB_ARGS_REQ(1));
+  ffi = mrb_define_module(mrb, "FFI");
+  library = mrb_define_module_under(mrb, ffi, "Library");
+
+  mrb_define_const(mrb, library, "CURRENT_PROCESS", mrb_symbol_value(mrb_intern_cstr(mrb, "current_process")));
+
+  mrb_define_method(mrb, library, "ffi_lib", func_ffi_lib, MRB_ARGS_REQ(1));
+  mrb_define_method(mrb, library, "attach_function", func_attach_function, MRB_ARGS_REQ(1));
 
   mrb_define_method(mrb, mrb->kernel_module, "foo", func1, MRB_ARGS_REQ(1));
 }
