@@ -38,6 +38,9 @@ static mrb_value
 mrb_ffi_dl_new(mrb_state *mrb, mrb_value self)
 {
   mrb_ffi_dl *dl;
+  unsigned char *s;
+  mrb_int len;
+  mrb_int flags;
 
   dl = (mrb_ffi_dl *)malloc(sizeof(mrb_ffi_dl));
   if (dl == NULL) {
@@ -47,6 +50,10 @@ mrb_ffi_dl_new(mrb_state *mrb, mrb_value self)
 
   DATA_PTR(self) = dl;
   DATA_TYPE(self) = &mrb_ffi_dl_type;
+
+  mrb_get_args(mrb, "si", &s, &len, &flags);
+
+  printf("ffi_dl.new) %s\n", s);
 
   return self;
 }

@@ -9,5 +9,5 @@ class Foo
   attach_function "func"
 end
 
-dl = FFI::DynamicLibrary.new 10, 20
+dl = FFI::DynamicLibrary.new "func1", 1
 
