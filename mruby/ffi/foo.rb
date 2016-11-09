@@ -10,4 +10,6 @@ class Foo
 end
 
 dl = FFI::DynamicLibrary.new "func1", 1
+puts ">> #{dl.name}"
+
 
