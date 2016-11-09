@@ -12,6 +12,45 @@
 #include <string.h>
 #include <stdio.h>
 
+typedef struct {
+  void *handle;
+} mrb_ffi_dl;
+
+static void mrb_ffi_dl_free(mrb_state *mrb, void *p);
+static mrb_value mrb_ffi_dl_new(mrb_state *mrb, mrb_value self);
+
+static const mrb_data_type mrb_ffi_dl_type = {
+  "mrb_ffi_dl", mrb_ffi_dl_free,
+};
+
+static void
+mrb_ffi_dl_free(mrb_state *mrb, void *p) {
+  mrb_ffi_dl *dl = (mrb_ffi_dl *)p;
+
+  if (dl->handle != NULL) {
+    dlclose(dl->handle);
+  }
+
+  free(dl);
+}
+
+static mrb_value
+mrb_ffi_dl_new(mrb_state *mrb, mrb_value self)
+{
+  mrb_ffi_dl *dl;
+
+  dl = (mrb_ffi_dl *)malloc(sizeof(mrb_ffi_dl));
+  if (dl == NULL) {
+    mrb_raise(mrb, E_RUNTIME_ERROR, "cannot allocate memory");
+  }
+  dl->handle = NULL;
+
+  DATA_PTR(self) = dl;
+  DATA_TYPE(self) = &mrb_ffi_dl_type;
+
+  return self;
+}
+
 static mrb_value
 func_ffi_lib(mrb_state *mrb, mrb_value self)
 {
@@ -68,9 +107,15 @@ void
 mrb_mruby_ffi_gem_init(mrb_state* mrb) {
   struct RClass *ffi;
   struct RClass *library;
+  struct RClass *ffi_dl;
 
   ffi = mrb_define_module(mrb, "FFI");
   library = mrb_define_module_under(mrb, ffi, "Library");
+
+  ffi_dl = mrb_define_class_under(mrb, ffi, "DynamicLibrary", mrb->object_class);
+  MRB_SET_INSTANCE_TT(ffi_dl, MRB_TT_DATA);
+
+  mrb_define_method(mrb, ffi_dl, "initialize", mrb_ffi_dl_new, MRB_ARGS_REQ(2));
 
   mrb_define_const(mrb, library, "CURRENT_PROCESS", mrb_symbol_value(mrb_intern_cstr(mrb, "current_process")));
 
