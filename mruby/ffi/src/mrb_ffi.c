@@ -19,7 +19,6 @@ typedef struct {
 static void mrb_ffi_dl_free(mrb_state *mrb, void *p);
 static mrb_value mrb_ffi_dl_new(mrb_state *mrb, mrb_value self);
 static mrb_value mrb_ffi_dl_get_name(mrb_state *mrb, mrb_value self);
-static mrb_value mrb_ffi_dl_set_name(mrb_state *mrb, mrb_value self);
 
 static const mrb_data_type mrb_ffi_dl_type = {
   "mrb_ffi_dl", mrb_ffi_dl_free,
@@ -69,12 +68,6 @@ mrb_ffi_dl_get_name(mrb_state *mrb, mrb_value self)
   mrb_value val = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@name"));
 
   return val;
-}
-
-static mrb_value
-mrb_ffi_dl_set_name(mrb_state *mrb, mrb_value self)
-{
-  return self;
 }
 
 static mrb_value
@@ -143,7 +136,6 @@ mrb_mruby_ffi_gem_init(mrb_state* mrb) {
 
   mrb_define_method(mrb, ffi_dl, "initialize", mrb_ffi_dl_new, MRB_ARGS_REQ(2));
   mrb_define_method(mrb, ffi_dl, "name", mrb_ffi_dl_get_name, MRB_ARGS_NONE());
-  mrb_define_method(mrb, ffi_dl, "name=", mrb_ffi_dl_set_name, MRB_ARGS_REQ(1));
 
   mrb_define_const(mrb, library, "CURRENT_PROCESS", mrb_symbol_value(mrb_intern_cstr(mrb, "current_process")));
 
