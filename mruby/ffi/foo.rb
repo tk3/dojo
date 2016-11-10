@@ -12,6 +12,5 @@ end
 dl = FFI::DynamicLibrary.new "/lib/x86_64-linux-gnu/libc.so.6", 1
 puts ">> #{dl.name}"
 
-func = FFI::Function.new 10, 20, 30
-
+func = FFI::Function.new :aaa, [:bbb], :ccc
 

@@ -109,6 +109,17 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
   DATA_PTR(self) = func;
   DATA_TYPE(self) = &mrb_ffi_func_type;
 
+  {
+    mrb_sym name;
+    mrb_value ary;
+    mrb_sym ret_type;
+
+    mrb_get_args(mrb, "nAn", &name, &ary, &ret_type);
+
+    printf("func) %s\n", mrb_sym2name(mrb, name));
+  }
+
+
   return self;
 }
 
