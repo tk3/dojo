@@ -9,7 +9,9 @@ class Foo
   attach_function "func"
 end
 
-dl = FFI::DynamicLibrary.new "func1", 1
+dl = FFI::DynamicLibrary.new "/lib/x86_64-linux-gnu/libc.so.6", 1
 puts ">> #{dl.name}"
+
+func = FFI::Function.new 10, 20, 30
 
 
