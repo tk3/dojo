@@ -14,3 +14,5 @@ puts ">> #{dl.name}"
 
 func = FFI::Function.new :aaa, [:bbb], :ccc
 
+p func
+
