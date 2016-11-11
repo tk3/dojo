@@ -25,12 +25,12 @@ diff:
 	cd mruby-ffi;  \
 	git diff
 
-irb:
+irb: build
 	./mruby/bin/mirb
 
-sample:
+sample: build
 	./mruby/bin/mruby ./foo.rb
 
-valgrind:
+valgrind: build
 	valgrind --leak-check=full ./mruby/bin/mruby ./foo.rb
 
