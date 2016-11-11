@@ -23,6 +23,7 @@ typedef struct {
 static void mrb_ffi_dl_free(mrb_state *mrb, void *p);
 static mrb_value mrb_ffi_dl_new(mrb_state *mrb, mrb_value self);
 static mrb_value mrb_ffi_dl_get_name(mrb_state *mrb, mrb_value self);
+static mrb_value mrb_ffi_dl_find(mrb_state *mrb, mrb_value self);
 
 static void mrb_ffi_func_free(mrb_state *mrb, void *p);
 static mrb_value mrb_ffi_func_new(mrb_state *mrb, mrb_value self);
@@ -87,6 +88,23 @@ mrb_ffi_dl_get_name(mrb_state *mrb, mrb_value self)
   return val;
 }
 
+static mrb_value
+mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
+{
+  struct RClass *ffi;
+  struct RClass *func;
+  mrb_value argv[3];
+
+  ffi = mrb_module_get(mrb, "FFI");
+  func = mrb_class_get_under(mrb, ffi, "Function");
+
+  argv[0] = mrb_fixnum_value(0);
+  argv[1] = mrb_fixnum_value(1);
+  argv[2] = mrb_fixnum_value(2);
+
+  return mrb_obj_new(mrb, func, 3, &argv);
+}
+
 ////////
 
 static void
@@ -109,6 +127,7 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
   DATA_PTR(self) = func;
   DATA_TYPE(self) = &mrb_ffi_func_type;
 
+#if 0
   {
     mrb_sym name;
     mrb_value ary;
@@ -118,7 +137,7 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
 
     printf("func) %s\n", mrb_sym2name(mrb, name));
   }
-
+#endif
 
   return self;
 }
@@ -192,6 +211,7 @@ mrb_mruby_ffi_gem_init(mrb_state* mrb) {
 
   mrb_define_method(mrb, ffi_dl, "initialize", mrb_ffi_dl_new, MRB_ARGS_REQ(2));
   mrb_define_method(mrb, ffi_dl, "name", mrb_ffi_dl_get_name, MRB_ARGS_NONE());
+  mrb_define_method(mrb, ffi_dl, "find", mrb_ffi_dl_find, MRB_ARGS_NONE());
 
   ffi_func = mrb_define_class_under(mrb, ffi, "Function", mrb->object_class);
   MRB_SET_INSTANCE_TT(ffi_func, MRB_TT_DATA);

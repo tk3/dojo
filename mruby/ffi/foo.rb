@@ -12,7 +12,9 @@ end
 dl = FFI::DynamicLibrary.new "/lib/x86_64-linux-gnu/libc.so.6", 1
 puts ">> #{dl.name}"
 
-func = FFI::Function.new :aaa, [:bbb], :ccc
+f = dl.find "aaa"
+p f
 
+func = FFI::Function.new :aaa, [:bbb], :ccc
 p func
 
