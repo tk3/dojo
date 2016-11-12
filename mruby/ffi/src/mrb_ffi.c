@@ -93,16 +93,14 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
 {
   struct RClass *ffi;
   struct RClass *func;
-  mrb_value argv[3];
+  const mrb_value argv[3];
 
   ffi = mrb_module_get(mrb, "FFI");
   func = mrb_class_get_under(mrb, ffi, "Function");
 
-  argv[0] = mrb_fixnum_value(0);
-  argv[1] = mrb_fixnum_value(1);
-  argv[2] = mrb_fixnum_value(2);
+  mrb_get_args(mrb, "ooo", &argv[0], &argv[1], &argv[2]);
 
-  return mrb_obj_new(mrb, func, 3, &argv);
+  return mrb_obj_new(mrb, func, 3, argv);
 }
 
 ////////
@@ -127,7 +125,6 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
   DATA_PTR(self) = func;
   DATA_TYPE(self) = &mrb_ffi_func_type;
 
-#if 0
   {
     mrb_sym name;
     mrb_value ary;
@@ -137,7 +134,6 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
 
     printf("func) %s\n", mrb_sym2name(mrb, name));
   }
-#endif
 
   return self;
 }
