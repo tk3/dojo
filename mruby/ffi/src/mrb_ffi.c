@@ -99,16 +99,6 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
     mrb_raise(mrb, E_ARGUMENT_ERROR, "invalid argument");
   }
 
-#if 0
-  void *func;
-  char *err_msg;
-  func = dlsym(dl->handle, c->init_func_name);
-  if ((err_msg = dlerror()) != NULL)  {
-    mrb_raise(mrb, E_RUNTIME_ERROR, "cannot find function");
-  }
-  dlerror();
-#endif
-
   {
     struct RClass *ffi;
     struct RClass *func;
@@ -127,6 +117,19 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
 
     func_name = mrb_sym2name(mrb, name);
     printf("func_name = %s\n", func_name);
+
+    {
+      void *func;
+      char *err_msg;
+
+      func = dlsym(dl->handle, func_name);
+      if ((err_msg = dlerror()) != NULL)  {
+          printf("cannot find function. name=%s\n", func_name);
+          dlerror();
+          return mrb_nil_value();
+      }
+      dlerror();
+    }
 
     argv[0] = mrb_symbol_value(name);
     argv[1] = ary;
