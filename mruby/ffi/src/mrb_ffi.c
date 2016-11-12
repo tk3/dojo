@@ -94,6 +94,22 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
   struct RClass *ffi;
   struct RClass *func;
   const mrb_value argv[3];
+  char *err_msg;
+  mrb_ffi_dl *dl;
+
+  dl = mrb_get_datatype(mrb, self, &mrb_ffi_dl_type);
+  if (dl == NULL) {
+    mrb_raise(mrb, E_ARGUMENT_ERROR, "invalid argument");
+  }
+
+#if 0
+  void *func;
+  func = dlsym(dl->handle, c->init_func_name);
+  if ((err_msg = dlerror()) != NULL)  {
+    mrb_raise(mrb, E_RUNTIME_ERROR, "cannot find function");
+  }
+  dlerror();
+#endif
 
   ffi = mrb_module_get(mrb, "FFI");
   func = mrb_class_get_under(mrb, ffi, "Function");
