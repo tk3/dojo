@@ -15,11 +15,11 @@ puts ">> #{dl.name}"
 f1 = dl.find :aaa, [:bbb], :ccc
 p f1
 
-f2 = dl.find :atoi, [:bbb], :ccc
+f2 = dl.find :atoi, [:string], :ccc
 p f2
 f2.call
 
-f3 = dl.find :puts, [:bbb], :ccc
+f3 = dl.find :puts, [:string], :ccc
 p f3
 f3.call
 

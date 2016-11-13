@@ -171,12 +171,16 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
 
   {
     mrb_sym name;
-    mrb_value ary;
+    mrb_value arg_type;
     mrb_sym ret_type;
 
-    mrb_get_args(mrb, "nAn", &name, &ary, &ret_type);
+    mrb_get_args(mrb, "nAn", &name, &arg_type, &ret_type);
 
     printf("func.new) %s\n", mrb_sym2name(mrb, name));
+
+    mrb_iv_set(mrb, self, mrb_intern_cstr(mrb, "@name"), mrb_symbol_value(name));
+    mrb_iv_set(mrb, self, mrb_intern_cstr(mrb, "@arg_type"), arg_type);
+    mrb_iv_set(mrb, self, mrb_intern_cstr(mrb, "@ret_type"), mrb_symbol_value(ret_type));
   }
 
   return self;
@@ -185,19 +189,32 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
 static mrb_value
 mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
 {
-  mrb_ffi_func *ffi_func;
   const char *s = "Hello world";
+  mrb_ffi_func *ffi_func;
+  mrb_value arg_type;
+  int len;
 
   ffi_func = mrb_get_datatype(mrb, self, &mrb_ffi_func_type);
 
+  arg_type = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@arg_type"));
+  len = mrb_ary_len(mrb, arg_type);
+
   {
     ffi_cif cif;
-    ffi_type *args[1];
+    //ffi_type *args[1];
+    ffi_type **args;
+    mrb_value v;
     void *values[1];
     int rc;
     void *c;
 
-    args[0] = &ffi_type_pointer;
+    args = (ffi_type **)malloc(sizeof(ffi_type*) * len);
+
+    for (int i = 0; i < len; i++) {
+      v = mrb_ary_ref(mrb, arg_type, i);
+      args[i] = sym_to_ffi_type(mrb, mrb_symbol(v));
+    }
+    //args[0] = &ffi_type_pointer;
 
     if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 1, &ffi_type_uint, args) != FFI_OK) {
       mrb_raise(mrb, E_RUNTIME_ERROR, "cannot execute function");
@@ -208,6 +225,8 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
     values[0] = &c;
 
     ffi_call(&cif, ffi_func->handle, &rc, values);
+
+    free(args);
   }
 
   return self;
@@ -220,6 +239,7 @@ sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
   ffi_type *type = NULL;
 
   name = mrb_sym2name(mrb, sym);
+  printf("sym_to_ffi_type>> ffi_type = %s\n", name);
   if (strcasecmp(name, "void") == 0) {
     type = &ffi_type_void;
   } else if (strcasecmp(name, "double") == 0) {
@@ -248,6 +268,8 @@ sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
     type = &ffi_type_sint64;
   } else if (strcasecmp(name, "uint64") == 0) {
     type = &ffi_type_uint64;
+  } else if (strcasecmp(name, "string") == 0) {
+    type = &ffi_type_pointer;
   }
   // ffi_type_complex_double
   // ffi_type_complex_float
