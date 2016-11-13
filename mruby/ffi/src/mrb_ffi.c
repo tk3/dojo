@@ -27,6 +27,7 @@ static mrb_value mrb_ffi_dl_find(mrb_state *mrb, mrb_value self);
 
 static void mrb_ffi_func_free(mrb_state *mrb, void *p);
 static mrb_value mrb_ffi_func_new(mrb_state *mrb, mrb_value self);
+static ffi_type* sym_to_ffi_type(mrb_state *mrb, mrb_sym sym);
 
 static const mrb_data_type mrb_ffi_dl_type = {
   "mrb_ffi_dl", mrb_ffi_dl_free,
@@ -176,6 +177,34 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
   }
 
   return self;
+}
+
+static ffi_type*
+sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
+{
+    const char *name;
+    ffi_type *type = NULL;
+
+    name = mrb_sym2name(mrb, sym);
+    if (strcasecmp(name, "void") == 0) {
+    } else if (strcasecmp(name, "double") == 0) {
+    } else if (strcasecmp(name, "float") == 0) {
+    } else if (strcasecmp(name, "pointer") == 0) {
+    } else if (strcasecmp(name, "sint8") == 0) {
+    } else if (strcasecmp(name, "uint8") == 0) {
+    } else if (strcasecmp(name, "sint16") == 0) {
+    } else if (strcasecmp(name, "uint16") == 0) {
+    } else if (strcasecmp(name, "sint32") == 0) {
+    } else if (strcasecmp(name, "uint32") == 0) {
+    } else if (strcasecmp(name, "sint64") == 0) {
+    } else if (strcasecmp(name, "uint64") == 0) {
+    }
+    // ffi_type_complex_double
+    // ffi_type_complex_float
+    // ffi_type_complex_longdouble
+    // ffi_type_longdouble
+
+    return type;
 }
 
 ////////
