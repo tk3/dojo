@@ -105,7 +105,8 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
     struct RClass *func;
     mrb_value argv[3];
     mrb_ffi_func *ffi_func;
-    char *func_name;
+    const char *func_name;
+    void *f;
 
     mrb_sym name;
     mrb_value ary;
@@ -120,10 +121,9 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
     printf("func_name = %s\n", func_name);
 
     {
-      void *func;
       char *err_msg;
 
-      func = dlsym(dl->handle, func_name);
+      f = dlsym(dl->handle, func_name);
       if ((err_msg = dlerror()) != NULL)  {
           printf("cannot find function. name=%s\n", func_name);
           dlerror();
@@ -139,6 +139,8 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
     ffi_function = mrb_obj_new(mrb, func, 3, argv);
 
     ffi_func = mrb_get_datatype(mrb, ffi_function, &mrb_ffi_func_type);
+
+    ffi_func->handle = f;
   }
 
   return ffi_function;
@@ -182,29 +184,41 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
 static ffi_type*
 sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
 {
-    const char *name;
-    ffi_type *type = NULL;
+  const char *name;
+  ffi_type *type = NULL;
 
-    name = mrb_sym2name(mrb, sym);
-    if (strcasecmp(name, "void") == 0) {
-    } else if (strcasecmp(name, "double") == 0) {
-    } else if (strcasecmp(name, "float") == 0) {
-    } else if (strcasecmp(name, "pointer") == 0) {
-    } else if (strcasecmp(name, "sint8") == 0) {
-    } else if (strcasecmp(name, "uint8") == 0) {
-    } else if (strcasecmp(name, "sint16") == 0) {
-    } else if (strcasecmp(name, "uint16") == 0) {
-    } else if (strcasecmp(name, "sint32") == 0) {
-    } else if (strcasecmp(name, "uint32") == 0) {
-    } else if (strcasecmp(name, "sint64") == 0) {
-    } else if (strcasecmp(name, "uint64") == 0) {
-    }
-    // ffi_type_complex_double
-    // ffi_type_complex_float
-    // ffi_type_complex_longdouble
-    // ffi_type_longdouble
+  name = mrb_sym2name(mrb, sym);
+  if (strcasecmp(name, "void") == 0) {
+    type = &ffi_type_void;
+  } else if (strcasecmp(name, "double") == 0) {
+    type = &ffi_type_double;
+  } else if (strcasecmp(name, "float") == 0) {
+    type = &ffi_type_float;
+  } else if (strcasecmp(name, "pointer") == 0) {
+    type = &ffi_type_pointer;
+  } else if (strcasecmp(name, "sint8") == 0) {
+    type = &ffi_type_sint8;
+  } else if (strcasecmp(name, "uint8") == 0) {
+    type = &ffi_type_uint8;
+  } else if (strcasecmp(name, "sint16") == 0) {
+    type = &ffi_type_sint16;
+  } else if (strcasecmp(name, "uint16") == 0) {
+    type = &ffi_type_uint16;
+  } else if (strcasecmp(name, "sint32") == 0) {
+    type = &ffi_type_sint32;
+  } else if (strcasecmp(name, "uint32") == 0) {
+    type = &ffi_type_uint32;
+  } else if (strcasecmp(name, "sint64") == 0) {
+    type = &ffi_type_sint64;
+  } else if (strcasecmp(name, "uint64") == 0) {
+    type = &ffi_type_uint64;
+  }
+  // ffi_type_complex_double
+  // ffi_type_complex_float
+  // ffi_type_complex_longdouble
+  // ffi_type_longdouble
 
-    return type;
+  return type;
 }
 
 ////////
