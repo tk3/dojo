@@ -27,6 +27,7 @@ static mrb_value mrb_ffi_dl_find(mrb_state *mrb, mrb_value self);
 
 static void mrb_ffi_func_free(mrb_state *mrb, void *p);
 static mrb_value mrb_ffi_func_new(mrb_state *mrb, mrb_value self);
+static mrb_value mrb_ffi_func_call(mrb_state *mrb, mrb_value self);
 static ffi_type* sym_to_ffi_type(mrb_state *mrb, mrb_sym sym);
 
 static const mrb_data_type mrb_ffi_dl_type = {
@@ -181,6 +182,37 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
   return self;
 }
 
+static mrb_value
+mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
+{
+  mrb_ffi_func *ffi_func;
+  const char *s = "Hello world";
+
+  ffi_func = mrb_get_datatype(mrb, self, &mrb_ffi_func_type);
+
+  {
+    ffi_cif cif;
+    ffi_type *args[1];
+    void *values[1];
+    int rc;
+    void *c;
+
+    args[0] = &ffi_type_pointer;
+
+    if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 1, &ffi_type_uint, args) != FFI_OK) {
+      mrb_raise(mrb, E_RUNTIME_ERROR, "cannot execute function");
+    }
+
+    c = s;
+
+    values[0] = &c;
+
+    ffi_call(&cif, ffi_func->handle, &rc, values);
+  }
+
+  return self;
+}
+
 static ffi_type*
 sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
 {
@@ -300,6 +332,7 @@ mrb_mruby_ffi_gem_init(mrb_state* mrb) {
   MRB_SET_INSTANCE_TT(ffi_func, MRB_TT_DATA);
 
   mrb_define_method(mrb, ffi_func, "initialize", mrb_ffi_func_new, MRB_ARGS_REQ(3));
+  mrb_define_method(mrb, ffi_func, "call", mrb_ffi_func_call, MRB_ARGS_NONE());
 
 
   mrb_define_const(mrb, library, "CURRENT_PROCESS", mrb_symbol_value(mrb_intern_cstr(mrb, "current_process")));
