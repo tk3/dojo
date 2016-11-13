@@ -196,6 +196,10 @@ sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
     type = &ffi_type_float;
   } else if (strcasecmp(name, "pointer") == 0) {
     type = &ffi_type_pointer;
+  } else if (strcasecmp(name, "schar") == 0) {
+    type = &ffi_type_schar;
+  } else if (strcasecmp(name, "uchar") == 0) {
+    type = &ffi_type_uchar;
   } else if (strcasecmp(name, "sint8") == 0) {
     type = &ffi_type_sint8;
   } else if (strcasecmp(name, "uint8") == 0) {
