@@ -186,7 +186,7 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
   const char *s = "Hello world";
   mrb_ffi_func *ffi_func;
   mrb_value arg_type;
-  int len;
+  int type_len;
 
   mrb_value *argv;
   mrb_int argc;
@@ -195,7 +195,13 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
   ffi_func = mrb_get_datatype(mrb, self, &mrb_ffi_func_type);
 
   arg_type = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@arg_type"));
-  len = mrb_ary_len(mrb, arg_type);
+  type_len = mrb_ary_len(mrb, arg_type);
+
+  if (argc < type_len) {
+    fprintf(stderr, "Error: too few arguments.\n");
+  } else if (argc > type_len) {
+    fprintf(stderr, "Error: argument line too long.\n");
+  }
 
   {
     ffi_cif cif;
@@ -206,10 +212,10 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
     int rc;
     void *c;
 
-    types = (ffi_type **)malloc(sizeof(ffi_type*) * len);
-    values = (void **)malloc(sizeof(void *) * len);
+    types = (ffi_type **)malloc(sizeof(ffi_type*) * type_len);
+    values = (void **)malloc(sizeof(void *) * type_len);
 
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < type_len; i++) {
       v = mrb_ary_ref(mrb, arg_type, i);
       types[i] = sym_to_ffi_type(mrb, mrb_symbol(v));
     }
