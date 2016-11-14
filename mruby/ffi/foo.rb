@@ -26,6 +26,7 @@ f3 = dl.find :puts, [:string], :ccc
 p f3
 f3.call
 f3.call 10, 20
+f3.call "Hello world"
 
 puts "========"
 func = FFI::Function.new :aaa, [:bbb], :ccc

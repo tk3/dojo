@@ -183,13 +183,13 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
 static mrb_value
 mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
 {
-  const char *s = "Hello world";
   mrb_ffi_func *ffi_func;
   mrb_value arg_type;
   int type_len;
 
   mrb_value *argv;
   mrb_int argc;
+
   mrb_get_args(mrb, "*", &argv, &argc);
 
   ffi_func = mrb_get_datatype(mrb, self, &mrb_ffi_func_type);
@@ -199,39 +199,41 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
 
   if (argc < type_len) {
     fprintf(stderr, "Error: too few arguments.\n");
+    return self;
   } else if (argc > type_len) {
     fprintf(stderr, "Error: argument line too long.\n");
+    return self;
   }
 
   {
     ffi_cif cif;
     ffi_type **types;
     mrb_value v;
-    //void *values[1];
     void **values;
+    void **values_at;
     int rc;
-    void *c;
 
     types = (ffi_type **)malloc(sizeof(ffi_type*) * type_len);
     values = (void **)malloc(sizeof(void *) * type_len);
+    values_at = (void **)malloc(sizeof(void *) * type_len);
 
     for (int i = 0; i < type_len; i++) {
       v = mrb_ary_ref(mrb, arg_type, i);
       types[i] = sym_to_ffi_type(mrb, mrb_symbol(v));
+
+      values_at[i] = mrb_string_value_cstr(mrb, &argv[i]);
+      values[i] = &values_at[i];
     }
 
     if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 1, &ffi_type_uint, types) != FFI_OK) {
       mrb_raise(mrb, E_RUNTIME_ERROR, "cannot execute function");
     }
 
-    c = s;
-
-    values[0] = &c;
-
     ffi_call(&cif, ffi_func->handle, &rc, values);
 
     free(types);
     free(values);
+    free(values_at);
   }
 
   return self;
