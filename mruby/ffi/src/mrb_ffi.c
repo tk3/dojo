@@ -188,6 +188,10 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
   mrb_value arg_type;
   int len;
 
+  mrb_value *argv;
+  mrb_int argc;
+  mrb_get_args(mrb, "*", &argv, &argc);
+
   ffi_func = mrb_get_datatype(mrb, self, &mrb_ffi_func_type);
 
   arg_type = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@arg_type"));
@@ -195,22 +199,22 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
 
   {
     ffi_cif cif;
-    //ffi_type *args[1];
-    ffi_type **args;
+    ffi_type **types;
     mrb_value v;
-    void *values[1];
+    //void *values[1];
+    void **values;
     int rc;
     void *c;
 
-    args = (ffi_type **)malloc(sizeof(ffi_type*) * len);
+    types = (ffi_type **)malloc(sizeof(ffi_type*) * len);
+    values = (void **)malloc(sizeof(void *) * len);
 
     for (int i = 0; i < len; i++) {
       v = mrb_ary_ref(mrb, arg_type, i);
-      args[i] = sym_to_ffi_type(mrb, mrb_symbol(v));
+      types[i] = sym_to_ffi_type(mrb, mrb_symbol(v));
     }
-    //args[0] = &ffi_type_pointer;
 
-    if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 1, &ffi_type_uint, args) != FFI_OK) {
+    if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 1, &ffi_type_uint, types) != FFI_OK) {
       mrb_raise(mrb, E_RUNTIME_ERROR, "cannot execute function");
     }
 
@@ -220,7 +224,8 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
 
     ffi_call(&cif, ffi_func->handle, &rc, values);
 
-    free(args);
+    free(types);
+    free(values);
   }
 
   return self;
