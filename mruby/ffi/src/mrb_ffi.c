@@ -68,9 +68,6 @@ mrb_ffi_dl_new(mrb_state *mrb, mrb_value self)
 
   mrb_get_args(mrb, "si", &s, &len, &flags);
 
-  printf("ffi_dl.new) %s\n", s);
-  printf("ffi_dl.new) %d\n", flags);
-
   dl->handle = dlopen((const char*)s, RTLD_LAZY | RTLD_LOCAL);
   if (dl->handle == NULL) {
     mrb_raise(mrb, E_RUNTIME_ERROR, "cannot find library");
@@ -119,7 +116,6 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
     mrb_get_args(mrb, "nAn", &name, &ary, &ret_type);
 
     func_name = mrb_sym2name(mrb, name);
-    printf("func_name = %s\n", func_name);
 
     {
       char *err_msg;
@@ -175,8 +171,6 @@ mrb_ffi_func_new(mrb_state *mrb, mrb_value self)
     mrb_sym ret_type;
 
     mrb_get_args(mrb, "nAn", &name, &arg_type, &ret_type);
-
-    printf("func.new) %s\n", mrb_sym2name(mrb, name));
 
     mrb_iv_set(mrb, self, mrb_intern_cstr(mrb, "@name"), mrb_symbol_value(name));
     mrb_iv_set(mrb, self, mrb_intern_cstr(mrb, "@arg_type"), arg_type);
