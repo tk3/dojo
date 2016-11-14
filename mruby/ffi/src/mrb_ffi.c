@@ -99,10 +99,7 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
   }
 
   {
-    struct RClass *ffi;
-    struct RClass *func;
     mrb_value argv[3];
-    mrb_ffi_func *ffi_func;
     const char *func_name;
     void *f;
 
@@ -110,8 +107,9 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
     mrb_value ary;
     mrb_sym ret_type;
 
-    ffi = mrb_module_get(mrb, "FFI");
-    func = mrb_class_get_under(mrb, ffi, "Function");
+    struct RClass *ffi;
+    struct RClass *func;
+    mrb_ffi_func *ffi_func;
 
     mrb_get_args(mrb, "nAn", &name, &ary, &ret_type);
 
@@ -133,6 +131,8 @@ mrb_ffi_dl_find(mrb_state *mrb, mrb_value self)
     argv[1] = ary;
     argv[2] = mrb_symbol_value(ret_type);
 
+    ffi = mrb_module_get(mrb, "FFI");
+    func = mrb_class_get_under(mrb, ffi, "Function");
     ffi_function = mrb_obj_new(mrb, func, 3, argv);
 
     ffi_func = mrb_get_datatype(mrb, ffi_function, &mrb_ffi_func_type);
@@ -233,7 +233,6 @@ sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
   ffi_type *type = NULL;
 
   name = mrb_sym2name(mrb, sym);
-  printf("sym_to_ffi_type>> ffi_type = %s\n", name);
   if (strcasecmp(name, "void") == 0) {
     type = &ffi_type_void;
   } else if (strcasecmp(name, "double") == 0) {
