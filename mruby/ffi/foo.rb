@@ -20,6 +20,8 @@ puts "========"
 f2 = dl.find :atoi, [:string], :ccc
 p f2
 f2.call
+r = f2.call 1234
+p r
 
 puts "========"
 f3 = dl.find :puts, [:string], :ccc

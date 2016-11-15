@@ -186,6 +186,7 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
   mrb_ffi_func *ffi_func;
   mrb_value arg_type;
   int type_len;
+  int rc;
 
   mrb_value *argv;
   mrb_int argc;
@@ -211,7 +212,6 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
     mrb_value v;
     void **values;
     void **values_at;
-    int rc;
 
     types = (ffi_type **)malloc(sizeof(ffi_type*) * type_len);
     values = (void **)malloc(sizeof(void *) * type_len);
@@ -236,7 +236,7 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
     free(values_at);
   }
 
-  return self;
+  return mrb_fixnum_value(rc);
 }
 
 static ffi_type*
