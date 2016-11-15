@@ -285,6 +285,11 @@ sym_to_ffi_type(mrb_state *mrb, mrb_sym sym)
   return type;
 }
 
+static void
+retval_to_mrbval(mrb_state *mrb, mrb_value *val)
+{
+}
+
 ////////
 
 static mrb_value
