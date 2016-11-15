@@ -17,7 +17,7 @@ f1 = dl.find :aaa, [:bbb], :ccc
 p f1
 
 puts "========"
-f2 = dl.find :atoi, [:string], :ccc
+f2 = dl.find :atoi, [:string], :int
 p f2
 f2.call
 r = f2.call 1234

@@ -236,7 +236,21 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
     free(values_at);
   }
 
-  return mrb_fixnum_value(rc);
+  {
+    mrb_value ret_type;
+    const char *n;
+
+    ret_type = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@ret_type"));
+
+    n = mrb_sym2name(mrb, mrb_symbol(ret_type));
+    if (strcasecmp(n, "int") == 0) {
+      return mrb_fixnum_value(rc);
+    } else if (strcasecmp(n, "void") == 0) {
+      return mrb_fixnum_value(rc);
+    } else {
+      return mrb_nil_value();
+    }
+  }
 }
 
 static ffi_type*
