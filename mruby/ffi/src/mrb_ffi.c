@@ -199,11 +199,9 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
   type_len = mrb_ary_len(mrb, arg_type);
 
   if (argc < type_len) {
-    fprintf(stderr, "Error: too few arguments.\n");
-    return self;
+    mrb_raise(mrb, E_ARGUMENT_ERROR, "too few arguments");
   } else if (argc > type_len) {
-    fprintf(stderr, "Error: argument line too long.\n");
-    return self;
+    mrb_raise(mrb, E_ARGUMENT_ERROR, "argument line too long");
   }
 
   {
@@ -316,9 +314,7 @@ func_ffi_lib(mrb_state *mrb, mrb_value self)
 
   type = mrb_type(o);
   if (type == MRB_TT_SYMBOL) {
-    printf("ffi_lib) %s\n", "symbol");
   } else if (type == MRB_TT_STRING) {
-    printf("ffi_lib) %s\n", "string");
   }
 
   return self;
@@ -331,8 +327,6 @@ func_attach_function(mrb_state *mrb, mrb_value self)
   mrb_int len;
 
   mrb_get_args(mrb, "s", &s, &len);
-
-  printf("ffi_lib) %s\n", s);
 
   return self;
 }
@@ -348,11 +342,8 @@ func1(mrb_state *mrb, mrb_value self)
 
   len = mrb_ary_len(mrb, ary);
 
-  printf("len: %d\n", mrb_ary_len(mrb, ary));
-
   for (int i = 0; i < len; i++) {
     v = mrb_ary_ref(mrb, ary, i);
-    printf("%d) %d\n", i, mrb_type(v));
   }
 
   return self;
