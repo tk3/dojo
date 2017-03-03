@@ -1,0 +1,39 @@
+gem install faraday
+gem install faraday_middleware
+
+
+#!/usr/bin/env ruby
+
+require 'faraday'
+require 'faraday_middleware'
+
+url = 'https://typetalk.in'
+
+conn = Faraday.new(url: url) do |faraday|
+  faraday.request :json
+  faraday.response :json
+  faraday.adapter Faraday.default_adapter
+end
+
+response = conn.post('/oauth2/access_token',
+             { :client_id => "PntZ8lRQz2gqBzhgRN6J1n3ePc9qj8SG",
+               :client_secret => "3xfr5i1orokjGFvtifoTD6R2meD2pQBLhoeU3jtOsigecxdkJUKBaTq9B6ZDmguO",
+               :grant_type => "client_credentials",
+               :scope => "my,topic.read,topic.post"})
+puts response.body
+
+access_token = response.body['access_token']
+
+# https://typetalk.in/api/v1/profile
+r = conn.get do |req|
+  req.url '/api/v1/profile'
+  req.headers['Authorization'] = "Bearer #{access_token}"
+end
+
+# or
+
+r = conn.get do |req|
+  req.url '/api/v1/profile'
+  req.params['access_token'] = access_token
+end
+
