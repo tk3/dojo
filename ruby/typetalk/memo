@@ -1,6 +1,8 @@
 gem install faraday
 gem install faraday_middleware
 
+CLIENT_ID = ""
+CLIENT_SECRET = ""
 
 #!/usr/bin/env ruby
 
@@ -9,6 +11,7 @@ require 'faraday_middleware'
 
 url = 'https://typetalk.in'
 
+# b.response :json, :content_type => /\bjson$/
 conn = Faraday.new(url: url) do |faraday|
   faraday.request :json
   faraday.response :json
@@ -18,12 +21,14 @@ end
 #--------
 r = conn.post do |req|
   req.url '/oauth2/access_token'
-  req.body = { :client_id => "xxxx",
-               :client_secret => "xxxx",
+  req.body = { :client_id => CLIENT_ID,
+               :client_secret => CLIENT_SECRET,
                :grant_type => "client_credentials",
                :scope => "my,topic.read,topic.post"}
 end
 if r.status == 200
+  access_token = r.body['access_token']
+  refresh_token = r.body['refresh_token']
   conn.authorization :Bearer, r.body['access_token']
 end
 
@@ -32,8 +37,8 @@ conn.headers.delete "Authorization"
 
 r = conn.post do |req|
   req.url '/oauth2/access_token'
-  req.body = { :client_id => "xxxx",
-               :client_secret => "xxxx",
+  req.body = { :client_id => CLIENT_ID,
+               :client_secret => CLIENT_SECRET,
                :grant_type => "refresh_token",
                :refresh_token => "xxxx"}
 end
@@ -45,17 +50,24 @@ r = conn.get do |req|
   req.url '/api/v1/profile'
 end
 
-#--------
-r = conn.get do |req|
-  req.url '/api/v1/topics'
-end
-
-
 # or
 
 r = conn.get do |req|
   req.url '/api/v1/profile'
   req.params['access_token'] = access_token
+end
+
+#--------
+r = conn.get do |req|
+  req.url '/api/v1/topics'
+end
+
+#--------
+# https://typetalk.in/api/v1/topics/:topicId
+topic_id = 19579
+r = conn.post do |req|
+  req.url "/api/v1/topics/#{topic_id}"
+  req.body = { :message => "post test" }
 end
 
 
