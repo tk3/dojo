@@ -15,20 +15,41 @@ conn = Faraday.new(url: url) do |faraday|
   faraday.adapter Faraday.default_adapter
 end
 
-response = conn.post('/oauth2/access_token',
-             { :client_id => "PntZ8lRQz2gqBzhgRN6J1n3ePc9qj8SG",
-               :client_secret => "3xfr5i1orokjGFvtifoTD6R2meD2pQBLhoeU3jtOsigecxdkJUKBaTq9B6ZDmguO",
+#--------
+r = conn.post do |req|
+  req.url '/oauth2/access_token'
+  req.body = { :client_id => "xxxx",
+               :client_secret => "xxxx",
                :grant_type => "client_credentials",
-               :scope => "my,topic.read,topic.post"})
-puts response.body
+               :scope => "my,topic.read,topic.post"}
+end
+if r.status == 200
+  conn.authorization :Bearer, r.body['access_token']
+end
 
-access_token = response.body['access_token']
+#--------
+conn.headers.delete "Authorization"
 
+r = conn.post do |req|
+  req.url '/oauth2/access_token'
+  req.body = { :client_id => "xxxx",
+               :client_secret => "xxxx",
+               :grant_type => "refresh_token",
+               :refresh_token => "xxxx"}
+end
+
+
+#--------
 # https://typetalk.in/api/v1/profile
 r = conn.get do |req|
   req.url '/api/v1/profile'
-  req.headers['Authorization'] = "Bearer #{access_token}"
 end
+
+#--------
+r = conn.get do |req|
+  req.url '/api/v1/topics'
+end
+
 
 # or
 
@@ -36,4 +57,14 @@ r = conn.get do |req|
   req.url '/api/v1/profile'
   req.params['access_token'] = access_token
 end
+
+
+
+[22] pry(main)> r.headers['www-authenticate']
+=> "Bearer error=\"invalid_token\", error_description=\"The access token expired\""
+[23] pry(main)> r.status
+=> 401
+
+[25] pry(main)> r.headers['www-authenticate']
+=> "Bearer error=\"invalid_client\", error_description=\"Authorization header could not be parsed\""
 
