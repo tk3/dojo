@@ -3,7 +3,7 @@ MRuby::Build.new do |conf|
 
   enable_debug
 
-  conf.gem '../mruby-digest-ffi'
+  conf.gem '../mruby-ffi'
 
   conf.gembox 'default'
 end
@@ -11,7 +11,7 @@ end
 MRuby::Build.new('test') do |conf|
   toolchain :gcc
 
-  conf.gem '../mruby-digest-ffi'
+  conf.gem '../mruby-ffi'
 
   enable_debug
   conf.enable_bintest
