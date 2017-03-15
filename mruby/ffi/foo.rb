@@ -14,7 +14,7 @@ dl = FFI::DynamicLibrary.new "/lib/x86_64-linux-gnu/libc.so.6", 1
 puts "========"
 f2 = dl.find :atoi, [:string], :int
 p f2
-f2.call
+#f2.call
 r = f2.call 1234
 p r
 
