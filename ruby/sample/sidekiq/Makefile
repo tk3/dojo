@@ -1,10 +1,10 @@
 
 
 redis-start:
-	~/opt/redis-3.2.8/bin/redis-server redis.conf
+	~/opt/redis-3.2.8/bin/redis-server ./redis/redis.conf
 
 redis-stop:
-	kill `cat redis_6379.pid`
+	kill `cat ./redis/redis_6379.pid`
 
 sidekiq-start:
 	sidekiq --daemon --pidfile ./sidekiq.pid --logfile ./sidekiq.log  --require ./sample_worker.rb
