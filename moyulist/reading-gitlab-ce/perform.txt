@@ -3,8 +3,9 @@
 ./app/controllers/admin/application_settings_controller.rb:33:    RepositoryCheck::ClearWorker.perform_async
 ./app/controllers/admin/projects_controller.rb:37:    RepositoryCheck::SingleRepositoryWorker.perform_async(@project.id)
 ./app/controllers/admin/users_controller.rb:138:    DeleteUserWorker.perform_async(current_user.id, user.id)
-./app/controllers/projects/merge_requests_controller.rb:357:        MergeWorker.perform_async(@merge_request.id, current_user.id, params)
-./app/controllers/projects/merge_requests_controller.rb:363:      MergeWorker.perform_async(@merge_request.id, current_user.id, params)
+
+./app/controllers/projects/merge_requests_controller.rb:357:        MergeWorker.perform_async
+./app/controllers/projects/merge_requests_controller.rb:363:      MergeWorker.perform_async
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
@@ -61,22 +62,32 @@
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
-./app/services/delete_merged_branches_service.rb:3:    DeleteMergedBranchesWorker.perform_async(project.id, current_user.id)
-./app/services/destroy_group_service.rb:11:    job_id = GroupDestroyWorker.perform_async(group.id, current_user.id)
+./app/services/delete_merged_branches_service.rb:3:    DeleteMergedBranchesWorker.perform_async
+
+./app/services/destroy_group_service.rb:11:    job_id = GroupDestroyWorker.perform_async
+
 ./app/services/git_push_service.rb:56:    perform_housekeeping
-./app/services/git_push_service.rb:80:    ProjectCacheWorker.perform_async(@project.id, types, [:commit_count, :repository_size])
-./app/services/git_push_service.rb:89:        perform_async(project.id, current_user.id, commit.to_hash, default)
-./app/services/git_push_service.rb:100:      .perform_async(@project.id, current_user.id, params[:oldrev], params[:newrev], params[:ref])
+./app/services/git_push_service.rb:89:        perform_async
+./app/services/git_push_service.rb:100:      .perform_async
 ./app/services/git_push_service.rb:114:  def perform_housekeeping
-./app/services/git_tag_push_service.rb:15:    ProjectCacheWorker.perform_async(project.id, [], [:commit_count, :repository_size])
-./app/services/merge_requests/merge_when_pipeline_succeeds_service.rb:29:        MergeWorker.perform_async(merge_request.id, merge_request.merge_user_id, merge_request.merge_params)
-./app/services/merge_requests/update_service.rb:83:        MergeWorker.perform_async(merge_request.id, current_user.id, {})
-./app/services/notes/create_service.rb:35:        NewNoteWorker.perform_async(note.id)
-./app/services/pages_service.rb:13:    PagesWorker.perform_async(:deploy, data[:build_id])
-./app/services/projects/destroy_service.rb:12:        job_id = ProjectDestroyWorker.perform_async(project.id, current_user.id, params)
-./app/services/projects/destroy_service.rb:66:        GitlabShellWorker.perform_in(5.minutes, :remove_repository, project.repository_storage_path, new_path)
-./app/services/projects/housekeeping_service.rb:44:      GitGarbageCollectWorker.perform_async(@project.id, task, lease_key, lease_uuid)
-./app/services/user_project_access_changed_service.rb:7:    AuthorizedProjectsWorker.bulk_perform_and_wait(@user_ids.map { |id| [id] })
+
+./app/services/git_push_service.rb:80:    ProjectCacheWorker.perform_async
+./app/services/git_tag_push_service.rb:15:    ProjectCacheWorker.perform_async
+
+./app/services/merge_requests/merge_when_pipeline_succeeds_service.rb:29:        MergeWorker.perform_async
+./app/services/merge_requests/update_service.rb:83:        MergeWorker.perform_async
+
+./app/services/notes/create_service.rb:35:        NewNoteWorker.perform_async
+
+./app/services/pages_service.rb:13:    PagesWorker.perform_async
+
+./app/services/projects/destroy_service.rb:12:        job_id = ProjectDestroyWorker.perform_async
+
+./app/services/projects/destroy_service.rb:66:        GitlabShellWorker.perform_in
+
+./app/services/projects/housekeeping_service.rb:44:      GitGarbageCollectWorker.perform_async
+
+./app/services/user_project_access_changed_service.rb:7:    AuthorizedProjectsWorker.bulk_perform_and_wait
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
