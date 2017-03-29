@@ -1,0 +1,127 @@
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+./app/controllers/admin/application_settings_controller.rb:33:    RepositoryCheck::ClearWorker.perform_async
+./app/controllers/admin/projects_controller.rb:37:    RepositoryCheck::SingleRepositoryWorker.perform_async(@project.id)
+./app/controllers/admin/users_controller.rb:138:    DeleteUserWorker.perform_async(current_user.id, user.id)
+./app/controllers/projects/merge_requests_controller.rb:357:        MergeWorker.perform_async(@merge_request.id, current_user.id, params)
+./app/controllers/projects/merge_requests_controller.rb:363:      MergeWorker.perform_async(@merge_request.id, current_user.id, params)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+./app/models/abuse_report.rb:19:    DeleteUserWorker.perform_async(deleted_by.id, user.id, delete_solo_owned_groups: true)
+./app/models/ci/build.rb:98:          BuildQueueWorker.perform_async(id)
+./app/models/ci/build.rb:104:          BuildHooksWorker.perform_async(id)
+./app/models/ci/build.rb:110:          BuildFinishedWorker.perform_async(id)
+./app/models/ci/build.rb:116:          BuildSuccessWorker.perform_async(id)
+./app/models/ci/build.rb:611:      ProjectCacheWorker.perform_async(project_id, [], [:build_artifacts_size])
+./app/models/ci/pipeline.rb:64:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
+./app/models/ci/pipeline.rb:68:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
+./app/models/ci/pipeline.rb:72:        pipeline.run_after_commit { PipelineSuccessWorker.perform_async(id) }
+./app/models/ci/pipeline.rb:79:          PipelineHooksWorker.perform_async(id)
+./app/models/ci/pipeline.rb:85:          PipelineNotificationWorker.perform_async(pipeline.id)
+./app/models/commit_status.rb:89:            PipelineProcessWorker.perform_async(pipeline.id)
+./app/models/commit_status.rb:91:            PipelineUpdateWorker.perform_async(pipeline.id)
+./app/models/concerns/reactive_caching.rb:69:      ReactiveCachingWorker.perform_async(self.class, id, *args)
+./app/models/concerns/reactive_caching.rb:115:      ReactiveCachingWorker.perform_in(self.class.reactive_cache_refresh_interval, self.class, id, *args)
+./app/models/key.rb:58:    UseKeyWorker.perform_async(id)
+./app/models/key.rb:62:    GitlabShellWorker.perform_async(
+./app/models/key.rb:74:    GitlabShellWorker.perform_async(
+./app/models/lfs_objects_project.rb:15:    ProjectCacheWorker.perform_async(project_id, [], [:lfs_objects_size])
+./app/models/namespace.rb:244:        GitlabShellWorker.perform_in(5.minutes, :rm_namespace, repository_storage_path, new_path)
+./app/models/project.rb:449:      job_id = RepositoryForkWorker.perform_async(id, forked_from_project.repository_storage_path,
+./app/models/project.rb:453:      job_id = RepositoryImportWorker.perform_async(self.id)
+./app/models/project.rb:464:    ProjectCacheWorker.perform_async(self.id)
+./app/models/project.rb:1197:      PagesWorker.perform_in(5.minutes, :remove, namespace.path, temp_path)
+./app/models/project.rb:1224:    job_id = ProjectExportWorker.perform_async(current_user.id, self.id)
+./app/models/project_services/builds_email_service.rb:37:      BuildEmailWorker.perform_async(
+./app/models/project_services/emails_on_push_service.rb:26:    EmailsOnPushWorker.perform_async(
+./app/models/project_services/irker_service.rb:31:    IrkerWorker.perform_async(project_id, channels,
+./app/models/project_services/pipelines_email_service.rb:35:    PipelineNotificationWorker.new.perform(pipeline_id, all_recipients)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+./app/services/delete_merged_branches_service.rb:3:    DeleteMergedBranchesWorker.perform_async(project.id, current_user.id)
+./app/services/destroy_group_service.rb:11:    job_id = GroupDestroyWorker.perform_async(group.id, current_user.id)
+./app/services/git_push_service.rb:56:    perform_housekeeping
+./app/services/git_push_service.rb:80:    ProjectCacheWorker.perform_async(@project.id, types, [:commit_count, :repository_size])
+./app/services/git_push_service.rb:89:        perform_async(project.id, current_user.id, commit.to_hash, default)
+./app/services/git_push_service.rb:100:      .perform_async(@project.id, current_user.id, params[:oldrev], params[:newrev], params[:ref])
+./app/services/git_push_service.rb:114:  def perform_housekeeping
+./app/services/git_tag_push_service.rb:15:    ProjectCacheWorker.perform_async(project.id, [], [:commit_count, :repository_size])
+./app/services/merge_requests/merge_when_pipeline_succeeds_service.rb:29:        MergeWorker.perform_async(merge_request.id, merge_request.merge_user_id, merge_request.merge_params)
+./app/services/merge_requests/update_service.rb:83:        MergeWorker.perform_async(merge_request.id, current_user.id, {})
+./app/services/notes/create_service.rb:35:        NewNoteWorker.perform_async(note.id)
+./app/services/pages_service.rb:13:    PagesWorker.perform_async(:deploy, data[:build_id])
+./app/services/projects/destroy_service.rb:12:        job_id = ProjectDestroyWorker.perform_async(project.id, current_user.id, params)
+./app/services/projects/destroy_service.rb:66:        GitlabShellWorker.perform_in(5.minutes, :remove_repository, project.repository_storage_path, new_path)
+./app/services/projects/housekeeping_service.rb:44:      GitGarbageCollectWorker.perform_async(@project.id, task, lease_key, lease_uuid)
+./app/services/user_project_access_changed_service.rb:7:    AuthorizedProjectsWorker.bulk_perform_and_wait(@user_ids.map { |id| [id] })
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+./app/workers/admin_email_worker.rb:5:  def perform
+./app/workers/authorized_projects_worker.rb:6:  def self.bulk_perform_and_wait(args_list)
+./app/workers/authorized_projects_worker.rb:7:    job_ids = bulk_perform_async(args_list)
+./app/workers/authorized_projects_worker.rb:12:  def self.bulk_perform_async(args_list)
+./app/workers/authorized_projects_worker.rb:16:  def perform(user_id)
+./app/workers/build_coverage_worker.rb:5:  def perform(build_id)
+./app/workers/build_email_worker.rb:5:  def perform(build_id, recipients, push_data)
+./app/workers/build_finished_worker.rb:5:  def perform(build_id)
+./app/workers/build_finished_worker.rb:7:      BuildCoverageWorker.new.perform(build.id)
+./app/workers/build_finished_worker.rb:8:      BuildHooksWorker.new.perform(build.id)
+./app/workers/build_hooks_worker.rb:5:  def perform(build_id)
+./app/workers/build_queue_worker.rb:5:  def perform(build_id)
+./app/workers/build_success_worker.rb:5:  def perform(build_id)
+./app/workers/clear_database_cache_worker.rb:8:  def perform
+./app/workers/delete_merged_branches_worker.rb:5:  def perform(project_id, user_id)
+./app/workers/delete_user_worker.rb:5:  def perform(current_user_id, delete_user_id, options = {})
+./app/workers/email_receiver_worker.rb:5:  def perform(raw)
+./app/workers/email_receiver_worker.rb:41:        "You are not allowed to perform this action. If you believe this is in error, contact a staff member."
+./app/workers/emails_on_push_worker.rb:7:  def perform(project_id, recipients, push_data, options = {})
+./app/workers/expire_build_artifacts_worker.rb:5:  def perform
+./app/workers/expire_build_instance_artifacts_worker.rb:5:  def perform(build_id)
+./app/workers/git_garbage_collect_worker.rb:8:  def perform(project_id, task = :gc, lease_key = nil, lease_uuid = nil)
+./app/workers/gitlab_shell_worker.rb:6:  def perform(action, *arg)
+./app/workers/group_destroy_worker.rb:5:  def perform(group_id, user_id)
+./app/workers/import_export_project_cleanup_worker.rb:5:  def perform
+./app/workers/irker_worker.rb:8:  def perform(project_id, chans, colors, push_data, settings)
+./app/workers/irker_worker.rb:12:    return false unless init_perform settings, chans, colors
+./app/workers/irker_worker.rb:35:  def init_perform(set, chans, colors)
+./app/workers/merge_worker.rb:5:  def perform(merge_request_id, current_user_id, params)
+./app/workers/new_note_worker.rb:7:  def perform(note_id, _params = {})
+./app/workers/pages_worker.rb:6:  def perform(action, *arg)
+./app/workers/pipeline_hooks_worker.rb:5:  def perform(pipeline_id)
+./app/workers/pipeline_metrics_worker.rb:5:  def perform(pipeline_id)
+./app/workers/pipeline_notification_worker.rb:5:  def perform(pipeline_id, recipients = nil)
+./app/workers/pipeline_process_worker.rb:5:  def perform(pipeline_id)
+./app/workers/pipeline_success_worker.rb:5:  def perform(pipeline_id)
+./app/workers/pipeline_update_worker.rb:5:  def perform(pipeline_id)
+./app/workers/post_receive.rb:5:  def perform(repo_path, identifier, changes)
+./app/workers/process_commit_worker.rb:16:  def perform(project_id, user_id, commit_hash, default = false)
+./app/workers/project_cache_worker.rb:14:  def perform(project_id, files = [], statistics = [])
+./app/workers/project_destroy_worker.rb:5:  def perform(project_id, user_id, params)
+./app/workers/project_export_worker.rb:7:  def perform(current_user_id, project_id)
+./app/workers/project_service_worker.rb:5:  def perform(hook_id, data)
+./app/workers/project_web_hook_worker.rb:7:  def perform(hook_id, data, hook_name)
+./app/workers/prune_old_events_worker.rb:5:  def perform
+./app/workers/reactive_caching_worker.rb:5:  def perform(class_name, id, *args)
+./app/workers/remove_expired_group_links_worker.rb:5:  def perform
+./app/workers/remove_expired_members_worker.rb:5:  def perform
+./app/workers/remove_unreferenced_lfs_objects_worker.rb:5:  def perform
+./app/workers/repository_archive_cache_worker.rb:5:  def perform
+./app/workers/repository_check/batch_worker.rb:8:    def perform
+./app/workers/repository_check/batch_worker.rb:22:        SingleRepositoryWorker.new.perform(project_id)
+./app/workers/repository_check/clear_worker.rb:6:    def perform
+./app/workers/repository_check/single_repository_worker.rb:6:    def perform(project_id)
+./app/workers/repository_fork_worker.rb:6:  def perform(project_id, forked_from_repository_storage_path, source_path, target_path)
+./app/workers/repository_import_worker.rb:8:  def perform(project_id)
+./app/workers/requests_profiles_worker.rb:5:  def perform
+./app/workers/stuck_ci_builds_worker.rb:7:  def perform
+./app/workers/system_hook_worker.rb:5:  def perform(hook_id, data, hook_name)
+./app/workers/trending_projects_worker.rb:5:  def perform
+./app/workers/update_merge_requests_worker.rb:5:  def perform(project_id, user_id, oldrev, newrev, ref)
+./app/workers/use_key_worker.rb:5:  def perform(key_id)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+./db/fixtures/development/17_cycle_analytics.rb:207:      PipelineMetricsWorker.new.perform(pipeline.id)
