@@ -9,34 +9,55 @@
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
 ./app/models/abuse_report.rb:19:    DeleteUserWorker.perform_async(deleted_by.id, user.id, delete_solo_owned_groups: true)
-./app/models/ci/build.rb:98:          BuildQueueWorker.perform_async(id)
-./app/models/ci/build.rb:104:          BuildHooksWorker.perform_async(id)
-./app/models/ci/build.rb:110:          BuildFinishedWorker.perform_async(id)
-./app/models/ci/build.rb:116:          BuildSuccessWorker.perform_async(id)
+
 ./app/models/ci/build.rb:611:      ProjectCacheWorker.perform_async(project_id, [], [:build_artifacts_size])
+./app/models/lfs_objects_project.rb:15:    ProjectCacheWorker.perform_async(project_id, [], [:lfs_objects_size])
+./app/models/project.rb:464:    ProjectCacheWorker.perform_async(self.id)
+
+./app/models/ci/build.rb:98:          BuildQueueWorker.perform_async(id)
+
+./app/models/ci/build.rb:104:          BuildHooksWorker.perform_async(id)
+
+./app/models/ci/build.rb:110:          BuildFinishedWorker.perform_async(id)
+
+./app/models/ci/build.rb:116:          BuildSuccessWorker.perform_async(id)
+
 ./app/models/ci/pipeline.rb:64:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
 ./app/models/ci/pipeline.rb:68:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
+
 ./app/models/ci/pipeline.rb:72:        pipeline.run_after_commit { PipelineSuccessWorker.perform_async(id) }
+
 ./app/models/ci/pipeline.rb:79:          PipelineHooksWorker.perform_async(id)
+
 ./app/models/ci/pipeline.rb:85:          PipelineNotificationWorker.perform_async(pipeline.id)
+./app/models/project_services/pipelines_email_service.rb:35:    PipelineNotificationWorker.new.perform(pipeline_id, all_recipients)
+
 ./app/models/commit_status.rb:89:            PipelineProcessWorker.perform_async(pipeline.id)
+
 ./app/models/commit_status.rb:91:            PipelineUpdateWorker.perform_async(pipeline.id)
+
 ./app/models/concerns/reactive_caching.rb:69:      ReactiveCachingWorker.perform_async(self.class, id, *args)
 ./app/models/concerns/reactive_caching.rb:115:      ReactiveCachingWorker.perform_in(self.class.reactive_cache_refresh_interval, self.class, id, *args)
+
 ./app/models/key.rb:58:    UseKeyWorker.perform_async(id)
+
 ./app/models/key.rb:62:    GitlabShellWorker.perform_async(
 ./app/models/key.rb:74:    GitlabShellWorker.perform_async(
-./app/models/lfs_objects_project.rb:15:    ProjectCacheWorker.perform_async(project_id, [], [:lfs_objects_size])
 ./app/models/namespace.rb:244:        GitlabShellWorker.perform_in(5.minutes, :rm_namespace, repository_storage_path, new_path)
+
 ./app/models/project.rb:449:      job_id = RepositoryForkWorker.perform_async(id, forked_from_project.repository_storage_path,
+
 ./app/models/project.rb:453:      job_id = RepositoryImportWorker.perform_async(self.id)
-./app/models/project.rb:464:    ProjectCacheWorker.perform_async(self.id)
+
 ./app/models/project.rb:1197:      PagesWorker.perform_in(5.minutes, :remove, namespace.path, temp_path)
+
 ./app/models/project.rb:1224:    job_id = ProjectExportWorker.perform_async(current_user.id, self.id)
+
 ./app/models/project_services/builds_email_service.rb:37:      BuildEmailWorker.perform_async(
+
 ./app/models/project_services/emails_on_push_service.rb:26:    EmailsOnPushWorker.perform_async(
+
 ./app/models/project_services/irker_service.rb:31:    IrkerWorker.perform_async(project_id, channels,
-./app/models/project_services/pipelines_email_service.rb:35:    PipelineNotificationWorker.new.perform(pipeline_id, all_recipients)
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
