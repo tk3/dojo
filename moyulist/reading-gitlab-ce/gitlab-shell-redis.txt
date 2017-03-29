@@ -1,0 +1,47 @@
+  def value
+./lib/gitlab_reference_counter.rb:15:    (redis_client.get(key) || 0).to_i
+  def increase
+./lib/gitlab_reference_counter.rb:20:      redis_client.incr(key)
+./lib/gitlab_reference_counter.rb:21:      redis_client.expire(key, REFERENCE_EXPIRE_TIME)
+  def decrease
+./lib/gitlab_reference_counter.rb:27:      current_value = redis_client.decr(key)
+./lib/gitlab_reference_counter.rb:30:        redis_client.del(key)
+
+
+% find . -name '*' -exec grep -nH 'GitlabReferenceCounter' {} \; | grep -v ./spec
+./hooks/pre-receive:21:    GitlabReferenceCounter.new(repo_path).increase
+./lib/gitlab_post_receive.rb:42:    result && GitlabReferenceCounter.new(repo_path).decrease
+./lib/gitlab_projects.rb:407:    @gitlab_reference_counter ||= GitlabReferenceCounter.new(full_path)
+./lib/gitlab_reference_counter.rb:4:class GitlabReferenceCounter
+
+
+./hooks/pre-receive:21:    GitlabReferenceCounter.new(repo_path).increase
+
+
+class GitlabPostReceive
+  def exec
+./lib/gitlab_post_receive.rb:42:    result && GitlabReferenceCounter.new(repo_path).decrease
+
+
+class GitlabProjects
+  def exec
+    def mv_storage
+      def wait_for_pushes
+        def gitlab_reference_counter
+./lib/gitlab_projects.rb:407:    @gitlab_reference_counter ||= GitlabReferenceCounter.new(full_path)
+
+
+% find . -name '*' -exec grep -nH 'GitlabProjects' {} \; | grep -v ./spec
+./bin/create-hooks:17:        GitlabProjects.create_hooks(repo)
+./bin/gitlab-projects:25:if GitlabProjects.new.exec
+
+
+% find . -name '*' -exec grep -nH 'GitlabPostReceive' {} \; | grep -v ./spec
+./hooks/post-receive:13:if GitlabPostReceive.new(repo_path, key_id, refs).exec &&
+./hooks/pre-receive:17:# other hand, we run GitlabPostReceive first because the push is already done
+
+
+% find . -type f -name '*' -exec grep -nH 'GitlabPostReceive' {} \; | grep -v ./spec
+./hooks/post-receive:13:if GitlabPostReceive.new(repo_path, key_id, refs).exec &&
+./hooks/pre-receive:17:# other hand, we run GitlabPostReceive first because the push is already done
+
