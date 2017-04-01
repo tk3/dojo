@@ -1,53 +1,159 @@
-app/workers/admin_email_worker.rb:1:class AdminEmailWorker
-app/workers/authorized_projects_worker.rb:1:class AuthorizedProjectsWorker
-app/workers/build_coverage_worker.rb:1:class BuildCoverageWorker
-app/workers/build_email_worker.rb:1:class BuildEmailWorker
-app/workers/build_finished_worker.rb:1:class BuildFinishedWorker
-app/workers/build_hooks_worker.rb:1:class BuildHooksWorker
-app/workers/build_queue_worker.rb:1:class BuildQueueWorker
-app/workers/build_success_worker.rb:1:class BuildSuccessWorker
-app/workers/clear_database_cache_worker.rb:2:class ClearDatabaseCacheWorker
-app/workers/delete_merged_branches_worker.rb:1:class DeleteMergedBranchesWorker
-app/workers/delete_user_worker.rb:1:class DeleteUserWorker
-app/workers/email_receiver_worker.rb:1:class EmailReceiverWorker
-app/workers/emails_on_push_worker.rb:1:class EmailsOnPushWorker
-app/workers/expire_build_artifacts_worker.rb:1:class ExpireBuildArtifactsWorker
-app/workers/expire_build_instance_artifacts_worker.rb:1:class ExpireBuildInstanceArtifactsWorker
-app/workers/git_garbage_collect_worker.rb:1:class GitGarbageCollectWorker
-app/workers/gitlab_shell_worker.rb:1:class GitlabShellWorker
-app/workers/group_destroy_worker.rb:1:class GroupDestroyWorker
-app/workers/import_export_project_cleanup_worker.rb:1:class ImportExportProjectCleanupWorker
-app/workers/irker_worker.rb:4:class IrkerWorker
-app/workers/merge_worker.rb:1:class MergeWorker
-app/workers/new_note_worker.rb:1:class NewNoteWorker
-app/workers/pages_worker.rb:1:class PagesWorker
-app/workers/pipeline_hooks_worker.rb:1:class PipelineHooksWorker
-app/workers/pipeline_metrics_worker.rb:1:class PipelineMetricsWorker
-app/workers/pipeline_notification_worker.rb:1:class PipelineNotificationWorker
-app/workers/pipeline_process_worker.rb:1:class PipelineProcessWorker
-app/workers/pipeline_success_worker.rb:1:class PipelineSuccessWorker
-app/workers/pipeline_update_worker.rb:1:class PipelineUpdateWorker
-app/workers/process_commit_worker.rb:7:class ProcessCommitWorker
-app/workers/project_cache_worker.rb:2:class ProjectCacheWorker
-app/workers/project_destroy_worker.rb:1:class ProjectDestroyWorker
-app/workers/project_export_worker.rb:1:class ProjectExportWorker
-app/workers/project_service_worker.rb:1:class ProjectServiceWorker
-app/workers/project_web_hook_worker.rb:1:class ProjectWebHookWorker
-app/workers/prune_old_events_worker.rb:1:class PruneOldEventsWorker
-app/workers/reactive_caching_worker.rb:1:class ReactiveCachingWorker
-app/workers/remove_expired_group_links_worker.rb:1:class RemoveExpiredGroupLinksWorker
-app/workers/remove_expired_members_worker.rb:1:class RemoveExpiredMembersWorker
-app/workers/remove_unreferenced_lfs_objects_worker.rb:1:class RemoveUnreferencedLfsObjectsWorker
-app/workers/repository_archive_cache_worker.rb:1:class RepositoryArchiveCacheWorker
-app/workers/repository_check/batch_worker.rb:2:  class BatchWorker
-app/workers/repository_check/clear_worker.rb:2:  class ClearWorker
-app/workers/repository_check/single_repository_worker.rb:2:  class SingleRepositoryWorker
-app/workers/repository_fork_worker.rb:1:class RepositoryForkWorker
-app/workers/repository_import_worker.rb:1:class RepositoryImportWorker
-app/workers/requests_profiles_worker.rb:1:class RequestsProfilesWorker
-app/workers/stuck_ci_builds_worker.rb:1:class StuckCiBuildsWorker
-app/workers/system_hook_worker.rb:1:class SystemHookWorker
-app/workers/trending_projects_worker.rb:1:class TrendingProjectsWorker
-app/workers/update_merge_requests_worker.rb:1:class UpdateMergeRequestsWorker
-app/workers/use_key_worker.rb:1:class UseKeyWorker
-db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb:4:class MigrateProcessCommitWorkerJobs < ActiveRecord::Migration
+class AdminEmailWorker
+	app/workers/admin_email_worker.rb
+
+class AuthorizedProjectsWorker
+	app/workers/authorized_projects_worker.rb
+
+class BuildCoverageWorker
+	app/workers/build_coverage_worker.rb
+
+class BuildEmailWorker
+	app/workers/build_email_worker.rb
+
+class BuildFinishedWorker
+	app/workers/build_finished_worker.rb
+
+class BuildHooksWorker
+	app/workers/build_hooks_worker.rb
+
+class BuildQueueWorker
+	app/workers/build_queue_worker.rb
+
+class BuildSuccessWorker
+	app/workers/build_success_worker.rb
+
+class ClearDatabaseCacheWorker
+	app/workers/clear_database_cache_worker.rb:2:
+
+class DeleteMergedBranchesWorker
+	app/workers/delete_merged_branches_worker.rb
+
+class DeleteUserWorker
+	app/workers/delete_user_worker.rb
+
+class EmailReceiverWorker
+	app/workers/email_receiver_worker.rb
+
+class EmailsOnPushWorker
+	app/workers/emails_on_push_worker.rb
+
+class ExpireBuildArtifactsWorker
+	app/workers/expire_build_artifacts_worker.rb
+
+class ExpireBuildInstanceArtifactsWorker
+	app/workers/expire_build_instance_artifacts_worker.rb
+
+class GitGarbageCollectWorker
+	app/workers/git_garbage_collect_worker.rb
+
+class GitlabShellWorker
+	app/workers/gitlab_shell_worker.rb
+
+class GroupDestroyWorker
+	app/workers/group_destroy_worker.rb
+
+class ImportExportProjectCleanupWorker
+	app/workers/import_export_project_cleanup_worker.rb
+
+class IrkerWorker
+	app/workers/irker_worker.rb:4:
+
+class MergeWorker
+	app/workers/merge_worker.rb
+
+class NewNoteWorker
+	app/workers/new_note_worker.rb
+
+class PagesWorker
+	app/workers/pages_worker.rb
+
+class PipelineHooksWorker
+	app/workers/pipeline_hooks_worker.rb
+
+class PipelineMetricsWorker
+	app/workers/pipeline_metrics_worker.rb
+
+class PipelineNotificationWorker
+	app/workers/pipeline_notification_worker.rb
+
+class PipelineProcessWorker
+	app/workers/pipeline_process_worker.rb
+
+class PipelineSuccessWorker
+	app/workers/pipeline_success_worker.rb
+
+class PipelineUpdateWorker
+	app/workers/pipeline_update_worker.rb
+
+class ProcessCommitWorker
+	app/workers/process_commit_worker.rb:7:
+
+class ProjectCacheWorker
+	app/workers/project_cache_worker.rb:2:
+
+class ProjectDestroyWorker
+	app/workers/project_destroy_worker.rb
+
+class ProjectExportWorker
+	app/workers/project_export_worker.rb
+
+class ProjectServiceWorker
+	app/workers/project_service_worker.rb
+
+class ProjectWebHookWorker
+	app/workers/project_web_hook_worker.rb
+
+class PruneOldEventsWorker
+	app/workers/prune_old_events_worker.rb
+
+class ReactiveCachingWorker
+	app/workers/reactive_caching_worker.rb
+
+class RemoveExpiredGroupLinksWorker
+	app/workers/remove_expired_group_links_worker.rb
+
+class RemoveExpiredMembersWorker
+	app/workers/remove_expired_members_worker.rb
+
+class RemoveUnreferencedLfsObjectsWorker
+	app/workers/remove_unreferenced_lfs_objects_worker.rb
+
+class RepositoryArchiveCacheWorker
+	app/workers/repository_archive_cache_worker.rb
+
+class BatchWorker
+	app/workers/repository_check/batch_worker.rb:2:  
+
+class ClearWorker
+	app/workers/repository_check/clear_worker.rb:2:  
+
+class SingleRepositoryWorker
+	app/workers/repository_check/single_repository_worker.rb:2:  
+
+class RepositoryForkWorker
+	app/workers/repository_fork_worker.rb
+
+class RepositoryImportWorker
+	app/workers/repository_import_worker.rb
+
+class RequestsProfilesWorker
+	app/workers/requests_profiles_worker.rb
+
+class StuckCiBuildsWorker
+	app/workers/stuck_ci_builds_worker.rb
+
+class SystemHookWorker
+	app/workers/system_hook_worker.rb
+
+class TrendingProjectsWorker
+	app/workers/trending_projects_worker.rb
+
+class UpdateMergeRequestsWorker
+	app/workers/update_merge_requests_worker.rb
+
+class UseKeyWorker
+	app/workers/use_key_worker.rb
+
+class MigrateProcessCommitWorkerJobs < ActiveRecord::Migration
+	db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb
+
