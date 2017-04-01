@@ -1,93 +1,139 @@
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+RepositoryCheck::ClearWorker.perform_async
+./app/controllers/admin/application_settings_controller.rb:33
 
-./app/controllers/admin/application_settings_controller.rb:33:    RepositoryCheck::ClearWorker.perform_async
-./app/controllers/admin/projects_controller.rb:37:    RepositoryCheck::SingleRepositoryWorker.perform_async(@project.id)
-./app/controllers/admin/users_controller.rb:138:    DeleteUserWorker.perform_async(current_user.id, user.id)
+RepositoryCheck::SingleRepositoryWorker.perform_async
+./app/controllers/admin/projects_controller.rb:37
+./app/workers/repository_check/batch_worker.rb:22
 
-./app/controllers/projects/merge_requests_controller.rb:357:        MergeWorker.perform_async
-./app/controllers/projects/merge_requests_controller.rb:363:      MergeWorker.perform_async
+DeleteUserWorker.perform_async
+./app/controllers/admin/users_controller.rb:138
 
----- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-
-./app/models/abuse_report.rb:19:    DeleteUserWorker.perform_async
-
-./app/models/ci/build.rb:611:      ProjectCacheWorker.perform_async
-./app/models/lfs_objects_project.rb:15:    ProjectCacheWorker.perform_async
-./app/models/project.rb:464:    ProjectCacheWorker.perform_async
-
-./app/models/ci/build.rb:98:          BuildQueueWorker.perform_async
-
-./app/models/ci/build.rb:104:          BuildHooksWorker.perform_async
-
-./app/models/ci/build.rb:110:          BuildFinishedWorker.perform_async
-
-./app/models/ci/build.rb:116:          BuildSuccessWorker.perform_async
-
-./app/models/ci/pipeline.rb:64:       PipelineMetricsWorker.perform_async
-./app/models/ci/pipeline.rb:68:       PipelineMetricsWorker.perform_async
-
-./app/models/ci/pipeline.rb:72:        PipelineSuccessWorker.perform_async
-
-./app/models/ci/pipeline.rb:79:          PipelineHooksWorker.perform_async
-
-./app/models/ci/pipeline.rb:85:          PipelineNotificationWorker.perform_async
-./app/models/project_services/pipelines_email_service.rb:35:    PipelineNotificationWorker.new.perform
-
-./app/models/commit_status.rb:89:            PipelineProcessWorker.perform_async
-
-./app/models/commit_status.rb:91:            PipelineUpdateWorker.perform_async
-
-./app/models/concerns/reactive_caching.rb:69:      ReactiveCachingWorker.perform_async
-./app/models/concerns/reactive_caching.rb:115:      ReactiveCachingWorker.perform_in
-
-./app/models/key.rb:58:    UseKeyWorker.perform_async
-
-./app/models/key.rb:62:    GitlabShellWorker.perform_async
-./app/models/key.rb:74:    GitlabShellWorker.perform_async
-./app/models/namespace.rb:244:        GitlabShellWorker.perform_in
-
-./app/models/project.rb:449:      job_id = RepositoryForkWorker.perform_async
-
-./app/models/project.rb:453:      job_id = RepositoryImportWorker.perform_async
-
-./app/models/project.rb:1197:      PagesWorker.perform_in
-
-./app/models/project.rb:1224:    job_id = ProjectExportWorker.perform_async
-
-./app/models/project_services/builds_email_service.rb:37:      BuildEmailWorker.perform_async
-
-./app/models/project_services/emails_on_push_service.rb:26:    EmailsOnPushWorker.perform_async
-
-./app/models/project_services/irker_service.rb:31:    IrkerWorker.perform_async
+MergeWorker.perform_async
+./app/controllers/projects/merge_requests_controller.rb:357
+./app/controllers/projects/merge_requests_controller.rb:363
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
-./app/services/delete_merged_branches_service.rb:3:    DeleteMergedBranchesWorker.perform_async
+DeleteUserWorker.perform_async
+./app/models/abuse_report.rb:19
 
-./app/services/destroy_group_service.rb:11:    job_id = GroupDestroyWorker.perform_async
+ProjectCacheWorker.perform_async
+./app/models/ci/build.rb:611
+./app/models/lfs_objects_project.rb:15
+./app/models/project.rb:464
+
+BuildQueueWorker.perform_async
+./app/models/ci/build.rb:98
+
+BuildHooksWorker.perform_async
+./app/models/ci/build.rb:104
+
+BuildFinishedWorker.perform_async
+./app/models/ci/build.rb:110
+
+BuildSuccessWorker.perform_async
+./app/models/ci/build.rb:116
+
+PipelineMetricsWorker.perform_async
+./app/models/ci/pipeline.rb:64
+./app/models/ci/pipeline.rb:68
+./db/fixtures/development/17_cycle_analytics.rb:207
+
+PipelineSuccessWorker.perform_async
+./app/models/ci/pipeline.rb:72
+
+PipelineHooksWorker.perform_async
+./app/models/ci/pipeline.rb:79
+
+PipelineNotificationWorker.perform_async
+./app/models/ci/pipeline.rb:85
+./app/models/project_services/pipelines_email_service.rb:35
+
+PipelineProcessWorker.perform_async
+./app/models/commit_status.rb:89
+
+PipelineUpdateWorker.perform_async
+./app/models/commit_status.rb:91
+
+ReactiveCachingWorker.perform_async
+./app/models/concerns/reactive_caching.rb:69
+./app/models/concerns/reactive_caching.rb:115
+
+UseKeyWorker.perform_async
+./app/models/key.rb:58
+
+GitlabShellWorker.perform_async
+./app/models/key.rb:62
+./app/models/key.rb:74
+./app/models/namespace.rb:244
+
+RepositoryForkWorker.perform_async
+./app/models/project.rb:449
+
+RepositoryImportWorker.perform_async
+./app/models/project.rb:453
+
+PagesWorker.perform_in
+./app/models/project.rb:1197
+
+ProjectExportWorker.perform_async
+./app/models/project.rb:1224
+
+BuildEmailWorker.perform_async
+./app/models/project_services/builds_email_service.rb:37
+
+EmailsOnPushWorker.perform_async
+./app/models/project_services/emails_on_push_service.rb:26
+
+IrkerWorker.perform_async
+./app/models/project_services/irker_service.rb:31
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+DeleteMergedBranchesWorker.perform_async
+./app/services/delete_merged_branches_service.rb:3
+
+GroupDestroyWorker.perform_async
+./app/services/destroy_group_service.rb:11
 
 ./app/services/git_push_service.rb:56:    perform_housekeeping
 ./app/services/git_push_service.rb:89:        perform_async
 ./app/services/git_push_service.rb:100:      .perform_async
 ./app/services/git_push_service.rb:114:  def perform_housekeeping
 
-./app/services/git_push_service.rb:80:    ProjectCacheWorker.perform_async
-./app/services/git_tag_push_service.rb:15:    ProjectCacheWorker.perform_async
+ProjectCacheWorker.perform_async
+./app/services/git_push_service.rb:80
+./app/services/git_tag_push_service.rb:15
 
-./app/services/merge_requests/merge_when_pipeline_succeeds_service.rb:29:        MergeWorker.perform_async
-./app/services/merge_requests/update_service.rb:83:        MergeWorker.perform_async
+MergeWorker.perform_async
+./app/services/merge_requests/merge_when_pipeline_succeeds_service.rb:29
+./app/services/merge_requests/update_service.rb:83
 
-./app/services/notes/create_service.rb:35:        NewNoteWorker.perform_async
+NewNoteWorker.perform_async
+./app/services/notes/create_service.rb:35
 
-./app/services/pages_service.rb:13:    PagesWorker.perform_async
+PagesWorker.perform_async
+./app/services/pages_service.rb:13
 
-./app/services/projects/destroy_service.rb:12:        job_id = ProjectDestroyWorker.perform_async
+ProjectDestroyWorker.perform_async
+./app/services/projects/destroy_service.rb:12
 
-./app/services/projects/destroy_service.rb:66:        GitlabShellWorker.perform_in
+GitlabShellWorker.perform_in
+./app/services/projects/destroy_service.rb:66
 
-./app/services/projects/housekeeping_service.rb:44:      GitGarbageCollectWorker.perform_async
+GitGarbageCollectWorker.perform_async
+./app/services/projects/housekeeping_service.rb:44
 
-./app/services/user_project_access_changed_service.rb:7:    AuthorizedProjectsWorker.bulk_perform_and_wait
+AuthorizedProjectsWorker.bulk_perform_and_wait
+./app/services/user_project_access_changed_service.rb:7
+
+BuildCoverageWorker.new.perform(build.id)
+./app/workers/build_finished_worker.rb:7
+
+BuildHooksWorker.new.perform(build.id)
+./app/workers/build_finished_worker.rb:8
+
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
@@ -99,8 +145,6 @@
 ./app/workers/build_coverage_worker.rb:5:  def perform(build_id)
 ./app/workers/build_email_worker.rb:5:  def perform(build_id, recipients, push_data)
 ./app/workers/build_finished_worker.rb:5:  def perform(build_id)
-./app/workers/build_finished_worker.rb:7:      BuildCoverageWorker.new.perform(build.id)
-./app/workers/build_finished_worker.rb:8:      BuildHooksWorker.new.perform(build.id)
 ./app/workers/build_hooks_worker.rb:5:  def perform(build_id)
 ./app/workers/build_queue_worker.rb:5:  def perform(build_id)
 ./app/workers/build_success_worker.rb:5:  def perform(build_id)
@@ -142,7 +186,6 @@
 ./app/workers/remove_unreferenced_lfs_objects_worker.rb:5:  def perform
 ./app/workers/repository_archive_cache_worker.rb:5:  def perform
 ./app/workers/repository_check/batch_worker.rb:8:    def perform
-./app/workers/repository_check/batch_worker.rb:22:        SingleRepositoryWorker.new.perform(project_id)
 ./app/workers/repository_check/clear_worker.rb:6:    def perform
 ./app/workers/repository_check/single_repository_worker.rb:6:    def perform(project_id)
 ./app/workers/repository_fork_worker.rb:6:  def perform(project_id, forked_from_repository_storage_path, source_path, target_path)
@@ -156,4 +199,3 @@
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
-./db/fixtures/development/17_cycle_analytics.rb:207:      PipelineMetricsWorker.new.perform(pipeline.id)
