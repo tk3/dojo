@@ -1,159 +1,238 @@
-class AdminEmailWorker
-	app/workers/admin_email_worker.rb
-
-class AuthorizedProjectsWorker
-	app/workers/authorized_projects_worker.rb
-
-class BuildCoverageWorker
-	app/workers/build_coverage_worker.rb
-
-class BuildEmailWorker
-	app/workers/build_email_worker.rb
-
-class BuildFinishedWorker
-	app/workers/build_finished_worker.rb
-
-class BuildHooksWorker
-	app/workers/build_hooks_worker.rb
-
-class BuildQueueWorker
-	app/workers/build_queue_worker.rb
-
-class BuildSuccessWorker
-	app/workers/build_success_worker.rb
-
-class ClearDatabaseCacheWorker
-	app/workers/clear_database_cache_worker.rb:2:
-
-class DeleteMergedBranchesWorker
-	app/workers/delete_merged_branches_worker.rb
-
-class DeleteUserWorker
-	app/workers/delete_user_worker.rb
-
-class EmailReceiverWorker
-	app/workers/email_receiver_worker.rb
-
-class EmailsOnPushWorker
-	app/workers/emails_on_push_worker.rb
-
-class ExpireBuildArtifactsWorker
-	app/workers/expire_build_artifacts_worker.rb
-
-class ExpireBuildInstanceArtifactsWorker
-	app/workers/expire_build_instance_artifacts_worker.rb
-
-class GitGarbageCollectWorker
-	app/workers/git_garbage_collect_worker.rb
-
-class GitlabShellWorker
-	app/workers/gitlab_shell_worker.rb
-
-class GroupDestroyWorker
-	app/workers/group_destroy_worker.rb
-
-class ImportExportProjectCleanupWorker
-	app/workers/import_export_project_cleanup_worker.rb
-
-class IrkerWorker
-	app/workers/irker_worker.rb:4:
-
-class MergeWorker
-	app/workers/merge_worker.rb
-
-class NewNoteWorker
-	app/workers/new_note_worker.rb
-
-class PagesWorker
-	app/workers/pages_worker.rb
-
-class PipelineHooksWorker
-	app/workers/pipeline_hooks_worker.rb
-
-class PipelineMetricsWorker
-	app/workers/pipeline_metrics_worker.rb
-
-class PipelineNotificationWorker
-	app/workers/pipeline_notification_worker.rb
-
-class PipelineProcessWorker
-	app/workers/pipeline_process_worker.rb
-
-class PipelineSuccessWorker
-	app/workers/pipeline_success_worker.rb
-
-class PipelineUpdateWorker
-	app/workers/pipeline_update_worker.rb
-
-class ProcessCommitWorker
-	app/workers/process_commit_worker.rb:7:
-
-class ProjectCacheWorker
-	app/workers/project_cache_worker.rb:2:
-
-class ProjectDestroyWorker
-	app/workers/project_destroy_worker.rb
-
-class ProjectExportWorker
-	app/workers/project_export_worker.rb
-
-class ProjectServiceWorker
-	app/workers/project_service_worker.rb
-
-class ProjectWebHookWorker
-	app/workers/project_web_hook_worker.rb
-
-class PruneOldEventsWorker
-	app/workers/prune_old_events_worker.rb
-
-class ReactiveCachingWorker
-	app/workers/reactive_caching_worker.rb
-
-class RemoveExpiredGroupLinksWorker
-	app/workers/remove_expired_group_links_worker.rb
-
-class RemoveExpiredMembersWorker
-	app/workers/remove_expired_members_worker.rb
-
-class RemoveUnreferencedLfsObjectsWorker
-	app/workers/remove_unreferenced_lfs_objects_worker.rb
-
-class RepositoryArchiveCacheWorker
-	app/workers/repository_archive_cache_worker.rb
-
-class BatchWorker
-	app/workers/repository_check/batch_worker.rb:2:  
-
-class ClearWorker
-	app/workers/repository_check/clear_worker.rb:2:  
-
-class SingleRepositoryWorker
-	app/workers/repository_check/single_repository_worker.rb:2:  
-
-class RepositoryForkWorker
-	app/workers/repository_fork_worker.rb
-
-class RepositoryImportWorker
-	app/workers/repository_import_worker.rb
-
-class RequestsProfilesWorker
-	app/workers/requests_profiles_worker.rb
-
-class StuckCiBuildsWorker
-	app/workers/stuck_ci_builds_worker.rb
-
-class SystemHookWorker
-	app/workers/system_hook_worker.rb
-
-class TrendingProjectsWorker
-	app/workers/trending_projects_worker.rb
-
-class UpdateMergeRequestsWorker
-	app/workers/update_merge_requests_worker.rb
-
-class UseKeyWorker
-	app/workers/use_key_worker.rb
-
-class MigrateProcessCommitWorkerJobs < ActiveRecord::Migration
-	db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb
-
+app/controllers/admin/application_settings_controller.rb:33:    RepositoryCheck::ClearWorker.perform_async
+app/controllers/admin/projects_controller.rb:37:    RepositoryCheck::SingleRepositoryWorker.perform_async(@project.id)
+app/controllers/admin/users_controller.rb:138:    DeleteUserWorker.perform_async(current_user.id, user.id)
+app/controllers/projects/merge_requests_controller.rb:357:        MergeWorker.perform_async(@merge_request.id, current_user.id, params)
+app/controllers/projects/merge_requests_controller.rb:363:      MergeWorker.perform_async(@merge_request.id, current_user.id, params)
+app/models/abuse_report.rb:19:    DeleteUserWorker.perform_async(deleted_by.id, user.id, delete_solo_owned_groups: true)
+app/models/ci/build.rb:98:          BuildQueueWorker.perform_async(id)
+app/models/ci/build.rb:104:          BuildHooksWorker.perform_async(id)
+app/models/ci/build.rb:110:          BuildFinishedWorker.perform_async(id)
+app/models/ci/build.rb:116:          BuildSuccessWorker.perform_async(id)
+app/models/ci/build.rb:611:      ProjectCacheWorker.perform_async(project_id, [], [:build_artifacts_size])
+app/models/ci/pipeline.rb:64:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
+app/models/ci/pipeline.rb:68:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
+app/models/ci/pipeline.rb:72:        pipeline.run_after_commit { PipelineSuccessWorker.perform_async(id) }
+app/models/ci/pipeline.rb:79:          PipelineHooksWorker.perform_async(id)
+app/models/ci/pipeline.rb:85:          PipelineNotificationWorker.perform_async(pipeline.id)
+app/models/commit_status.rb:89:            PipelineProcessWorker.perform_async(pipeline.id)
+app/models/commit_status.rb:91:            PipelineUpdateWorker.perform_async(pipeline.id)
+app/models/concerns/reactive_caching.rb:69:      ReactiveCachingWorker.perform_async(self.class, id, *args)
+app/models/concerns/reactive_caching.rb:115:      ReactiveCachingWorker.perform_in(self.class.reactive_cache_refresh_interval, self.class, id, *args)
+app/models/hooks/system_hook.rb:3:    Sidekiq::Client.enqueue(SystemHookWorker, id, data, hook_name)
+app/models/hooks/web_hook.rb:50:    Sidekiq::Client.enqueue(ProjectWebHookWorker, id, data, hook_name)
+app/models/key.rb:58:    UseKeyWorker.perform_async(id)
+app/models/key.rb:62:    GitlabShellWorker.perform_async(
+app/models/key.rb:74:    GitlabShellWorker.perform_async(
+app/models/lfs_objects_project.rb:15:    ProjectCacheWorker.perform_async(project_id, [], [:lfs_objects_size])
+app/models/namespace.rb:244:        GitlabShellWorker.perform_in(5.minutes, :rm_namespace, repository_storage_path, new_path)
+app/models/project.rb:449:      job_id = RepositoryForkWorker.perform_async(id, forked_from_project.repository_storage_path,
+app/models/project.rb:453:      job_id = RepositoryImportWorker.perform_async(self.id)
+app/models/project.rb:464:    ProjectCacheWorker.perform_async(self.id)
+app/models/project.rb:1197:      PagesWorker.perform_in(5.minutes, :remove, namespace.path, temp_path)
+app/models/project.rb:1224:    job_id = ProjectExportWorker.perform_async(current_user.id, self.id)
+app/models/project_services/builds_email_service.rb:37:      BuildEmailWorker.perform_async(
+app/models/project_services/emails_on_push_service.rb:26:    EmailsOnPushWorker.perform_async(
+app/models/project_services/irker_service.rb:31:    IrkerWorker.perform_async(project_id, channels,
+app/models/project_services/pipelines_email_service.rb:35:    PipelineNotificationWorker.new.perform(pipeline_id, all_recipients)
+app/models/service.rb:205:    Sidekiq::Client.enqueue(ProjectServiceWorker, id, data)
+app/services/delete_merged_branches_service.rb:3:    DeleteMergedBranchesWorker.perform_async(project.id, current_user.id)
+app/services/destroy_group_service.rb:11:    job_id = GroupDestroyWorker.perform_async(group.id, current_user.id)
+app/services/git_push_service.rb:80:    ProjectCacheWorker.perform_async(@project.id, types, [:commit_count, :repository_size])
+app/services/git_push_service.rb:88:      ProcessCommitWorker.
+app/services/git_push_service.rb:99:    UpdateMergeRequestsWorker
+app/services/git_tag_push_service.rb:15:    ProjectCacheWorker.perform_async(project.id, [], [:commit_count, :repository_size])
+app/services/merge_requests/merge_when_pipeline_succeeds_service.rb:29:        MergeWorker.perform_async(merge_request.id, merge_request.merge_user_id, merge_request.merge_params)
+app/services/merge_requests/update_service.rb:83:        MergeWorker.perform_async(merge_request.id, current_user.id, {})
+app/services/notes/create_service.rb:35:        NewNoteWorker.perform_async(note.id)
+app/services/pages_service.rb:13:    PagesWorker.perform_async(:deploy, data[:build_id])
+app/services/projects/destroy_service.rb:12:        job_id = ProjectDestroyWorker.perform_async(project.id, current_user.id, params)
+app/services/projects/destroy_service.rb:66:        GitlabShellWorker.perform_in(5.minutes, :remove_repository, project.repository_storage_path, new_path)
+app/services/projects/housekeeping_service.rb:44:      GitGarbageCollectWorker.perform_async(@project.id, task, lease_key, lease_uuid)
+app/services/user_project_access_changed_service.rb:7:    AuthorizedProjectsWorker.bulk_perform_and_wait(@user_ids.map { |id| [id] })
+app/workers/admin_email_worker.rb:1:class AdminEmailWorker
+app/workers/admin_email_worker.rb:2:  include Sidekiq::Worker
+app/workers/authorized_projects_worker.rb:1:class AuthorizedProjectsWorker
+app/workers/authorized_projects_worker.rb:2:  include Sidekiq::Worker
+app/workers/build_coverage_worker.rb:1:class BuildCoverageWorker
+app/workers/build_coverage_worker.rb:2:  include Sidekiq::Worker
+app/workers/build_email_worker.rb:1:class BuildEmailWorker
+app/workers/build_email_worker.rb:2:  include Sidekiq::Worker
+app/workers/build_finished_worker.rb:1:class BuildFinishedWorker
+app/workers/build_finished_worker.rb:2:  include Sidekiq::Worker
+app/workers/build_finished_worker.rb:7:      BuildCoverageWorker.new.perform(build.id)
+app/workers/build_finished_worker.rb:8:      BuildHooksWorker.new.perform(build.id)
+app/workers/build_hooks_worker.rb:1:class BuildHooksWorker
+app/workers/build_hooks_worker.rb:2:  include Sidekiq::Worker
+app/workers/build_queue_worker.rb:1:class BuildQueueWorker
+app/workers/build_queue_worker.rb:2:  include Sidekiq::Worker
+app/workers/build_success_worker.rb:1:class BuildSuccessWorker
+app/workers/build_success_worker.rb:2:  include Sidekiq::Worker
+app/workers/clear_database_cache_worker.rb:2:class ClearDatabaseCacheWorker
+app/workers/clear_database_cache_worker.rb:3:  include Sidekiq::Worker
+app/workers/concerns/build_queue.rb:6:    sidekiq_options queue: :build
+app/workers/concerns/cronjob_queue.rb:7:    sidekiq_options queue: :cronjob, retry: false
+app/workers/concerns/dedicated_sidekiq_queue.rb:7:    sidekiq_options queue: name.sub(/Worker\z/, '').underscore.tr('/', '_')
+app/workers/concerns/pipeline_queue.rb:6:    sidekiq_options queue: :pipeline
+app/workers/concerns/repository_check_queue.rb:6:    sidekiq_options queue: :repository_check, retry: false
+app/workers/delete_merged_branches_worker.rb:1:class DeleteMergedBranchesWorker
+app/workers/delete_merged_branches_worker.rb:2:  include Sidekiq::Worker
+app/workers/delete_user_worker.rb:1:class DeleteUserWorker
+app/workers/delete_user_worker.rb:2:  include Sidekiq::Worker
+app/workers/email_receiver_worker.rb:1:class EmailReceiverWorker
+app/workers/email_receiver_worker.rb:2:  include Sidekiq::Worker
+app/workers/emails_on_push_worker.rb:1:class EmailsOnPushWorker
+app/workers/emails_on_push_worker.rb:2:  include Sidekiq::Worker
+app/workers/expire_build_artifacts_worker.rb:1:class ExpireBuildArtifactsWorker
+app/workers/expire_build_artifacts_worker.rb:2:  include Sidekiq::Worker
+app/workers/expire_build_artifacts_worker.rb:11:    Sidekiq::Client.push_bulk('class' => ExpireBuildInstanceArtifactsWorker, 'args' => build_ids )
+app/workers/expire_build_instance_artifacts_worker.rb:1:class ExpireBuildInstanceArtifactsWorker
+app/workers/expire_build_instance_artifacts_worker.rb:2:  include Sidekiq::Worker
+app/workers/git_garbage_collect_worker.rb:1:class GitGarbageCollectWorker
+app/workers/git_garbage_collect_worker.rb:2:  include Sidekiq::Worker
+app/workers/git_garbage_collect_worker.rb:6:  sidekiq_options retry: false
+app/workers/gitlab_shell_worker.rb:1:class GitlabShellWorker
+app/workers/gitlab_shell_worker.rb:2:  include Sidekiq::Worker
+app/workers/group_destroy_worker.rb:1:class GroupDestroyWorker
+app/workers/group_destroy_worker.rb:2:  include Sidekiq::Worker
+app/workers/import_export_project_cleanup_worker.rb:1:class ImportExportProjectCleanupWorker
+app/workers/import_export_project_cleanup_worker.rb:2:  include Sidekiq::Worker
+app/workers/irker_worker.rb:4:class IrkerWorker
+app/workers/irker_worker.rb:5:  include Sidekiq::Worker
+app/workers/merge_worker.rb:1:class MergeWorker
+app/workers/merge_worker.rb:2:  include Sidekiq::Worker
+app/workers/new_note_worker.rb:1:class NewNoteWorker
+app/workers/new_note_worker.rb:2:  include Sidekiq::Worker
+app/workers/new_note_worker.rb:6:  # old `NewNoteWorker` jobs (can remove later)
+app/workers/new_note_worker.rb:12:      Rails.logger.error("NewNoteWorker: couldn't find note with ID=#{note_id}, skipping job")
+app/workers/pages_worker.rb:1:class PagesWorker
+app/workers/pages_worker.rb:2:  include Sidekiq::Worker
+app/workers/pages_worker.rb:4:  sidekiq_options queue: :pages, retry: false
+app/workers/pipeline_hooks_worker.rb:1:class PipelineHooksWorker
+app/workers/pipeline_hooks_worker.rb:2:  include Sidekiq::Worker
+app/workers/pipeline_metrics_worker.rb:1:class PipelineMetricsWorker
+app/workers/pipeline_metrics_worker.rb:2:  include Sidekiq::Worker
+app/workers/pipeline_notification_worker.rb:1:class PipelineNotificationWorker
+app/workers/pipeline_notification_worker.rb:2:  include Sidekiq::Worker
+app/workers/pipeline_process_worker.rb:1:class PipelineProcessWorker
+app/workers/pipeline_process_worker.rb:2:  include Sidekiq::Worker
+app/workers/pipeline_success_worker.rb:1:class PipelineSuccessWorker
+app/workers/pipeline_success_worker.rb:2:  include Sidekiq::Worker
+app/workers/pipeline_update_worker.rb:1:class PipelineUpdateWorker
+app/workers/pipeline_update_worker.rb:2:  include Sidekiq::Worker
+app/workers/post_receive.rb:2:  include Sidekiq::Worker
+app/workers/process_commit_worker.rb:1:# Worker for processing individiual commit messages pushed to a repository.
+app/workers/process_commit_worker.rb:7:class ProcessCommitWorker
+app/workers/process_commit_worker.rb:8:  include Sidekiq::Worker
+app/workers/project_cache_worker.rb:1:# Worker for updating any project specific caches.
+app/workers/project_cache_worker.rb:2:class ProjectCacheWorker
+app/workers/project_cache_worker.rb:3:  include Sidekiq::Worker
+app/workers/project_destroy_worker.rb:1:class ProjectDestroyWorker
+app/workers/project_destroy_worker.rb:2:  include Sidekiq::Worker
+app/workers/project_export_worker.rb:1:class ProjectExportWorker
+app/workers/project_export_worker.rb:2:  include Sidekiq::Worker
+app/workers/project_export_worker.rb:5:  sidekiq_options retry: 3
+app/workers/project_service_worker.rb:1:class ProjectServiceWorker
+app/workers/project_service_worker.rb:2:  include Sidekiq::Worker
+app/workers/project_web_hook_worker.rb:1:class ProjectWebHookWorker
+app/workers/project_web_hook_worker.rb:2:  include Sidekiq::Worker
+app/workers/project_web_hook_worker.rb:5:  sidekiq_options retry: 4
+app/workers/prune_old_events_worker.rb:1:class PruneOldEventsWorker
+app/workers/prune_old_events_worker.rb:2:  include Sidekiq::Worker
+app/workers/reactive_caching_worker.rb:1:class ReactiveCachingWorker
+app/workers/reactive_caching_worker.rb:2:  include Sidekiq::Worker
+app/workers/remove_expired_group_links_worker.rb:1:class RemoveExpiredGroupLinksWorker
+app/workers/remove_expired_group_links_worker.rb:2:  include Sidekiq::Worker
+app/workers/remove_expired_members_worker.rb:1:class RemoveExpiredMembersWorker
+app/workers/remove_expired_members_worker.rb:2:  include Sidekiq::Worker
+app/workers/remove_unreferenced_lfs_objects_worker.rb:1:class RemoveUnreferencedLfsObjectsWorker
+app/workers/remove_unreferenced_lfs_objects_worker.rb:2:  include Sidekiq::Worker
+app/workers/repository_archive_cache_worker.rb:1:class RepositoryArchiveCacheWorker
+app/workers/repository_archive_cache_worker.rb:2:  include Sidekiq::Worker
+app/workers/repository_check/batch_worker.rb:2:  class BatchWorker
+app/workers/repository_check/batch_worker.rb:3:    include Sidekiq::Worker
+app/workers/repository_check/batch_worker.rb:14:      # RepositoryCheckWorker each hour so that as long as there are repositories to
+app/workers/repository_check/batch_worker.rb:22:        SingleRepositoryWorker.new.perform(project_id)
+app/workers/repository_check/batch_worker.rb:53:      # this feature, an active RepositoryCheckWorker would keep going for up
+app/workers/repository_check/clear_worker.rb:2:  class ClearWorker
+app/workers/repository_check/clear_worker.rb:3:    include Sidekiq::Worker
+app/workers/repository_check/single_repository_worker.rb:2:  class SingleRepositoryWorker
+app/workers/repository_check/single_repository_worker.rb:3:    include Sidekiq::Worker
+app/workers/repository_fork_worker.rb:1:class RepositoryForkWorker
+app/workers/repository_fork_worker.rb:2:  include Sidekiq::Worker
+app/workers/repository_import_worker.rb:1:class RepositoryImportWorker
+app/workers/repository_import_worker.rb:2:  include Sidekiq::Worker
+app/workers/requests_profiles_worker.rb:1:class RequestsProfilesWorker
+app/workers/requests_profiles_worker.rb:2:  include Sidekiq::Worker
+app/workers/stuck_ci_builds_worker.rb:1:class StuckCiBuildsWorker
+app/workers/stuck_ci_builds_worker.rb:2:  include Sidekiq::Worker
+app/workers/system_hook_worker.rb:1:class SystemHookWorker
+app/workers/system_hook_worker.rb:2:  include Sidekiq::Worker
+app/workers/trending_projects_worker.rb:1:class TrendingProjectsWorker
+app/workers/trending_projects_worker.rb:2:  include Sidekiq::Worker
+app/workers/update_merge_requests_worker.rb:1:class UpdateMergeRequestsWorker
+app/workers/update_merge_requests_worker.rb:2:  include Sidekiq::Worker
+app/workers/use_key_worker.rb:1:class UseKeyWorker
+app/workers/use_key_worker.rb:2:  include Sidekiq::Worker
+app/workers/use_key_worker.rb:9:    Rails.logger.error("UseKeyWorker: couldn't find key with ID=#{key_id}, skipping job")
+config/initializers/1_settings.rb:308:Settings.cron_jobs['stuck_ci_builds_worker']['job_class'] = 'StuckCiBuildsWorker'
+config/initializers/1_settings.rb:311:Settings.cron_jobs['expire_build_artifacts_worker']['job_class'] = 'ExpireBuildArtifactsWorker'
+config/initializers/1_settings.rb:314:Settings.cron_jobs['repository_check_worker']['job_class'] = 'RepositoryCheck::BatchWorker'
+config/initializers/1_settings.rb:317:Settings.cron_jobs['admin_email_worker']['job_class'] = 'AdminEmailWorker'
+config/initializers/1_settings.rb:320:Settings.cron_jobs['repository_archive_cache_worker']['job_class'] = 'RepositoryArchiveCacheWorker'
+config/initializers/1_settings.rb:323:Settings.cron_jobs['import_export_project_cleanup_worker']['job_class'] = 'ImportExportProjectCleanupWorker'
+config/initializers/1_settings.rb:326:Settings.cron_jobs['requests_profiles_worker']['job_class'] = 'RequestsProfilesWorker'
+config/initializers/1_settings.rb:329:Settings.cron_jobs['remove_expired_members_worker']['job_class'] = 'RemoveExpiredMembersWorker'
+config/initializers/1_settings.rb:332:Settings.cron_jobs['remove_expired_group_links_worker']['job_class'] = 'RemoveExpiredGroupLinksWorker'
+config/initializers/1_settings.rb:335:Settings.cron_jobs['prune_old_events_worker']['job_class'] = 'PruneOldEventsWorker'
+config/initializers/1_settings.rb:339:Settings.cron_jobs['trending_projects_worker']['job_class'] = 'TrendingProjectsWorker'
+config/initializers/1_settings.rb:342:Settings.cron_jobs['remove_unreferenced_lfs_objects_worker']['job_class'] = 'RemoveUnreferencedLfsObjectsWorker'
+config/initializers/metrics.rb:92:  instrumentation.instrument_instance_methods(RepositoryCheck::SingleRepositoryWorker)
+db/fixtures/development/17_cycle_analytics.rb:207:      PipelineMetricsWorker.new.perform(pipeline.id)
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:26:      'GitGarbageCollectorWorker' => :git_garbage_collector,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:27:      'ProjectExportWorker'       => :project_export,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:28:      'RepositoryForkWorker'      => :repository_fork,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:29:      'RepositoryImportWorker'    => :repository_import
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:32:      'ProjectServiceWorker' => :project_service
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:35:      'EmailReceiverWorker' => :email_receiver
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:38:      'EmailsOnPushWorker' => :emails_on_push
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:41:      'AdminEmailWorker'                        => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:42:      'BuildCoverageWorker'                     => :build,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:43:      'BuildEmailWorker'                        => :build,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:44:      'BuildFinishedWorker'                     => :build,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:45:      'BuildHooksWorker'                        => :build,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:46:      'BuildSuccessWorker'                      => :build,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:47:      'ClearDatabaseCacheWorker'                => :clear_database_cache,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:48:      'DeleteUserWorker'                        => :delete_user,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:49:      'ExpireBuildArtifactsWorker'              => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:50:      'ExpireBuildInstanceArtifactsWorker'      => :expire_build_instance_artifacts,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:51:      'GroupDestroyWorker'                      => :group_destroy,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:52:      'ImportExportProjectCleanupWorker'        => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:53:      'IrkerWorker'                             => :irker,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:54:      'MergeWorker'                             => :merge,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:55:      'NewNoteWorker'                           => :new_note,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:56:      'PipelineHooksWorker'                     => :pipeline,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:57:      'PipelineMetricsWorker'                   => :pipeline,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:58:      'PipelineProcessWorker'                   => :pipeline,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:59:      'PipelineSuccessWorker'                   => :pipeline,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:60:      'PipelineUpdateWorker'                    => :pipeline,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:61:      'ProjectCacheWorker'                      => :project_cache,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:62:      'ProjectDestroyWorker'                    => :project_destroy,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:63:      'PruneOldEventsWorker'                    => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:64:      'RemoveExpiredGroupLinksWorker'           => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:65:      'RemoveExpiredMembersWorker'              => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:66:      'RepositoryArchiveCacheWorker'            => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:67:      'RepositoryCheck::BatchWorker'            => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:68:      'RepositoryCheck::ClearWorker'            => :repository_check,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:69:      'RepositoryCheck::SingleRepositoryWorker' => :repository_check,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:70:      'RequestsProfilesWorker'                  => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:71:      'StuckCiBuildsWorker'                     => :cronjob,
+db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:72:      'UpdateMergeRequestsWorker'               => :update_merge_requests
+db/migrate/20161024042317_migrate_mailroom_queue_from_default.rb:26:          'EmailReceiverWorker' => :email_receiver
+db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb:4:class MigrateProcessCommitWorkerJobs < ActiveRecord::Migration
+db/post_migrate/20170104150317_requeue_pending_delete_projects.rb:22:      Sidekiq::Client.push_bulk('class' => "ProjectDestroyWorker", 'args' => args)
+db/post_migrate/20170106142508_fill_authorized_projects.rb:24:      Sidekiq::Client.push_bulk('class' => 'AuthorizedProjectsWorker', 'args' => args)
+lib/gitlab/sidekiq_middleware/memory_killer.rb:28:          Sidekiq.logger.warn "this thread will shut down PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"\
+lib/gitlab/sidekiq_middleware/memory_killer.rb:32:          Sidekiq.logger.warn "sending SIGTERM to PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"
+lib/gitlab/sidekiq_middleware/memory_killer.rb:36:            "#{SHUTDOWN_SIGNAL} to PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"
+lib/gitlab/sidekiq_middleware/memory_killer.rb:39:          Sidekiq.logger.warn "sending #{SHUTDOWN_SIGNAL} to PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"
+lib/gitlab/sidekiq_status.rb:8:  #     job_id = SomeWorker.perform_async(...)
