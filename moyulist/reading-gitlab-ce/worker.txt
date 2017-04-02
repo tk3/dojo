@@ -69,7 +69,11 @@ app/workers/build_success_worker.rb:1:class BuildSuccessWorker
 app/workers/build_success_worker.rb:2:  include Sidekiq::Worker
 app/workers/clear_database_cache_worker.rb:2:class ClearDatabaseCacheWorker
 app/workers/clear_database_cache_worker.rb:3:  include Sidekiq::Worker
+app/workers/concerns/build_queue.rb:6:    sidekiq_options queue: :build
+app/workers/concerns/cronjob_queue.rb:7:    sidekiq_options queue: :cronjob, retry: false
 app/workers/concerns/dedicated_sidekiq_queue.rb:7:    sidekiq_options queue: name.sub(/Worker\z/, '').underscore.tr('/', '_')
+app/workers/concerns/pipeline_queue.rb:6:    sidekiq_options queue: :pipeline
+app/workers/concerns/repository_check_queue.rb:6:    sidekiq_options queue: :repository_check, retry: false
 app/workers/delete_merged_branches_worker.rb:1:class DeleteMergedBranchesWorker
 app/workers/delete_merged_branches_worker.rb:2:  include Sidekiq::Worker
 app/workers/delete_user_worker.rb:1:class DeleteUserWorker
@@ -85,6 +89,7 @@ app/workers/expire_build_instance_artifacts_worker.rb:1:class ExpireBuildInstanc
 app/workers/expire_build_instance_artifacts_worker.rb:2:  include Sidekiq::Worker
 app/workers/git_garbage_collect_worker.rb:1:class GitGarbageCollectWorker
 app/workers/git_garbage_collect_worker.rb:2:  include Sidekiq::Worker
+app/workers/git_garbage_collect_worker.rb:6:  sidekiq_options retry: false
 app/workers/gitlab_shell_worker.rb:1:class GitlabShellWorker
 app/workers/gitlab_shell_worker.rb:2:  include Sidekiq::Worker
 app/workers/group_destroy_worker.rb:1:class GroupDestroyWorker
@@ -101,6 +106,7 @@ app/workers/new_note_worker.rb:6:  # old `NewNoteWorker` jobs (can remove later)
 app/workers/new_note_worker.rb:12:      Rails.logger.error("NewNoteWorker: couldn't find note with ID=#{note_id}, skipping job")
 app/workers/pages_worker.rb:1:class PagesWorker
 app/workers/pages_worker.rb:2:  include Sidekiq::Worker
+app/workers/pages_worker.rb:4:  sidekiq_options queue: :pages, retry: false
 app/workers/pipeline_hooks_worker.rb:1:class PipelineHooksWorker
 app/workers/pipeline_hooks_worker.rb:2:  include Sidekiq::Worker
 app/workers/pipeline_metrics_worker.rb:1:class PipelineMetricsWorker
@@ -124,10 +130,12 @@ app/workers/project_destroy_worker.rb:1:class ProjectDestroyWorker
 app/workers/project_destroy_worker.rb:2:  include Sidekiq::Worker
 app/workers/project_export_worker.rb:1:class ProjectExportWorker
 app/workers/project_export_worker.rb:2:  include Sidekiq::Worker
+app/workers/project_export_worker.rb:5:  sidekiq_options retry: 3
 app/workers/project_service_worker.rb:1:class ProjectServiceWorker
 app/workers/project_service_worker.rb:2:  include Sidekiq::Worker
 app/workers/project_web_hook_worker.rb:1:class ProjectWebHookWorker
 app/workers/project_web_hook_worker.rb:2:  include Sidekiq::Worker
+app/workers/project_web_hook_worker.rb:5:  sidekiq_options retry: 4
 app/workers/prune_old_events_worker.rb:1:class PruneOldEventsWorker
 app/workers/prune_old_events_worker.rb:2:  include Sidekiq::Worker
 app/workers/reactive_caching_worker.rb:1:class ReactiveCachingWorker
@@ -319,11 +327,18 @@ spec/workers/build_finished_worker_spec.rb:16:        expect_any_instance_of(Bui
 spec/workers/build_hooks_worker_spec.rb:3:describe BuildHooksWorker do
 spec/workers/build_success_worker_spec.rb:3:describe BuildSuccessWorker do
 spec/workers/concerns/build_queue_spec.rb:6:      include Sidekiq::Worker
+spec/workers/concerns/build_queue_spec.rb:12:    expect(worker.sidekiq_options['queue'].to_s).to eq('build')
 spec/workers/concerns/cronjob_queue_spec.rb:6:      include Sidekiq::Worker
+spec/workers/concerns/cronjob_queue_spec.rb:12:    expect(worker.sidekiq_options['queue'].to_s).to eq('cronjob')
+spec/workers/concerns/cronjob_queue_spec.rb:16:    expect(worker.sidekiq_options['retry']).to eq(false)
 spec/workers/concerns/dedicated_sidekiq_queue_spec.rb:7:        'Foo::Bar::DummyWorker'
 spec/workers/concerns/dedicated_sidekiq_queue_spec.rb:10:      include Sidekiq::Worker
+spec/workers/concerns/dedicated_sidekiq_queue_spec.rb:17:      expect(worker.sidekiq_options['queue']).to eq('foo_bar_dummy')
 spec/workers/concerns/pipeline_queue_spec.rb:6:      include Sidekiq::Worker
+spec/workers/concerns/pipeline_queue_spec.rb:12:    expect(worker.sidekiq_options['queue'].to_s).to eq('pipeline')
 spec/workers/concerns/repository_check_queue_spec.rb:6:      include Sidekiq::Worker
+spec/workers/concerns/repository_check_queue_spec.rb:12:    expect(worker.sidekiq_options['queue'].to_s).to eq('repository_check')
+spec/workers/concerns/repository_check_queue_spec.rb:16:    expect(worker.sidekiq_options['retry']).to eq(false)
 spec/workers/delete_merged_branches_worker_spec.rb:3:describe DeleteMergedBranchesWorker do
 spec/workers/delete_user_worker_spec.rb:3:describe DeleteUserWorker do
 spec/workers/delete_user_worker_spec.rb:7:  it "calls the DeleteUserWorker with the params it was given" do
@@ -332,6 +347,9 @@ spec/workers/delete_user_worker_spec.rb:18:    DeleteUserWorker.new.perform(curr
 spec/workers/email_receiver_worker_spec.rb:3:describe EmailReceiverWorker do
 spec/workers/emails_on_push_worker_spec.rb:3:describe EmailsOnPushWorker do
 spec/workers/emails_on_push_worker_spec.rb:15:  subject { EmailsOnPushWorker.new }
+spec/workers/every_sidekiq_worker_spec.rb:20:      expect(worker.sidekiq_options['queue'].to_s).not_to eq('default')
+spec/workers/every_sidekiq_worker_spec.rb:32:      expect(worker.sidekiq_options['queue'].to_s).to eq('cronjob')
+spec/workers/every_sidekiq_worker_spec.rb:41:      expect(queue_names).to include(worker.sidekiq_options['queue'].to_s)
 spec/workers/expire_build_artifacts_worker_spec.rb:3:describe ExpireBuildArtifactsWorker do
 spec/workers/expire_build_artifacts_worker_spec.rb:8:  before { Sidekiq::Worker.clear_all }
 spec/workers/expire_build_artifacts_worker_spec.rb:43:      Sidekiq::Queues.jobs_by_worker['ExpireBuildInstanceArtifactsWorker']
