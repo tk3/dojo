@@ -1,43 +1,35 @@
 app/controllers/admin/application_settings_controller.rb:33:    RepositoryCheck::ClearWorker.perform_async
 app/controllers/admin/projects_controller.rb:37:    RepositoryCheck::SingleRepositoryWorker.perform_async(@project.id)
 app/controllers/admin/users_controller.rb:138:    DeleteUserWorker.perform_async(current_user.id, user.id)
-app/controllers/application_controller.rb:304:  # to perform authentication.
-app/controllers/concerns/authenticates_with_two_factor.rb:85:  # Actual communication is performed using a Javascript API
-app/controllers/profiles/two_factor_auths_controller.rb:95:  # Actual communication is performed using a Javascript API
-app/controllers/projects/issues_controller.rb:178:    # The Sortable default scope causes performance issues when used with find_by
 app/controllers/projects/merge_requests_controller.rb:357:        MergeWorker.perform_async(@merge_request.id, current_user.id, params)
 app/controllers/projects/merge_requests_controller.rb:363:      MergeWorker.perform_async(@merge_request.id, current_user.id, params)
-app/finders/issuable_finder.rb:68:    # better than performing multiple queries.
 app/models/abuse_report.rb:19:    DeleteUserWorker.perform_async(deleted_by.id, user.id, delete_solo_owned_groups: true)
+app/models/ci/build.rb:83:          status_event: 'enqueue'
 app/models/ci/build.rb:98:          BuildQueueWorker.perform_async(id)
 app/models/ci/build.rb:104:          BuildHooksWorker.perform_async(id)
 app/models/ci/build.rb:110:          BuildFinishedWorker.perform_async(id)
 app/models/ci/build.rb:116:          BuildSuccessWorker.perform_async(id)
+app/models/ci/build.rb:141:      if self.enqueue
 app/models/ci/build.rb:611:      ProjectCacheWorker.perform_async(project_id, [], [:build_artifacts_size])
+app/models/ci/pipeline.rb:25:      event :enqueue do
 app/models/ci/pipeline.rb:64:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
 app/models/ci/pipeline.rb:68:        pipeline.run_after_commit { PipelineMetricsWorker.perform_async(id) }
 app/models/ci/pipeline.rb:72:        pipeline.run_after_commit { PipelineSuccessWorker.perform_async(id) }
 app/models/ci/pipeline.rb:79:          PipelineHooksWorker.perform_async(id)
 app/models/ci/pipeline.rb:85:          PipelineNotificationWorker.perform_async(pipeline.id)
-app/models/ci/runner.rb:47:    # This method performs a *partial* match on tokens, thus a query for "a"
+app/models/ci/pipeline.rb:321:        when 'pending' then enqueue
+app/models/commit_status.rb:43:    event :enqueue do
 app/models/commit_status.rb:89:            PipelineProcessWorker.perform_async(pipeline.id)
 app/models/commit_status.rb:91:            PipelineUpdateWorker.perform_async(pipeline.id)
 app/models/concerns/reactive_caching.rb:69:      ReactiveCachingWorker.perform_async(self.class, id, *args)
 app/models/concerns/reactive_caching.rb:115:      ReactiveCachingWorker.perform_in(self.class.reactive_cache_refresh_interval, self.class, id, *args)
-app/models/event.rb:343:    # update the project. Only one query should actually perform the update,
 app/models/hooks/system_hook.rb:3:    Sidekiq::Client.enqueue(SystemHookWorker, id, data, hook_name)
 app/models/hooks/web_hook.rb:50:    Sidekiq::Client.enqueue(ProjectWebHookWorker, id, data, hook_name)
-app/models/issue.rb:216:  # for performance reasons, check commit: 002ad215818450d2cbbc5fa065850a953dc7ada8
 app/models/key.rb:58:    UseKeyWorker.perform_async(id)
 app/models/key.rb:62:    GitlabShellWorker.perform_async(
 app/models/key.rb:74:    GitlabShellWorker.perform_async(
 app/models/lfs_objects_project.rb:15:    ProjectCacheWorker.perform_async(project_id, [], [:lfs_objects_size])
-app/models/merge_request.rb:155:  # UNIONs on the other hand perform much better in these cases.
-app/models/merge_request.rb:208:    # here too, to get the same diff size without performing highlighting.
-app/models/merge_request.rb:549:  # `MergeRequestsClosingIssues` model. This is a performance optimization.
-app/models/merge_request_diff.rb:283:  # serialization and deserialization calls resulting in bad performance.
 app/models/namespace.rb:244:        GitlabShellWorker.perform_in(5.minutes, :rm_namespace, repository_storage_path, new_path)
-app/models/project.rb:295:    # On PostgreSQL this method uses "ILIKE" to perform a case-insensitive
 app/models/project.rb:449:      job_id = RepositoryForkWorker.perform_async(id, forked_from_project.repository_storage_path,
 app/models/project.rb:453:      job_id = RepositoryImportWorker.perform_async(self.id)
 app/models/project.rb:464:    ProjectCacheWorker.perform_async(self.id)
@@ -48,8 +40,7 @@ app/models/project_services/emails_on_push_service.rb:26:    EmailsOnPushWorker.
 app/models/project_services/irker_service.rb:31:    IrkerWorker.perform_async(project_id, channels,
 app/models/project_services/pipelines_email_service.rb:35:    PipelineNotificationWorker.new.perform(pipeline_id, all_recipients)
 app/models/service.rb:205:    Sidekiq::Client.enqueue(ProjectServiceWorker, id, data)
-app/models/user.rb:824:  # This method relies on a subquery as this performs significantly better
-app/policies/issue_policy.rb:2:  # This class duplicates the same check of Issue#readable_by? for performance reasons
+app/services/ci/process_pipeline_service.rb:36:        build.enqueue
 app/services/commits/change_service.rb:54:                     A #{action.to_s.dasherize} may have already been performed with this #{@commit.change_type_title(current_user)}, or a more recent commit may have updated some of its content."
 app/services/delete_merged_branches_service.rb:3:    DeleteMergedBranchesWorker.perform_async(project.id, current_user.id)
 app/services/destroy_group_service.rb:11:    job_id = GroupDestroyWorker.perform_async(group.id, current_user.id)
@@ -61,32 +52,14 @@ app/services/git_push_service.rb:99:    UpdateMergeRequestsWorker
 app/services/git_push_service.rb:100:      .perform_async(@project.id, current_user.id, params[:oldrev], params[:newrev], params[:ref])
 app/services/git_push_service.rb:114:  def perform_housekeeping
 app/services/git_tag_push_service.rb:15:    ProjectCacheWorker.perform_async(project.id, [], [:commit_count, :repository_size])
-app/services/members/approve_access_request_service.rb:8:    # current_user - The user that performs the access request approval
 app/services/merge_requests/merge_when_pipeline_succeeds_service.rb:29:        MergeWorker.perform_async(merge_request.id, merge_request.merge_user_id, merge_request.merge_params)
-app/services/merge_requests/refresh_service.rb:173:    # `MergeRequestsClosingIssues` model (as a performance optimization).
 app/services/merge_requests/update_service.rb:83:        MergeWorker.perform_async(merge_request.id, current_user.id, {})
 app/services/notes/create_service.rb:35:        NewNoteWorker.perform_async(note.id)
 app/services/pages_service.rb:13:    PagesWorker.perform_async(:deploy, data[:build_id])
 app/services/projects/destroy_service.rb:12:        job_id = ProjectDestroyWorker.perform_async(project.id, current_user.id, params)
 app/services/projects/destroy_service.rb:66:        GitlabShellWorker.perform_in(5.minutes, :remove_repository, project.repository_storage_path, new_path)
 app/services/projects/housekeeping_service.rb:44:      GitGarbageCollectWorker.perform_async(@project.id, task, lease_key, lease_uuid)
-app/services/protected_branches/api_create_service.rb:2:# flags for backward compatibility, and so performs translation between that format and the
-app/services/protected_branches/api_update_service.rb:2:# flags for backward compatibility, and so performs translation between that format and the
-app/services/system_note_service.rb:12:  # author           - User performing the change
-app/services/system_note_service.rb:36:  # author   - User performing the change
-app/services/system_note_service.rb:56:  # author         - User performing the change
-app/services/system_note_service.rb:96:  # author    - User performing the change
-app/services/system_note_service.rb:116:  # author        - User performing the change
-app/services/system_note_service.rb:142:  # author     - User performing the change
-app/services/system_note_service.rb:171:  # author   - User performing the change
-app/services/system_note_service.rb:173:  # source   - Mentionable performing the change, or nil
-app/services/system_note_service.rb:239:  # author    - User performing the change
-app/services/system_note_service.rb:263:  # author  - User performing the change
-app/services/system_note_service.rb:279:  # author      - User performing the change
-app/services/system_note_service.rb:298:  # author      - User performing the change
-app/services/system_note_service.rb:335:  # author    - User performing the reference
-app/services/system_note_service.rb:436:  # author    - User performing the change
-app/services/system_note_service.rb:455:  # author       - User performing the move
+app/services/projects/update_pages_service.rb:16:      @status.enqueue!
 app/services/user_project_access_changed_service.rb:7:    AuthorizedProjectsWorker.bulk_perform_and_wait(@user_ids.map { |id| [id] })
 app/workers/admin_email_worker.rb:1:class AdminEmailWorker
 app/workers/admin_email_worker.rb:2:  include Sidekiq::Worker
@@ -168,7 +141,6 @@ app/workers/merge_worker.rb:2:  include Sidekiq::Worker
 app/workers/merge_worker.rb:5:  def perform(merge_request_id, current_user_id, params)
 app/workers/new_note_worker.rb:1:class NewNoteWorker
 app/workers/new_note_worker.rb:2:  include Sidekiq::Worker
-app/workers/new_note_worker.rb:6:  # old `NewNoteWorker` jobs (can remove later)
 app/workers/new_note_worker.rb:7:  def perform(note_id, _params = {})
 app/workers/new_note_worker.rb:12:      Rails.logger.error("NewNoteWorker: couldn't find note with ID=#{note_id}, skipping job")
 app/workers/pages_worker.rb:1:class PagesWorker
@@ -195,11 +167,9 @@ app/workers/pipeline_update_worker.rb:2:  include Sidekiq::Worker
 app/workers/pipeline_update_worker.rb:5:  def perform(pipeline_id)
 app/workers/post_receive.rb:2:  include Sidekiq::Worker
 app/workers/post_receive.rb:5:  def perform(repo_path, identifier, changes)
-app/workers/process_commit_worker.rb:1:# Worker for processing individiual commit messages pushed to a repository.
 app/workers/process_commit_worker.rb:7:class ProcessCommitWorker
 app/workers/process_commit_worker.rb:8:  include Sidekiq::Worker
 app/workers/process_commit_worker.rb:16:  def perform(project_id, user_id, commit_hash, default = false)
-app/workers/project_cache_worker.rb:1:# Worker for updating any project specific caches.
 app/workers/project_cache_worker.rb:2:class ProjectCacheWorker
 app/workers/project_cache_worker.rb:3:  include Sidekiq::Worker
 app/workers/project_cache_worker.rb:14:  def perform(project_id, files = [], statistics = [])
@@ -238,9 +208,7 @@ app/workers/repository_archive_cache_worker.rb:5:  def perform
 app/workers/repository_check/batch_worker.rb:2:  class BatchWorker
 app/workers/repository_check/batch_worker.rb:3:    include Sidekiq::Worker
 app/workers/repository_check/batch_worker.rb:8:    def perform
-app/workers/repository_check/batch_worker.rb:14:      # RepositoryCheckWorker each hour so that as long as there are repositories to
 app/workers/repository_check/batch_worker.rb:22:        SingleRepositoryWorker.new.perform(project_id)
-app/workers/repository_check/batch_worker.rb:53:      # this feature, an active RepositoryCheckWorker would keep going for up
 app/workers/repository_check/clear_worker.rb:2:  class ClearWorker
 app/workers/repository_check/clear_worker.rb:3:    include Sidekiq::Worker
 app/workers/repository_check/clear_worker.rb:6:    def perform
@@ -276,7 +244,6 @@ config/environments/development.rb:11:  config.action_controller.perform_caching
 config/environments/development.rb:41:  config.action_mailer.perform_deliveries = (ENV['BOOTSTRAP'] != '1')
 config/environments/production.rb:9:  config.action_controller.perform_caching = true
 config/environments/production.rb:77:  config.action_mailer.perform_deliveries = true
-config/environments/test.rb:10:  # Configure static asset server for tests with Cache-Control for performance
 config/environments/test.rb:17:  config.action_controller.perform_caching = false
 config/initializers/1_settings.rb:308:Settings.cron_jobs['stuck_ci_builds_worker']['job_class'] = 'StuckCiBuildsWorker'
 config/initializers/1_settings.rb:311:Settings.cron_jobs['expire_build_artifacts_worker']['job_class'] = 'ExpireBuildArtifactsWorker'
@@ -290,12 +257,8 @@ config/initializers/1_settings.rb:332:Settings.cron_jobs['remove_expired_group_l
 config/initializers/1_settings.rb:335:Settings.cron_jobs['prune_old_events_worker']['job_class'] = 'PruneOldEventsWorker'
 config/initializers/1_settings.rb:339:Settings.cron_jobs['trending_projects_worker']['job_class'] = 'TrendingProjectsWorker'
 config/initializers/1_settings.rb:342:Settings.cron_jobs['remove_unreferenced_lfs_objects_worker']['job_class'] = 'RemoveUnreferencedLfsObjectsWorker'
-config/initializers/acts_as_taggable.rb:4:# since the count is not used anywhere its better performance wise to disable this cache
-config/initializers/devise.rb:69:  # Limiting the stretches to just one in testing will increase the performance of
 config/initializers/metrics.rb:92:  instrumentation.instrument_instance_methods(RepositoryCheck::SingleRepositoryWorker)
-db/fixtures/development/17_cycle_analytics.rb:13:  # created. Since we're performing a number of git actions
 db/fixtures/development/17_cycle_analytics.rb:207:      PipelineMetricsWorker.new.perform(pipeline.id)
-db/migrate/20151012173029_set_jira_service_api_url.rb:3:  # This migration can be performed online without errors, but some Jira API calls may be missed
 db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:26:      'GitGarbageCollectorWorker' => :git_garbage_collector,
 db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:27:      'ProjectExportWorker'       => :project_export,
 db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:28:      'RepositoryForkWorker'      => :repository_fork,
@@ -339,26 +302,17 @@ db/migrate/20161024042317_migrate_mailroom_queue_from_default.rb:26:          'E
 db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb:4:class MigrateProcessCommitWorkerJobs < ActiveRecord::Migration
 db/post_migrate/20170104150317_requeue_pending_delete_projects.rb:22:      Sidekiq::Client.push_bulk('class' => "ProjectDestroyWorker", 'args' => args)
 db/post_migrate/20170106142508_fill_authorized_projects.rb:24:      Sidekiq::Client.push_bulk('class' => 'AuthorizedProjectsWorker', 'args' => args)
+lib/api/commit_statuses.rb:86:            status.enqueue!
+lib/api/commit_statuses.rb:88:            status.enqueue
 lib/api/commits.rb:49:        requires :actions, type: Array[Hash], desc: 'Actions to perform in commit'
 lib/api/settings.rb:106:        requires :housekeeping_bitmaps_enabled, type: Boolean, desc: "Creating pack file bitmaps makes housekeeping take a little longer but bitmaps should accelerate 'git clone' performance."
-lib/banzai/object_renderer.rb:4:  # redaction are both performed.
-lib/banzai/renderer.rb:122:    # This method is used to perform state-dependent changes to a String of
+lib/api/sidekiq_metrics.rb:37:          enqueued: stats.enqueued
 lib/disable_email_interceptor.rb:4:    message.perform_deliveries = false
-lib/gitlab/data_builder/push.rb:35:        # For performance purposes maximum 20 latest commits
-lib/gitlab/database/migration_helpers.rb:37:      # on_delete - The action to perform when associated data is removed,
-lib/gitlab/downtime_check.rb:57:    # Returns true if the given migration can be performed without downtime.
-lib/gitlab/git/diff.rb:119:        #    binary detection. This is useful to improve performance in cases
-lib/gitlab/git/repository.rb:610:      #    - The number of total checkout steps to be performed.
-lib/gitlab/git/repository.rb:628:      #    to use when performing the checkout. Possible values are:
-lib/gitlab/git/repository.rb:734:      #    should be performed.
-lib/gitlab/git_access.rb:1:# Check a user's access to perform a git action. All public methods in this
-lib/gitlab/import_export/relation_factory.rb:174:        # performed on the same object between the SELECT and the INSERT
 lib/gitlab/metrics/sidekiq_middleware.rb:8:        trans = Transaction.new("#{worker.class.name}#perform")
-lib/gitlab/metrics/transaction.rb:18:      # action - A String describing the action performed, usually the class
+lib/gitlab/metrics/sidekiq_middleware.rb:12:          trans.set(:sidekiq_queue_duration, Time.now.to_f - (message['enqueued_at'] || message['created_at'] || 0))
 lib/gitlab/middleware/webpack_proxy.rb:14:      def perform_request(env)
 lib/gitlab/sidekiq_middleware/memory_killer.rb:28:          Sidekiq.logger.warn "this thread will shut down PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"\
 lib/gitlab/sidekiq_middleware/memory_killer.rb:32:          Sidekiq.logger.warn "sending SIGTERM to PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"
 lib/gitlab/sidekiq_middleware/memory_killer.rb:36:            "#{SHUTDOWN_SIGNAL} to PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"
 lib/gitlab/sidekiq_middleware/memory_killer.rb:39:          Sidekiq.logger.warn "sending #{SHUTDOWN_SIGNAL} to PID #{Process.pid} - Worker #{worker.class} - JID-#{job['jid']}"
 lib/gitlab/sidekiq_status.rb:8:  #     job_id = SomeWorker.perform_async(...)
-lib/gitlab/sql/union.rb:23:        # (thus fixing this problem), at a slight performance cost.
