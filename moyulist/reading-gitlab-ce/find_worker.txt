@@ -3,6 +3,9 @@ app/controllers/admin/projects_controller.rb:37:    RepositoryCheck::SingleRepos
 app/controllers/admin/users_controller.rb:138:    DeleteUserWorker.perform_async(current_user.id, user.id)
 app/controllers/projects/merge_requests_controller.rb:357:        MergeWorker.perform_async(@merge_request.id, current_user.id, params)
 app/controllers/projects/merge_requests_controller.rb:363:      MergeWorker.perform_async(@merge_request.id, current_user.id, params)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 app/models/abuse_report.rb:19:    DeleteUserWorker.perform_async(deleted_by.id, user.id, delete_solo_owned_groups: true)
 app/models/ci/build.rb:98:          BuildQueueWorker.perform_async(id)
 app/models/ci/build.rb:104:          BuildHooksWorker.perform_async(id)
@@ -35,6 +38,9 @@ app/models/project_services/emails_on_push_service.rb:26:    EmailsOnPushWorker.
 app/models/project_services/irker_service.rb:31:    IrkerWorker.perform_async(project_id, channels,
 app/models/project_services/pipelines_email_service.rb:35:    PipelineNotificationWorker.new.perform(pipeline_id, all_recipients)
 app/models/service.rb:205:    Sidekiq::Client.enqueue(ProjectServiceWorker, id, data)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 app/services/delete_merged_branches_service.rb:3:    DeleteMergedBranchesWorker.perform_async(project.id, current_user.id)
 app/services/destroy_group_service.rb:11:    job_id = GroupDestroyWorker.perform_async(group.id, current_user.id)
 app/services/git_push_service.rb:56:    perform_housekeeping
@@ -53,6 +59,9 @@ app/services/projects/destroy_service.rb:12:        job_id = ProjectDestroyWorke
 app/services/projects/destroy_service.rb:66:        GitlabShellWorker.perform_in(5.minutes, :remove_repository, project.repository_storage_path, new_path)
 app/services/projects/housekeeping_service.rb:44:      GitGarbageCollectWorker.perform_async(@project.id, task, lease_key, lease_uuid)
 app/services/user_project_access_changed_service.rb:7:    AuthorizedProjectsWorker.bulk_perform_and_wait(@user_ids.map { |id| [id] })
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 app/workers/admin_email_worker.rb:1:class AdminEmailWorker
 app/workers/admin_email_worker.rb:2:  include Sidekiq::Worker
 app/workers/admin_email_worker.rb:5:  def perform
@@ -232,6 +241,9 @@ app/workers/use_key_worker.rb:1:class UseKeyWorker
 app/workers/use_key_worker.rb:2:  include Sidekiq::Worker
 app/workers/use_key_worker.rb:5:  def perform(key_id)
 app/workers/use_key_worker.rb:9:    Rails.logger.error("UseKeyWorker: couldn't find key with ID=#{key_id}, skipping job")
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 config/environments/development.rb:11:  config.action_controller.perform_caching = false
 config/environments/development.rb:41:  config.action_mailer.perform_deliveries = (ENV['BOOTSTRAP'] != '1')
 config/environments/production.rb:9:  config.action_controller.perform_caching = true
@@ -250,6 +262,9 @@ config/initializers/1_settings.rb:335:Settings.cron_jobs['prune_old_events_worke
 config/initializers/1_settings.rb:339:Settings.cron_jobs['trending_projects_worker']['job_class'] = 'TrendingProjectsWorker'
 config/initializers/1_settings.rb:342:Settings.cron_jobs['remove_unreferenced_lfs_objects_worker']['job_class'] = 'RemoveUnreferencedLfsObjectsWorker'
 config/initializers/metrics.rb:92:  instrumentation.instrument_instance_methods(RepositoryCheck::SingleRepositoryWorker)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 db/fixtures/development/17_cycle_analytics.rb:207:      PipelineMetricsWorker.new.perform(pipeline.id)
 db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:26:      'GitGarbageCollectorWorker' => :git_garbage_collector,
 db/migrate/20161019190736_migrate_sidekiq_queues_from_default.rb:27:      'ProjectExportWorker'       => :project_export,
@@ -294,6 +309,9 @@ db/migrate/20161024042317_migrate_mailroom_queue_from_default.rb:26:          'E
 db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb:4:class MigrateProcessCommitWorkerJobs < ActiveRecord::Migration
 db/post_migrate/20170104150317_requeue_pending_delete_projects.rb:22:      Sidekiq::Client.push_bulk('class' => "ProjectDestroyWorker", 'args' => args)
 db/post_migrate/20170106142508_fill_authorized_projects.rb:24:      Sidekiq::Client.push_bulk('class' => 'AuthorizedProjectsWorker', 'args' => args)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 lib/api/commits.rb:49:        requires :actions, type: Array[Hash], desc: 'Actions to perform in commit'
 lib/api/settings.rb:106:        requires :housekeeping_bitmaps_enabled, type: Boolean, desc: "Creating pack file bitmaps makes housekeeping take a little longer but bitmaps should accelerate 'git clone' performance."
 lib/disable_email_interceptor.rb:4:    message.perform_deliveries = false
