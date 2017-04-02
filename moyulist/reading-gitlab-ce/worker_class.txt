@@ -78,7 +78,7 @@ class ImportExportProjectCleanupWorker
 	app/workers/import_export_project_cleanup_worker.rb
 
 class IrkerWorker
-	app/workers/irker_worker.rb:4:
+	app/workers/irker_worker.rb
 
 class MergeWorker
 	app/workers/merge_worker.rb
@@ -109,10 +109,10 @@ class PipelineUpdateWorker
 	app/workers/pipeline_update_worker.rb
 
 class ProcessCommitWorker
-	app/workers/process_commit_worker.rb:7:
+	app/workers/process_commit_worker.rb
 
 class ProjectCacheWorker
-	app/workers/project_cache_worker.rb:2:
+	app/workers/project_cache_worker.rb
 
 class ProjectDestroyWorker
 	app/workers/project_destroy_worker.rb
@@ -180,5 +180,5 @@ class UseKeyWorker
 	app/workers/use_key_worker.rb
 
 class MigrateProcessCommitWorkerJobs < ActiveRecord::Migration
-	db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb:4:
+	db/migrate/20161124141322_migrate_process_commit_worker_jobs.rb
 
