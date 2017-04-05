@@ -6,18 +6,17 @@ app/workers/concerns/cronjob_queue.rb
 module CronjobQueue
 	sidekiq_options queue: :cronjob, retry: false
 
-app/workers/concerns/dedicated_sidekiq_queue.rb
-module DedicatedSidekiqQueue
-	sidekiq_options queue: name.sub(/Worker\z/, '').underscore.tr('/', '_')
+app/workers/concerns/repository_check_queue.rb
+module RepositoryCheckQueue
+	sidekiq_options queue: :repository_check, retry: false
 
 app/workers/concerns/pipeline_queue.rb
 module PipelineQueue
 	sidekiq_options queue: :pipeline
 
-app/workers/concerns/repository_check_queue.rb
-module RepositoryCheckQueue
-	sidekiq_options queue: :repository_check, retry: false
-
+app/workers/concerns/dedicated_sidekiq_queue.rb
+module DedicatedSidekiqQueue
+	sidekiq_options queue: name.sub(/Worker\z/, '').underscore.tr('/', '_')
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
 
@@ -85,15 +84,10 @@ sidekiq_options queue: :pages, retry: false
 	class PagesWorker
 		app/workers/pages_worker.rb
 
+
 include DedicatedSidekiqQueue
 	class AuthorizedProjectsWorker
 		app/workers/authorized_projects_worker.rb
-
-
-
-
-
-
 
 include DedicatedSidekiqQueue
 	class ClearDatabaseCacheWorker
@@ -114,7 +108,6 @@ include DedicatedSidekiqQueue
 include DedicatedSidekiqQueue
 	class EmailsOnPushWorker
 		app/workers/emails_on_push_worker.rb
-
 
 include DedicatedSidekiqQueue
 	class ExpireBuildInstanceArtifactsWorker
@@ -204,4 +197,5 @@ include DedicatedSidekiqQueue
 	class UseKeyWorker
 		app/workers/use_key_worker.rb
 
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
 // vim: ts=2:
