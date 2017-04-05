@@ -1,39 +1,3 @@
-app/workers/admin_email_worker.rb
-class AdminEmailWorker
-  include CronjobQueue
-
-app/workers/authorized_projects_worker.rb
-class AuthorizedProjectsWorker
-  include DedicatedSidekiqQueue
-
-app/workers/build_coverage_worker.rb
-class BuildCoverageWorker
-  include BuildQueue
-
-app/workers/build_email_worker.rb
-class BuildEmailWorker
-  include BuildQueue
-
-app/workers/build_finished_worker.rb
-class BuildFinishedWorker
-  include BuildQueue
-
-app/workers/build_hooks_worker.rb
-class BuildHooksWorker
- include BuildQueue
-
-app/workers/build_queue_worker.rb
-class BuildQueueWorker
-  include BuildQueue
-
-app/workers/build_success_worker.rb
-class BuildSuccessWorker
-  include BuildQueue
-
-app/workers/clear_database_cache_worker.rb
-class ClearDatabaseCacheWorker
-  include DedicatedSidekiqQueue
-
 app/workers/concerns/build_queue.rb
 module BuildQueue
     sidekiq_options queue: :build
@@ -48,192 +12,231 @@ module DedicatedSidekiqQueue
 
 app/workers/concerns/pipeline_queue.rb
 module PipelineQueue
-:    sidekiq_options queue: :pipeline
+    sidekiq_options queue: :pipeline
 
 app/workers/concerns/repository_check_queue.rb
 module RepositoryCheckQueue
     sidekiq_options queue: :repository_check, retry: false
 
-app/workers/delete_merged_branches_worker.rb
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+
+include CronjobQueue
+class AdminEmailWorker
+app/workers/admin_email_worker.rb
+
+include DedicatedSidekiqQueue
+class AuthorizedProjectsWorker
+app/workers/authorized_projects_worker.rb
+
+include BuildQueue
+class BuildCoverageWorker
+app/workers/build_coverage_worker.rb
+
+include BuildQueue
+class BuildEmailWorker
+app/workers/build_email_worker.rb
+
+include BuildQueue
+class BuildFinishedWorker
+app/workers/build_finished_worker.rb
+
+include BuildQueue
+class BuildHooksWorker
+app/workers/build_hooks_worker.rb
+
+include BuildQueue
+class BuildQueueWorker
+app/workers/build_queue_worker.rb
+
+include BuildQueue
+class BuildSuccessWorker
+app/workers/build_success_worker.rb
+
+include DedicatedSidekiqQueue
+class ClearDatabaseCacheWorker
+app/workers/clear_database_cache_worker.rb
+
+include DedicatedSidekiqQueue
 class DeleteMergedBranchesWorker
-  include DedicatedSidekiqQueue
+app/workers/delete_merged_branches_worker.rb
 
-app/workers/delete_user_worker.rb
+include DedicatedSidekiqQueue
 class DeleteUserWorker
-  include DedicatedSidekiqQueue
+app/workers/delete_user_worker.rb
 
-app/workers/email_receiver_worker.rb
+include DedicatedSidekiqQueue
 class EmailReceiverWorker
-  include DedicatedSidekiqQueue
+app/workers/email_receiver_worker.rb
 
-app/workers/emails_on_push_worker.rb
+include DedicatedSidekiqQueue
 class EmailsOnPushWorker
-  include DedicatedSidekiqQueue
+app/workers/emails_on_push_worker.rb
 
-app/workers/expire_build_artifacts_worker.rb
+include CronjobQueue
 class ExpireBuildArtifactsWorker
-  include CronjobQueue
+app/workers/expire_build_artifacts_worker.rb
 
-app/workers/expire_build_instance_artifacts_worker.rb
+include DedicatedSidekiqQueue
 class ExpireBuildInstanceArtifactsWorker
-  include DedicatedSidekiqQueue
+app/workers/expire_build_instance_artifacts_worker.rb
 
-app/workers/git_garbage_collect_worker.rb
+include DedicatedSidekiqQueue
 class GitGarbageCollectWorker
-  include DedicatedSidekiqQueue
+app/workers/git_garbage_collect_worker.rb
   include Gitlab::CurrentSettings
   sidekiq_options retry: false
 
-app/workers/gitlab_shell_worker.rb
+include DedicatedSidekiqQueue
 class GitlabShellWorker
+app/workers/gitlab_shell_worker.rb
   include Gitlab::ShellAdapter
-  include DedicatedSidekiqQueue
 
-app/workers/group_destroy_worker.rb
+include DedicatedSidekiqQueue
 class GroupDestroyWorker
-  include DedicatedSidekiqQueue
+app/workers/group_destroy_worker.rb
 
-app/workers/import_export_project_cleanup_worker.rb
+include CronjobQueue
 class ImportExportProjectCleanupWorker
-  include CronjobQueue
+app/workers/import_export_project_cleanup_worker.rb
 
-app/workers/irker_worker.rb
+include DedicatedSidekiqQueue
 class IrkerWorker
-  include DedicatedSidekiqQueue
+app/workers/irker_worker.rb
 
-app/workers/merge_worker.rb
+include DedicatedSidekiqQueue
 class MergeWorker
-  include DedicatedSidekiqQueue
+app/workers/merge_worker.rb
 
-app/workers/new_note_worker.rb
+include DedicatedSidekiqQueue
 class NewNoteWorker
-  include DedicatedSidekiqQueue
+app/workers/new_note_worker.rb
 
-app/workers/pages_worker.rb
+sidekiq_options queue: :pages, retry: false
 class PagesWorker
-  sidekiq_options queue: :pages, retry: false
+app/workers/pages_worker.rb
 
-app/workers/pipeline_hooks_worker.rb
+include PipelineQueue
 class PipelineHooksWorker
-  include PipelineQueue
+app/workers/pipeline_hooks_worker.rb
 
-app/workers/pipeline_metrics_worker.rb
+include PipelineQueue
 class PipelineMetricsWorker
-  include PipelineQueue
+app/workers/pipeline_metrics_worker.rb
 
-app/workers/pipeline_notification_worker.rb
+include PipelineQueue
 class PipelineNotificationWorker
-  include PipelineQueue
+app/workers/pipeline_notification_worker.rb
 
-app/workers/pipeline_process_worker.rb
+include PipelineQueue
 class PipelineProcessWorker
-  include PipelineQueue
+app/workers/pipeline_process_worker.rb
 
-app/workers/pipeline_success_worker.rb
+include PipelineQueue
 class PipelineSuccessWorker
-  include PipelineQueue
+app/workers/pipeline_success_worker.rb
 
-app/workers/pipeline_update_worker.rb
 class PipelineUpdateWorker
-  include PipelineQueue
+include PipelineQueue
+app/workers/pipeline_update_worker.rb
 
-app/workers/post_receive.rb
+include DedicatedSidekiqQueue
 class PostReceive
-  include DedicatedSidekiqQueue
+app/workers/post_receive.rb
 
-app/workers/process_commit_worker.rb
+include DedicatedSidekiqQueue
 class ProcessCommitWorker
-  include DedicatedSidekiqQueue
+app/workers/process_commit_worker.rb
 
-app/workers/project_cache_worker.rb
+include DedicatedSidekiqQueue
 class ProjectCacheWorker
-  include DedicatedSidekiqQueue
+app/workers/project_cache_worker.rb
 
-app/workers/project_destroy_worker.rb
+include DedicatedSidekiqQueue
 class ProjectDestroyWorker
-  include DedicatedSidekiqQueue
+app/workers/project_destroy_worker.rb
 
-app/workers/project_export_worker.rb
+include DedicatedSidekiqQueue
 class ProjectExportWorker
-  include DedicatedSidekiqQueue
+app/workers/project_export_worker.rb
   sidekiq_options retry: 3
 
-app/workers/project_service_worker.rb
+include DedicatedSidekiqQueue
 class ProjectServiceWorker
-  include DedicatedSidekiqQueue
+app/workers/project_service_worker.rb
 
-app/workers/project_web_hook_worker.rb
+include DedicatedSidekiqQueue
 class ProjectWebHookWorker
-  include DedicatedSidekiqQueue
+app/workers/project_web_hook_worker.rb
   sidekiq_options retry: 4
 
-app/workers/prune_old_events_worker.rb
+include CronjobQueue
 class PruneOldEventsWorker
-  include CronjobQueue
+app/workers/prune_old_events_worker.rb
 
-app/workers/reactive_caching_worker.rb
+include DedicatedSidekiqQueue
 class ReactiveCachingWorker
-  include DedicatedSidekiqQueue
+app/workers/reactive_caching_worker.rb
 
-app/workers/remove_expired_group_links_worker.rb
+include CronjobQueue
 class RemoveExpiredGroupLinksWorker
-  include CronjobQueue
+app/workers/remove_expired_group_links_worker.rb
 
-app/workers/remove_expired_members_worker.rb
+include CronjobQueue
 class RemoveExpiredMembersWorker
-  include CronjobQueue
+app/workers/remove_expired_members_worker.rb
 
-app/workers/remove_unreferenced_lfs_objects_worker.rb
+include CronjobQueue
 class RemoveUnreferencedLfsObjectsWorker
-  include CronjobQueue
+app/workers/remove_unreferenced_lfs_objects_worker.rb
 
-app/workers/repository_archive_cache_worker.rb
+include CronjobQueue
 class RepositoryArchiveCacheWorker
-  include CronjobQueue
+app/workers/repository_archive_cache_worker.rb
 
-app/workers/repository_check/batch_worker.rb
+include CronjobQueue
 class BatchWorker
-    include CronjobQueue
+app/workers/repository_check/batch_worker.rb
 
-app/workers/repository_check/clear_worker.rb
+include RepositoryCheckQueue
 class ClearWorker
-    include RepositoryCheckQueue
+app/workers/repository_check/clear_worker.rb
 
-app/workers/repository_check/single_repository_worker.rb
+include RepositoryCheckQueue
 class SingleRepositoryWorker
-    include RepositoryCheckQueue
+app/workers/repository_check/single_repository_worker.rb
 
-app/workers/repository_fork_worker.rb
+include DedicatedSidekiqQueue
 class RepositoryForkWorker
+app/workers/repository_fork_worker.rb
   include Gitlab::ShellAdapter
-  include DedicatedSidekiqQueue
 
-app/workers/repository_import_worker.rb
+include DedicatedSidekiqQueue
 class RepositoryImportWorker
+app/workers/repository_import_worker.rb
   include Gitlab::ShellAdapter
-  include DedicatedSidekiqQueue
 
-app/workers/requests_profiles_worker.rb
+include CronjobQueue
 class RequestsProfilesWorker
-  include CronjobQueue
+app/workers/requests_profiles_worker.rb
 
-app/workers/stuck_ci_builds_worker.rb
+include CronjobQueue
 class StuckCiBuildsWorker
-  include CronjobQueue
+app/workers/stuck_ci_builds_worker.rb
 
-app/workers/system_hook_worker.rb
+include DedicatedSidekiqQueue
 class SystemHookWorker
-  include DedicatedSidekiqQueue
+app/workers/system_hook_worker.rb
 
-app/workers/trending_projects_worker.rb
+include CronjobQueue
 class TrendingProjectsWorker
-  include CronjobQueue
+app/workers/trending_projects_worker.rb
 
-app/workers/update_merge_requests_worker.rb
+include DedicatedSidekiqQueue
 class UpdateMergeRequestsWorker
-  include DedicatedSidekiqQueue
+app/workers/update_merge_requests_worker.rb
 
-app/workers/use_key_worker.rb
+include DedicatedSidekiqQueue
 class UseKeyWorker
-  include DedicatedSidekiqQueue
+app/workers/use_key_worker.rb
 
