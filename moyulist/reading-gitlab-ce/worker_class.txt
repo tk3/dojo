@@ -198,4 +198,134 @@ include DedicatedSidekiqQueue
 		app/workers/use_key_worker.rb
 
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+
+build
+        BuildCoverageWorker(app/workers/build_coverage_worker.rb)
+        BuildEmailWorker(app/workers/build_email_worker.rb)
+        BuildFinishedWorker(app/workers/build_finished_worker.rb)
+        BuildHooksWorker(app/workers/build_hooks_worker.rb)
+        BuildQueueWorker(app/workers/build_queue_worker.rb)
+        BuildSuccessWorker(app/workers/build_success_worker.rb)
+
+cronjob
+        AdminEmailWorker(app/workers/admin_email_worker.rb)
+        ExpireBuildArtifactsWorker(app/workers/expire_build_artifacts_worker.rb)
+        ImportExportProjectCleanupWorker(app/workers/import_export_project_cleanup_worker.rb)
+        PruneOldEventsWorker(app/workers/prune_old_events_worker.rb)
+        RemoveExpiredGroupLinksWorker(app/workers/remove_expired_group_links_worker.rb)
+        RemoveExpiredMembersWorker(app/workers/remove_expired_members_worker.rb)
+        RemoveUnreferencedLfsObjectsWorker(app/workers/remove_unreferenced_lfs_objects_worker.rb)
+        RepositoryArchiveCacheWorker(app/workers/repository_archive_cache_worker.rb)
+        BatchWorker(app/workers/repository_check/batch_worker.rb)
+        RequestsProfilesWorker(app/workers/requests_profiles_worker.rb)
+        StuckCiBuildsWorker(app/workers/stuck_ci_builds_worker.rb)
+        TrendingProjectsWorker(app/workers/trending_projects_worker.rb)
+
+pipeline
+        PipelineHooksWorker(app/workers/pipeline_hooks_worker.rb)
+        PipelineMetricsWorker(app/workers/pipeline_metrics_worker.rb)
+        PipelineNotificationWorker(app/workers/pipeline_notification_worker.rb)
+        PipelineProcessWorker(app/workers/pipeline_process_worker.rb)
+        PipelineSuccessWorker(app/workers/pipeline_success_worker.rb)
+        PipelineUpdateWorker(app/workers/pipeline_update_worker.rb)
+
+pages
+        PagesWorker(app/workers/pages_worker.rb)
+
+
+authorized_projects
+        AuthorizedProjectsWorker(app/workers/authorized_projects_worker.rb)
+
+clear_database_cache
+        ClearDatabaseCacheWorker(app/workers/clear_database_cache_worker.rb)
+
+default
+
+delete_merged_branches
+        DeleteMergedBranchesWorker(app/workers/delete_merged_branches_worker.rb)
+
+delete_user
+        DeleteUserWorker(app/workers/delete_user_worker.rb)
+
+email_receiver
+        EmailReceiverWorker(app/workers/email_receiver_worker.rb)
+
+emails_on_push
+        EmailsOnPushWorker(app/workers/emails_on_push_worker.rb)
+
+expire_build_instance_artifacts
+        ExpireBuildInstanceArtifactsWorker(app/workers/expire_build_instance_artifacts_worker.rb)
+
+git_garbage_collect
+        GitGarbageCollectWorker(app/workers/git_garbage_collect_worker.rb)
+                        include Gitlab::CurrentSettings
+                        sidekiq_options retry: false
+
+gitlab_shell
+        GitlabShellWorker(app/workers/gitlab_shell_worker.rb)
+                        include Gitlab::ShellAdapter
+
+group_destroy
+        GroupDestroyWorker(app/workers/group_destroy_worker.rb)
+
+irker
+        IrkerWorker(app/workers/irker_worker.rb)
+
+mailers
+
+merge
+        MergeWorker(app/workers/merge_worker.rb)
+
+new_note
+        NewNoteWorker(app/workers/new_note_worker.rb)
+
+post_receive
+        PostReceive(app/workers/post_receive.rb)
+
+process_commit
+        ProcessCommitWorker(app/workers/process_commit_worker.rb)
+
+project_cache
+        ProjectCacheWorker(app/workers/project_cache_worker.rb)
+
+project_destroy
+        ProjectDestroyWorker(app/workers/project_destroy_worker.rb)
+
+project_export
+        ProjectExportWorker(app/workers/project_export_worker.rb)
+                        sidekiq_options retry: 3
+
+project_service
+        ProjectServiceWorker(app/workers/project_service_worker.rb)
+
+project_web_hook
+        ProjectWebHookWorker(app/workers/project_web_hook_worker.rb)
+                sidekiq_options retry: 4
+
+reactive_caching
+        ReactiveCachingWorker(app/workers/reactive_caching_worker.rb)
+
+repository_check
+        ClearWorker(app/workers/repository_check/clear_worker.rb)
+        SingleRepositoryWorker(app/workers/repository_check/single_repository_worker.rb)
+
+repository_fork
+        RepositoryForkWorker(app/workers/repository_fork_worker.rb)
+                        include Gitlab::ShellAdapter
+
+repository_import
+        RepositoryImportWorker(app/workers/repository_import_worker.rb)
+                        include Gitlab::ShellAdapter
+
+system_hook
+        SystemHookWorker(app/workers/system_hook_worker.rb)
+
+update_merge_requests
+        UpdateMergeRequestsWorker(app/workers/update_merge_requests_worker.rb)
+
+use_key
+        UseKeyWorker(app/workers/use_key_worker.rb)
+
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+
 // vim: ts=2:
