@@ -25,10 +25,15 @@ app/workers/build_success_worker.rb:3:  include BuildQueue
 app/workers/clear_database_cache_worker.rb:2:class ClearDatabaseCacheWorker
 app/workers/clear_database_cache_worker.rb:3:  include Sidekiq::Worker
 app/workers/clear_database_cache_worker.rb:4:  include DedicatedSidekiqQueue
+app/workers/concerns/build_queue.rb:2:module BuildQueue
 app/workers/concerns/build_queue.rb:6:    sidekiq_options queue: :build
+app/workers/concerns/cronjob_queue.rb:3:module CronjobQueue
 app/workers/concerns/cronjob_queue.rb:7:    sidekiq_options queue: :cronjob, retry: false
+app/workers/concerns/dedicated_sidekiq_queue.rb:3:module DedicatedSidekiqQueue
 app/workers/concerns/dedicated_sidekiq_queue.rb:7:    sidekiq_options queue: name.sub(/Worker\z/, '').underscore.tr('/', '_')
+app/workers/concerns/pipeline_queue.rb:2:module PipelineQueue
 app/workers/concerns/pipeline_queue.rb:6:    sidekiq_options queue: :pipeline
+app/workers/concerns/repository_check_queue.rb:2:module RepositoryCheckQueue
 app/workers/concerns/repository_check_queue.rb:6:    sidekiq_options queue: :repository_check, retry: false
 app/workers/delete_merged_branches_worker.rb:1:class DeleteMergedBranchesWorker
 app/workers/delete_merged_branches_worker.rb:2:  include Sidekiq::Worker
