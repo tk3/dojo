@@ -24,34 +24,76 @@ module RepositoryCheckQueue
 include CronjobQueue
 	class AdminEmailWorker
 		app/workers/admin_email_worker.rb
+	class ExpireBuildArtifactsWorker
+		app/workers/expire_build_artifacts_worker.rb
+	class ImportExportProjectCleanupWorker
+		app/workers/import_export_project_cleanup_worker.rb
+	class PruneOldEventsWorker
+		app/workers/prune_old_events_worker.rb
+	class RemoveExpiredGroupLinksWorker
+		app/workers/remove_expired_group_links_worker.rb
+	class RemoveExpiredMembersWorker
+		app/workers/remove_expired_members_worker.rb
+	class RemoveUnreferencedLfsObjectsWorker
+		app/workers/remove_unreferenced_lfs_objects_worker.rb
+	class RepositoryArchiveCacheWorker
+		app/workers/repository_archive_cache_worker.rb
+	class BatchWorker
+		app/workers/repository_check/batch_worker.rb
+	class RequestsProfilesWorker
+		app/workers/requests_profiles_worker.rb
+	class StuckCiBuildsWorker
+		app/workers/stuck_ci_builds_worker.rb
+	class TrendingProjectsWorker
+		app/workers/trending_projects_worker.rb
+
+include BuildQueue
+	class BuildCoverageWorker
+		app/workers/build_coverage_worker.rb
+	class BuildEmailWorker
+		app/workers/build_email_worker.rb
+	class BuildFinishedWorker
+		app/workers/build_finished_worker.rb
+	class BuildHooksWorker
+		app/workers/build_hooks_worker.rb
+	class BuildQueueWorker
+		app/workers/build_queue_worker.rb
+	class BuildSuccessWorker
+		app/workers/build_success_worker.rb
+
+include PipelineQueue
+	class PipelineHooksWorker
+		app/workers/pipeline_hooks_worker.rb
+	class PipelineMetricsWorker
+		app/workers/pipeline_metrics_worker.rb
+	class PipelineNotificationWorker
+		app/workers/pipeline_notification_worker.rb
+	class PipelineProcessWorker
+		app/workers/pipeline_process_worker.rb
+	class PipelineSuccessWorker
+		app/workers/pipeline_success_worker.rb
+	class PipelineUpdateWorker
+		app/workers/pipeline_update_worker.rb
+
+include RepositoryCheckQueue
+	class ClearWorker
+		app/workers/repository_check/clear_worker.rb
+	class SingleRepositoryWorker
+		app/workers/repository_check/single_repository_worker.rb
+
+sidekiq_options queue: :pages, retry: false
+	class PagesWorker
+		app/workers/pages_worker.rb
 
 include DedicatedSidekiqQueue
 	class AuthorizedProjectsWorker
 		app/workers/authorized_projects_worker.rb
 
-include BuildQueue
-	class BuildCoverageWorker
-		app/workers/build_coverage_worker.rb
 
-include BuildQueue
-	class BuildEmailWorker
-		app/workers/build_email_worker.rb
 
-include BuildQueue
-	class BuildFinishedWorker
-		app/workers/build_finished_worker.rb
 
-include BuildQueue
-	class BuildHooksWorker
-		app/workers/build_hooks_worker.rb
 
-include BuildQueue
-	class BuildQueueWorker
-		app/workers/build_queue_worker.rb
 
-include BuildQueue
-	class BuildSuccessWorker
-		app/workers/build_success_worker.rb
 
 include DedicatedSidekiqQueue
 	class ClearDatabaseCacheWorker
@@ -73,9 +115,6 @@ include DedicatedSidekiqQueue
 	class EmailsOnPushWorker
 		app/workers/emails_on_push_worker.rb
 
-include CronjobQueue
-	class ExpireBuildArtifactsWorker
-		app/workers/expire_build_artifacts_worker.rb
 
 include DedicatedSidekiqQueue
 	class ExpireBuildInstanceArtifactsWorker
@@ -96,9 +135,6 @@ include DedicatedSidekiqQueue
 	class GroupDestroyWorker
 		app/workers/group_destroy_worker.rb
 
-include CronjobQueue
-	class ImportExportProjectCleanupWorker
-		app/workers/import_export_project_cleanup_worker.rb
 
 include DedicatedSidekiqQueue
 	class IrkerWorker
@@ -111,34 +147,6 @@ include DedicatedSidekiqQueue
 include DedicatedSidekiqQueue
 	class NewNoteWorker
 		app/workers/new_note_worker.rb
-
-sidekiq_options queue: :pages, retry: false
-	class PagesWorker
-		app/workers/pages_worker.rb
-
-include PipelineQueue
-	class PipelineHooksWorker
-		app/workers/pipeline_hooks_worker.rb
-
-include PipelineQueue
-	class PipelineMetricsWorker
-		app/workers/pipeline_metrics_worker.rb
-
-include PipelineQueue
-	class PipelineNotificationWorker
-		app/workers/pipeline_notification_worker.rb
-
-include PipelineQueue
-	class PipelineProcessWorker
-		app/workers/pipeline_process_worker.rb
-
-include PipelineQueue
-	class PipelineSuccessWorker
-		app/workers/pipeline_success_worker.rb
-
-include PipelineQueue
-	class PipelineUpdateWorker
-		app/workers/pipeline_update_worker.rb
 
 include DedicatedSidekiqQueue
 	class PostReceive
@@ -170,41 +178,9 @@ include DedicatedSidekiqQueue
 		app/workers/project_web_hook_worker.rb
 		sidekiq_options retry: 4
 
-include CronjobQueue
-	class PruneOldEventsWorker
-		app/workers/prune_old_events_worker.rb
-
 include DedicatedSidekiqQueue
 	class ReactiveCachingWorker
 		app/workers/reactive_caching_worker.rb
-
-include CronjobQueue
-	class RemoveExpiredGroupLinksWorker
-		app/workers/remove_expired_group_links_worker.rb
-
-include CronjobQueue
-	class RemoveExpiredMembersWorker
-		app/workers/remove_expired_members_worker.rb
-
-include CronjobQueue
-	class RemoveUnreferencedLfsObjectsWorker
-		app/workers/remove_unreferenced_lfs_objects_worker.rb
-
-include CronjobQueue
-	class RepositoryArchiveCacheWorker
-		app/workers/repository_archive_cache_worker.rb
-
-include CronjobQueue
-	class BatchWorker
-		app/workers/repository_check/batch_worker.rb
-
-include RepositoryCheckQueue
-	class ClearWorker
-		app/workers/repository_check/clear_worker.rb
-
-include RepositoryCheckQueue
-	class SingleRepositoryWorker
-		app/workers/repository_check/single_repository_worker.rb
 
 include DedicatedSidekiqQueue
 	class RepositoryForkWorker
@@ -216,21 +192,9 @@ include DedicatedSidekiqQueue
 		app/workers/repository_import_worker.rb
 			include Gitlab::ShellAdapter
 
-include CronjobQueue
-	class RequestsProfilesWorker
-		app/workers/requests_profiles_worker.rb
-
-include CronjobQueue
-	class StuckCiBuildsWorker
-		app/workers/stuck_ci_builds_worker.rb
-
 include DedicatedSidekiqQueue
 	class SystemHookWorker
 		app/workers/system_hook_worker.rb
-
-include CronjobQueue
-	class TrendingProjectsWorker
-		app/workers/trending_projects_worker.rb
 
 include DedicatedSidekiqQueue
 	class UpdateMergeRequestsWorker
