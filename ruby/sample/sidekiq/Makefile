@@ -1,3 +1,6 @@
+redis-cli:
+	~/opt/redis-3.2.8/bin/redis-cli
+
 redis-start:
 	~/opt/redis-3.2.8/bin/redis-server ./redis/redis.conf
 
