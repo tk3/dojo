@@ -5,5 +5,4 @@ require "thor"
 class MyCLI < Thor
 end
  
-MyCLI.start(ARGV)
-
+MyCLI.start ARGV
