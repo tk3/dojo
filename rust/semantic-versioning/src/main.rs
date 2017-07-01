@@ -11,6 +11,14 @@ impl Version {
     }
 }
 
+impl PartialEq for Version {
+    fn eq(&self, other: &Version) -> bool {
+        self.major == other.major && self.minor == other.minor && self.patch == other.patch
+    }
+}
+impl Eq for Version {}
+
+
 fn main() {
     println!("Hello, world!");
 }
