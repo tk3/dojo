@@ -18,6 +18,11 @@ impl PartialEq for Version {
 }
 impl Eq for Version {}
 
+impl std::fmt::Debug for Version {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "Version {{ major: {}, minor: {}, patch: {} }}", self.major, self.minor, self.patch)
+    }
+}
 
 fn main() {
     println!("Hello, world!");
@@ -48,6 +53,7 @@ mod test {
         let v: Version = Version { major: 1, minor: 4, patch: 2 };
 
         assert_eq!(v, Version { major: 1, minor: 4, patch: 2 });
+        assert_ne!(v, Version { major: 2, minor: 1, patch: 0 });
     }
 }
 
