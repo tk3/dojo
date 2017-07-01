@@ -34,5 +34,12 @@ mod test {
 
         assert_eq!(v.to_string(), "1.4.2");
     }
+
+    #[test]
+    fn version_equals_works() {
+        let v: Version = Version { major: 1, minor: 4, patch: 2 };
+
+        assert_eq!(v, Version { major: 1, minor: 4, patch: 2 });
+    }
 }
 
