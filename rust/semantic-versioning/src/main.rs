@@ -14,8 +14,12 @@ mod test {
     use super::*;
 
     #[test]
-    fn it_works() {
-        assert_eq!(0, 0);
+    fn version_works() {
+        let v: Version = Version { major: 1, minor: 4, patch: 2 };
+
+        assert_eq!(v.major, 1);
+        assert_eq!(v.minor, 4);
+        assert_eq!(v.patch, 2);
     }
 }
 
