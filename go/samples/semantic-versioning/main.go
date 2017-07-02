@@ -8,8 +8,8 @@ type Version struct {
 	Patch int
 }
 
-func (v *Version) ToString() {
-	fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Patch)
+func (v *Version) ToString() string {
+	return fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Patch)
 }
 
 func main() {
