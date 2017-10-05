@@ -1,67 +1,67 @@
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.sql.DataSource;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class App
 {
-	private static DataSource datasource;
-
-	public static DataSource getDataSource()
-	{
-		if (datasource == null)
-		{
-			HikariConfig config = new HikariConfig();
-
-			config.setJdbcUrl("jdbc:postgresql://localhost/testdb");
-			config.setUsername("ubuntu");
-			config.setPassword("password");
-
-			config.setMaximumPoolSize(8);
-			config.setAutoCommit(false);
-
-			datasource = new HikariDataSource(config);
-		}
-		return datasource;
-	}
-
 	public static void main(String[] args)
 	{
-		Connection connection = null;
-		PreparedStatement pstmt = null;
-		ResultSet resultSet = null;
+		HikariConfig config = new HikariConfig();
+
+		config.setJdbcUrl("jdbc:postgresql://localhost/testdb");
+		config.setUsername("ubuntu");
+		config.setPassword("password");
+
+		config.setMaximumPoolSize(8);
+		config.setAutoCommit(false);
+
+		HikariDataSource ds = new HikariDataSource(config);
+
+		Connection conn = null;
+		Statement stmt = null;
 
 		try
 		{
-			DataSource dataSource = App.getDataSource();
-			connection = dataSource.getConnection();
-			pstmt = connection.prepareStatement("SELECT * FROM books");
+			conn = ds.getConnection();
 
-			System.out.println("The Connection Object is of Class: " + connection.getClass());
+			stmt = conn.createStatement();
 
-			resultSet = pstmt.executeQuery();
-			while (resultSet.next())
+			System.out.println("The Connection Object is of Class: " + conn.getClass());
+
+			ResultSet rs = stmt.executeQuery("SELECT * FROM books");
+			while (rs.next())
 			{
-				System.out.println(resultSet.getString(1) + "," + resultSet.getString(2) + "," + resultSet.getString(3));
+				System.out.println(rs.getString(1) + "," + rs.getString(2) + "," + rs.getString(3));
 			}
 
+			rs.close();
+			stmt.close();
+			conn.close();
+
+			ds.close();
 		}
 		catch (Exception e)
 		{
-			try
-			{
-				connection.rollback();
-			}
-			catch (SQLException e1)
-			{
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			}
+			catch (SQLException se2) {
+				try {
+					if (conn != null)
+						conn.close();
+				}
+				catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+			}
 		}
 	}
 }
