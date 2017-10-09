@@ -8,59 +8,61 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class App
 {
-	public static void main(String[] args)
-	{
-		HikariConfig config = new HikariConfig();
+    public static void main(String[] args)
+    {
+        HikariConfig config = new HikariConfig();
 
-		config.setJdbcUrl("jdbc:postgresql://localhost/testdb");
-		config.setUsername("ubuntu");
-		config.setPassword("password");
+        config.setJdbcUrl("jdbc:postgresql://localhost/testdb");
+        config.setUsername("ubuntu");
+        config.setPassword("password");
 
-		config.setMaximumPoolSize(8);
+        config.setMaximumPoolSize(8);
 
-		HikariDataSource ds = new HikariDataSource(config);
+        HikariDataSource ds = new HikariDataSource(config);
 
-		Connection conn = null;
-		Statement stmt = null;
+        Connection conn = null;
+        Statement stmt = null;
 
-		try
+        try
+        {
+            conn = ds.getConnection();
+
+            stmt = conn.createStatement();
+
+            System.out.println("The Connection Object is of Class: " + conn.getClass());
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM books");
+            while (rs.next())
+            {
+                System.out.println(rs.getString(1) + "," + rs.getString(2) + "," + rs.getString(3));
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+            ds.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+            }
+            catch (SQLException se2)
+	    {
+                try
 		{
-			conn = ds.getConnection();
-
-			stmt = conn.createStatement();
-
-			System.out.println("The Connection Object is of Class: " + conn.getClass());
-
-			ResultSet rs = stmt.executeQuery("SELECT * FROM books");
-			while (rs.next())
-			{
-				System.out.println(rs.getString(1) + "," + rs.getString(2) + "," + rs.getString(3));
-			}
-
-			rs.close();
-			stmt.close();
-			conn.close();
-
-			ds.close();
-		}
-		catch (Exception e)
+                    if (conn != null)  conn.close();
+                }
+                catch (SQLException e2)
 		{
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-			}
-			catch (SQLException se2) {
-				try {
-					if (conn != null)
-						conn.close();
-				}
-				catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
+                    e2.printStackTrace();
+                }
+            }
+        }
+    }
 }
