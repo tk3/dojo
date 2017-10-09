@@ -29,8 +29,6 @@ public class App
 
             stmt = conn.createStatement();
 
-            System.out.println("The Connection Object is of Class: " + conn.getClass());
-
             ResultSet rs = stmt.executeQuery("SELECT * FROM books");
             while (rs.next())
             {
