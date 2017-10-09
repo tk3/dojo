@@ -17,7 +17,6 @@ public class App
 		config.setPassword("password");
 
 		config.setMaximumPoolSize(8);
-		config.setAutoCommit(false);
 
 		HikariDataSource ds = new HikariDataSource(config);
 
