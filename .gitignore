@@ -1,1 +1,5 @@
 *.o
+
+# Gradle project
+.gradle/
+build/
