@@ -8,10 +8,6 @@ import javax.sql.DataSource
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 
-fun getGreeting(): String {
-    return "Hello world."
-}
-
 fun main(args: Array<String>) {
     val config = HikariConfig()
 
@@ -52,19 +48,15 @@ fun main(args: Array<String>) {
     }
     finally {
         try {
-            if (stmt != null)
-                stmt.close()
+            if (stmt != null)  stmt.close()
         }
         catch (se2: SQLException) {
             try {
-                if (conn != null)
-                    conn.close()
+                if (conn != null)  conn.close()
             }
             catch (e2: SQLException) {
                 e2.printStackTrace()
             }
         }
     }
-
-    println(getGreeting())
 }
