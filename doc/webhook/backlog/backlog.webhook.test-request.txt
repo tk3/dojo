@@ -1,0 +1,101 @@
+Cf-Connecting-Ip: 52.192.161.184
+Cf-Ray: 3d07eb59b992850e-HKG
+Cf-Ipcountry: JP
+Cf-Visitor: {"scheme":"https"}
+Content-Type: application/json; charset=UTF-8
+Connection: close
+Content-Length: nnn
+Host: requestb.in
+Via: 1.1 vegur
+X-Request-Id: 28124a66-0f95-43b7-bc8d-c26ce7be9a5c
+Accept-Encoding: gzip
+User-Agent: Backlog Webhook
+Connect-Time: 0
+Total-Route-Time: 0
+method: POST
+
+
+* 課題に関するイベント
+
+** 課題の追加
+{"created":"2017-12-21T03:55:46Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":1,"content":{"summary":"test issue","key_id":100,"customFields":[],"dueDate":"","description":"test description","priority":{"name":"","id":null},"resolution":{"name":"","id":null},"actualHours":null,"issueType":{"color":"null","name":"Bug","displayOrder":null,"id":400,"projectId":null},"milestone":[{"archived":"false","releaseDueDate":"null","name":"prototype release","displayOrder":null,"description":"","id":null,"projectId":null,"startDate":"null"},{"archived":"false","releaseDueDate":"null","name":"alpha release","displayOrder":null,"description":"","id":null,"projectId":null,"startDate":"null"},{"archived":"false","releaseDueDate":"null","name":"beta release","displayOrder":null,"description":"","id":null,"projectId":null,"startDate":"null"},{"archived":"false","releaseDueDate":"null","name":"product release","displayOrder":null,"description":"","id":null,"projectId":null,"startDate":"null"}],"versions":[{"archived":"false","releaseDueDate":"null","name":"Version0.1","displayOrder":null,"description":"","id":null,"projectId":null,"startDate":"null"},{"archived":"false","releaseDueDate":"null","name":"Version0.2","displayOrder":null,"description":"","id":null,"projectId":null,"startDate":"null"},{"archived":"false","releaseDueDate":"null","name":"Version1.0","displayOrder":null,"description":"","id":null,"projectId":null,"startDate":"null"}],"parentIssueId":null,"estimatedHours":null,"id":100,"assignee":null,"category":[{"name":"Category1","displayOrder":null,"id":null},{"name":"Category2","displayOrder":null,"id":null}],"startDate":"","status":{"name":"In Progress","id":2}},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** 課題の更新
+{"created":"2017-12-21T03:56:52Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":2,"content":{"summary":"test issue","key_id":100,"changes":[{"field":"priority","old_value":"","type":"standard","new_value":""}],"description":"test description","comment":{"id":200,"content":""},"id":100},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** 課題にコメント
+{"created":"2017-12-21T03:57:19Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":3,"content":{"summary":"test issue","key_id":100,"description":"test description","comment":{"id":200,"content":"test comment"},"id":100},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** 課題の削除
+{"created":"2017-12-21T03:57:48Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":4,"content":{"key_id":100,"id":100},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** 課題をまとめて更新
+{"created":"2017-12-21T03:59:20Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":14,"content":{"link":[{"key_id":"100","id":"100","title":"test issue1"},{"key_id":"101","id":"101","title":"test issue2"}],"changes":[{"field":"priority","type":"standard","new_value":"高"}],"tx_id":"200"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** お知らせの追加
+{"created":"2017-12-21T03:59:56Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":17,"content":{"summary":"test issue","key_id":100,"description":"test description","comment":{"id":200,"content":"test comment"},"id":100},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+
+* Wikiに関するイベント
+
+** Wikiの追加
+{"created":"2017-12-21T04:00:52Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":5,"content":{"name":"test wiki","id":100,"content":"test content"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** Wikiの更新
+{"created":"2017-12-21T04:01:16Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":6,"content":{"name":"test wiki","diff":"1c1\n<test content---\n>test","id":100,"version":3,"content":"test content"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** Wikiの削除
+{"created":"2017-12-21T04:01:43Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":7,"content":{"name":"test wiki","id":100,"content":"test content"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+
+* 共有ファイルに関するイベント
+
+** ファイルの追加
+{"created":"2017-12-21T04:06:43Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":8,"content":{"size":128,"name":"test.txt","id":100,"dir":"/"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** ファイルの更新
+{"created":"2017-12-21T04:07:05Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":9,"content":{"size":128,"name":"test.txt","id":100,"dir":"/"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** ファイルの削除
+{"created":"2017-12-21T04:07:25Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":10,"content":{"size":128,"name":"test.txt","id":100,"dir":"/"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+* バージョン管理に関するイベント
+
+** Subversionコミット
+{"created":"2017-12-21T04:10:20Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":11,"content":{"rev":100,"comment":"test commit"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** Gitプッシュ
+{"created":"2017-12-21T04:10:53Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":12,"content":{"ref":"refs/heads/test","revision_type":"commit","revisions":[{"rev":"e1cf1103242ea1ce59382ac2e2ab4de43751524d","link":{"text":"e1cf1103242ea1ce59382ac2e2ab4de43751524d","url":"git/TEST/test/commit/e1cf1103242ea1ce59382ac2e2ab4de43751524d"},"comment":"test"}],"change_type":"update","revision_count":1,"repository":{"name":"app","id":3}},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** Gitリポジトリの作成
+{"created":"2017-12-21T04:11:11Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":13,"content":{"repository":{"name":"test","description":"","id":100}},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+
+* プロジェクトに関するイベント
+
+** プロジェクトに参加
+{"created":"2017-12-21T04:13:27Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":15,"content":{"comment":"","users":[{"nulabAccount":{"nulabId":"snGjFs8agNSJeI4ZdeiVXsTiKJd0jPJAoD60apGa0VS8RPspt4","name":"matsu ( Yusuke Matsuura )","uniqueId":"matsuzj"},"name":"test user","id":100}]},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** プロジェクトから脱退
+{"created":"2017-12-21T04:13:50Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":16,"content":{"users":[{"nulabAccount":{"nulabId":"snGjFs8agNSJeI4ZdeiVXsTiKJd0jPJAoD60apGa0VS8RPspt4","name":"matsu ( Yusuke Matsuura )","uniqueId":"matsuzj"},"name":"test user","id":100}]},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** 発生バージョン/マイルストーンの追加
+{"created":"2017-12-21T04:15:22Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":22,"content":{"name":"test version","description":"test description","id":100,"reference_date":"","start_date":""},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** 発生バージョン/マイルストーンの更新
+{"created":"2017-12-21T04:15:40Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":23,"content":{"name":"test version","changes":[{"field":"name","old_value":"test old version","new_value":"test version"},{"field":"description","old_value":"test old description","new_value":"test description"}],"id":100},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** 発生バージョン/マイルストーンの削除
+{"created":"2017-12-21T04:16:01Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":24,"content":{"name":"test version","description":"test description","id":100,"reference_date":"","start_date":""},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+* プルリクエストに関するイベント
+
+** プルリクエストの追加
+{"created":"2017-12-21T04:16:23Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":18,"content":{"summary":"test pull request","number":100,"issue":null,"changes":[],"description":"test description","diff":null,"comment":null,"id":100,"assignee":null,"repository":{"name":"test repository","description":"test description","id":100},"branch":"feature","base":"master"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** プルリクエストの更新
+{"created":"2017-12-21T04:16:40Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":19,"content":{"summary":"test pull request","number":100,"issue":null,"changes":[],"description":"test description","diff":"1c1\n<test description---\n>test","comment":null,"id":100,"assignee":null,"repository":{"name":"test repository","description":"test description","id":100},"branch":"feature","base":"master"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+
+** プルリクエストにコメント
+{"created":"2017-12-21T04:16:55Z","project":{"archived":false,"projectKey":"TEST","name":"TestProject","chartEnabled":false,"id":100,"subtaskingEnabled":false},"id":10,"type":20,"content":{"summary":"test pull request","number":100,"issue":null,"changes":[],"description":"test description","diff":null,"comment":{"id":100,"content":"test comment"},"id":100,"assignee":null,"repository":{"name":"test repository","description":"test description","id":100},"branch":"feature","base":"master"},"notifications":[],"createdUser":{"nulabAccount":{"nulabId":"_nulabid__________________________________________","name":"John Doe","uniqueId":"John"},"name":"John Doe","mailAddress":null,"id":12345,"roleType":1,"lang":"ja","userId":null}}
+

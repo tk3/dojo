@@ -1,0 +1,36 @@
+Backlog Webhook 一覧
+
+- 課題に関するイベント
+  - 課題の追加
+  - 課題の更新
+  - 課題にコメント
+  - 課題の削除
+  - 課題をまとめて更新
+  - お知らせの追加
+- Wikiに関するイベント
+  - Wikiの追加
+  - Wikiの更新
+  - Wikiの削除
+- 共有ファイルに関するイベント
+  - ファイルの追加
+  - ファイルの更新
+  - ファイルの削除
+- バージョン管理に関するイベント
+  - Subversionコミット
+  - Gitプッシュ
+  - Gitリポジトリの作成
+- プロジェクトに関するイベント
+  - プロジェクトに参加
+  - プロジェクトから脱退
+  - 発生バージョン/マイルストーンの追加
+  - 発生バージョン/マイルストーンの更新
+  - 発生バージョン/マイルストーンの削除
+- プルリクエストに関するイベント
+  - プルリクエストの追加
+  - プルリクエストの更新
+  - プルリクエストにコメント
+
+
+Get Recent Updates | Backlog Developer API | Nulab https://developer.nulab-inc.com/docs/backlog/api/2/get-recent-updates/
+最近の更新の取得 | Backlog Developer API | Nulab https://developer.nulab-inc.com/ja/docs/backlog/api/2/get-recent-updates/
+
