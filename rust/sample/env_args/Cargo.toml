@@ -1,0 +1,6 @@
+[package]
+name = "env_args"
+version = "0.1.0"
+authors = ["qtakamitsu <qtakamitsu@gmail.com>"]
+
+[dependencies]
