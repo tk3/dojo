@@ -196,7 +196,9 @@ mrb_ffi_func_call(mrb_state *mrb, mrb_value self)
   ffi_func = mrb_get_datatype(mrb, self, &mrb_ffi_func_type);
 
   arg_type = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@arg_type"));
-  type_len = mrb_ary_len(mrb, arg_type);
+  //type_len = mrb_ary_len(mrb, arg_type);
+  struct RArray *a = mrb_ary_ptr(arg_type);
+  type_len = ARY_LEN(a);
 
   if (argc < type_len) {
     mrb_raise(mrb, E_ARGUMENT_ERROR, "too few arguments");
@@ -340,7 +342,9 @@ func1(mrb_state *mrb, mrb_value self)
 
   mrb_get_args(mrb, "A", &ary);
 
-  len = mrb_ary_len(mrb, ary);
+  //len = mrb_ary_len(mrb, ary);
+  struct RArray *a = mrb_ary_ptr(ary);
+  len = ARY_LEN(a);
 
   for (int i = 0; i < len; i++) {
     v = mrb_ary_ref(mrb, ary, i);
