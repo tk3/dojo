@@ -1,16 +1,22 @@
 .env
 
+# for cc
 *.o
+/cc/**/main
+!/cc/**/main/
 
 # Gradle project
-.gradle/
-build/
+/java/**/.gradle/
+/java/**/build/
+/kotlin/**/.gradle/
+/kotlin/**/build/
 
 # for Rust
-Cargo.lock
-rust/**/target/
+/rust/**/Cargo.lock
+/rust/**/target/
 
 # for Ruby
-ruby/**/.bundle/
-ruby/**/vendor/bundle
+/ruby/**/.bundle/
+/ruby/**/vendor/bundle
+/ruby/**/Gemfile.lock
 
