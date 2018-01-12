@@ -1,10 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'sinatra'
+require 'json'
 
-#!/usr/bin/env ruby
-
-require 'sinatra'
 
 def print_client_information(request, params)
   r = ""
@@ -35,6 +33,15 @@ end
 
 post '/echo' do
    print_client_information request, params
+end
+
+get '/show' do
+  content_type 'application/json;charset=utf-8'
+  { 
+    key: "foo", 
+    name: "foo bar", 
+    created: "2008-07-06T15:00:00Z",
+  }.to_json
 end
 
 get '/foo' do
