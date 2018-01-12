@@ -1,5 +1,16 @@
+.env
+
 *.o
 
 # Gradle project
 .gradle/
 build/
+
+# for Rust
+Cargo.lock
+rust/**/target/
+
+# for Ruby
+ruby/**/.bundle/
+ruby/**/vendor/bundle
+
