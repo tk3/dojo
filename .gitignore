@@ -2,6 +2,7 @@
 
 # for cc
 *.o
+*.so
 /cc/**/main
 !/cc/**/main/
 
