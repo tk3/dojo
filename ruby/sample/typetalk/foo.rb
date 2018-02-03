@@ -7,19 +7,21 @@ require "json"
 Dotenv.load
 
 client = OAuth2::Client.new(
-  ENV["CLIENT_ID"],
-  ENV["CLIENT_SECRET"],
+  ENV["CC_CLIENT_ID"],
+  ENV["CC_CLIENT_SECRET"],
   {
     :site => 'https://typetalk.com/',
     :authorize_url => '/oauth2/authorize', 
     :token_url => '/oauth2/access_token'
   })
 
-token = client.client_credentials.get_token({:scope => 'topic.read,topic.post,topic.write,topic.delete,my'})
+typetalk_scope_type = %w(topic.read topic.post topic.write topic.delete my)
 
-r = token.get("/api/v1/profile")
+token = client.client_credentials.get_token({:scope => typetalk_scope_type.join(',')})
 
-j = JSON.parse r.response.body
+response = token.get "/api/v1/profile"
 
-puts j["account"]["name"]
+data = JSON.parse response.response.body
+
+puts data["account"]["name"]
 
