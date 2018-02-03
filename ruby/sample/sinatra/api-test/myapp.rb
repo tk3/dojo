@@ -35,10 +35,10 @@ post '/echo' do
    print_client_information request, params
 end
 
-get '/show' do
+get '/json' do
   content_type 'application/json;charset=utf-8'
   { 
-    key: "foo", 
+    id: 5,
     name: "foo bar", 
     created: "2008-07-06T15:00:00Z",
   }.to_json
