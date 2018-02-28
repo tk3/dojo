@@ -1,44 +1,44 @@
 .DEFAULT_GOAL := build
 
 pkg-mruby:
-	sudo apt install bison
+	@sudo apt install bison
 
-pkg-ffi:
-	sudo apt install pkg-config libffi-dev
+install-pkg:
+	@sudo apt install pkg-config libffi-dev
 
 get-mruby:
-	git clone https://github.com/mruby/mruby.git
+	@git clone https://github.com/mruby/mruby.git
 
 get-gem:
-	git clone git@github.com:qtkmz/mruby-ffi.git
+	@git clone git@github.com:qtkmz/mruby-ffi.git
 
 config-init:
-	cp build_config.rb ./mruby
+	@cp build_config.rb ./mruby
 
 build: config-init
-	cp build_config.rb ./mruby; \
+	@cp build_config.rb ./mruby; \
 	cd mruby;  \
-	rake
+	./minirake
 
 test: config-init
-	cp build_config.rb ./mruby; \
+	@cp build_config.rb ./mruby; \
 	cd mruby;  \
-	rake test
+	./minirake test
 
 clean:
-	cd mruby;  \
-	rake clean
+	@cd mruby;  \
+	./minirake clean
 
 diff:
-	cd mruby-ffi;  \
+	@cd mruby-ffi;  \
 	git diff
 
 irb:
-	./mruby/bin/mirb
+	@./mruby/bin/mirb
 
 run:
-	./mruby/bin/mruby ./foo.rb
+	@./mruby/bin/mruby ./foo.rb
 
 valgrind:
-	valgrind --leak-check=full ./mruby/bin/mruby ./foo.rb
+	@valgrind --leak-check=full ./mruby/bin/mruby ./foo.rb
 
