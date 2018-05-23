@@ -40,15 +40,15 @@ end
 
 
 if __FILE__ == $0
-
   require "faraday"
+  require "date"
 
   cache_file = "./capacamera.cache.txt"
 
   html = ""
   unless File.exist?(cache_file)
     url = "https://capa.getnavi.jp/exhibition/tokyo/"
-    r = Faraday.get u
+    r = Faraday.get url
     html = r.body
 
     File.open(cache_file, "w") do |fout|
@@ -59,6 +59,18 @@ if __FILE__ == $0
   end
 
   data = Scraper::CAPACameranet.scrape html
+
+  this_year = Date.today.year
+  data = data.map do |e|
+    begin
+      e[:exhibition_period] = e[:exhibition_period].scan(/(.+)～(.+)/)
+        .map{|i| [Date.parse("#{this_year}/#{i[0]}"), Date.parse("#{this_year}/#{i[1]}")] }
+        .map{|i| Range.new(i[0], i[1])}
+    rescue => ex
+      STDERR.puts "Exception -> #{ex.message}, #{e[:exhibition_period]}"
+    end
+    e
+  end
 
   data.each do |d|
     puts "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % [
