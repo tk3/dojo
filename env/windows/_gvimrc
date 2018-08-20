@@ -1,0 +1,52 @@
+set lines=50
+set columns=100
+
+set laststatus=2
+set statusline=%<%f\ %m%r%h%w\ %=[%l,%v][%P][%{&fenc!=''?&fenc:&enc}][%{&ff}]
+
+set backupdir=$HOME/tmp/vim
+set directory=$HOME/tmp/vim
+set noundofile
+
+set guioptions-=m  " hidden menu bar
+set guioptions-=T  " hidden tool bar
+
+"
+" Vundle.vim
+"
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+"Plugin 'wakatime/vim-wakatime'
+Plugin 'molokai'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+" end Vundle.vim
+
+set t_Co=256
+colorscheme molokai
+
+
+let g:mymemo              = "$HOME/Documents/memo.txt"
+let g:mymemo_fileencoding = "utf-8"
+let g:mymemo_fileformat   = "unix"
+
+"nnoremap <Leader><Leader>o :new g:clmemo<CR>
+nnoremap ,o :OpenMymemo<CR>
+command! OpenMymemo :call s:MymemoOpen() 
+
+function s:MymemoOpen()
+  let g:changelog_dateformat='%Y-%m-%d'
+  let g:changelog_username='tk3'
+
+  let l:cmd = ":edit ++enc=" . g:mymemo_fileencoding . " ++ff=" . g:mymemo_fileformat . " " . g:mymemo
+  execute "normal! " . l:cmd . "\<CR>"
+  execute "normal gg0" 
+  "map ,d ggi<CR><CR><ESC>kki<C-R>=strftime(\"%c\")<CR> 
+  " \ xxx <xxxx><ESC>o<CR><TAB>* 
+endfunction
