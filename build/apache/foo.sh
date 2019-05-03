@@ -1,11 +1,28 @@
 #!/bin/bash
 
+webdav_url="http://localhost:18080/uploads/"
 
 case $1 in
 "propfind")
   cmd="curl --include --request PROPFIND "
   cmd="$cmd --header 'Depth: 1' "
-  cmd="$cmd http://localhost:18080/uploads/"
+  cmd="$cmd $webdav_url"
+
+  echo $cmd
+  $SHELL -c "$cmd"
+  ;;
+
+"propfind-allprop")
+  body=./tmp-request-body.txt
+  echo '<?xml version="1.0" encoding="utf-8" ?>' >  $body
+  echo '<D:propfind xmlns:D="DAV:">'             >> $body
+  echo '<D:allprop/>'                            >> $body
+  echo '</D:propfind>'                           >> $body
+
+  cmd="curl --include --request PROPFIND "
+  cmd="$cmd --header 'Depth: 1' "
+  cmd="$cmd --data-binary @$body "
+  cmd="$cmd $webdav_url"
 
   echo $cmd
   $SHELL -c "$cmd"
@@ -13,7 +30,7 @@ case $1 in
 
 "propfind-nodepth")
   cmd="curl --include --request PROPFIND "
-  cmd="$cmd http://localhost:18080/uploads/"
+  cmd="$cmd $webdav_url"
 
   echo $cmd
   $SHELL -c "$cmd"
@@ -21,7 +38,7 @@ case $1 in
 
 "mkcol-1")
   cmd="curl --include --request MKCOL "
-  cmd="$cmd http://localhost:18080/abcd/"
+  cmd="$cmd ${webdav_url}abcd"
 
   echo $cmd
   $SHELL -c "$cmd"
@@ -29,34 +46,40 @@ case $1 in
 
 "mkcol")
   cmd="curl --include --request MKCOL "
-  cmd="$cmd http://localhost:18080/uploads/abcd/"
+  cmd="$cmd ${webdav_url}abcd"
 
   echo $cmd
   $SHELL -c "$cmd"
   ;;
 
-"upload-dir")
-  echo 'aaa' >  ./test.txt
-  echo 'bbb' >> ./test.txt
+"put-dir")
+  body=./tmp-request-body.txt
+  echo 'aaa' >  $body
+  echo 'bbb' >> $body
 
   cmd="curl --include --request PUT "
-  cmd="$cmd --data-binary @./test.txt "
-  cmd="$cmd http://localhost:18080/uploads/"
+  cmd="$cmd --data-binary @$body "
+  cmd="$cmd ${webdav_url}"
 
   echo $cmd
   $SHELL -c "$cmd"
   ;;
 
-"upload")
-  echo 'aaa' >  ./test.txt
-  echo 'bbb' >> ./test.txt
+"put")
+  body=./tmp-request-body.txt
+  echo 'aaa' >  $body
+  echo 'bbb' >> $body
 
   cmd="curl --include --request PUT "
-  cmd="$cmd --data-binary @./test.txt "
-  cmd="$cmd http://localhost:18080/uploads/test.txt"
+  cmd="$cmd --data-binary @$body "
+  cmd="$cmd ${webdav_url}test.txt"
 
   echo $cmd
   $SHELL -c "$cmd"
+  ;;
+
+*)
+  echo "not supported. [$1]"
   ;;
 
 esac
