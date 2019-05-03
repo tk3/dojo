@@ -78,6 +78,21 @@ task "edit-config" do
   sh "vi #{apache_home}/conf/httpd.conf"
 end
 
+
+task "add-config" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_conf = "#{apache_home}/conf/httpd.conf"
+  pwd = Dir.pwd
+
+  puts 'DavLockDB "#{pwd}/var/DavLock'
+  puts 'Alias /uploads "#{pwd}/uploads'
+  puts ''
+  puts '<Directory "#{pwd}/uploads">'
+  puts '    Dav On'
+  puts '    Require all granted'
+  puts '</Directory>'
+end
+
 namespace :foo do
   message = '1.7.0'
 
