@@ -48,6 +48,36 @@ task 'apache' do
   end
 end
 
+
+
+task "start" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "#{apache_home}/bin/httpd -k start"
+end
+
+task "restart" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "#{apache_home}/bin/httpd -k restart"
+end
+
+
+task "stop" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "#{apache_home}/bin/httpd -k stop"
+end
+
+task "clean-logs" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+
+  File.delete("#{apache_home}/logs/access_log") if File.exist?("#{apache_home}/logs/access_log")
+  File.delete("#{apache_home}/logs/error_log")  if File.exist?("#{apache_home}/logs/error_log")
+end
+
+task "edit-config" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "vi #{apache_home}/conf/httpd.conf"
+end
+
 namespace :foo do
   message = '1.7.0'
 
