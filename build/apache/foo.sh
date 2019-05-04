@@ -36,6 +36,43 @@ case $1 in
   $SHELL -c "$cmd"
   ;;
 
+"proppatch")
+  body=./tmp-request-body.txt
+  echo '<?xml version="1.0" encoding="utf-8" ?>' >  $body
+  echo '<D:propertyupdate xmlns:D="DAV:" xmlns:Z="http://ns.example.com/standards/z39.50/">'  >> $body
+  echo '<D:set>'                             >> $body
+  echo '<D:prop>'                            >> $body
+  echo '<Z:Authors>'                         >> $body
+  echo '<Z:Author>Jim Whitehead</Z:Author>'  >> $body
+# echo '<Z:Author>Roy Fielding</Z:Author>'   >> $body
+  echo '</Z:Authors>'                        >> $body
+  echo '</D:prop>'                           >> $body
+  echo '</D:set>'                            >> $body
+# echo '<D:remove>'                          >> $body
+# echo '<D:prop>'                            >> $body
+# echo '<Z:Copyright-Owner/>'                >> $body
+# echo '</D:prop>'                           >> $body
+# echo '</D:remove>'                         >> $body
+  echo '</D:propertyupdate>'                 >> $body
+
+  cmd="curl --include --request PROPPATCH "
+  cmd="$cmd --header \"Content-Type: application/xml; charset=\"utf-8\"\" "
+  cmd="$cmd --data-binary @$body "
+  cmd="$cmd ${webdav_url}test.txt"
+
+  echo $cmd
+  $SHELL -c "$cmd"
+
+  echo "========"
+
+  cmd="curl --include --request PROPFIND "
+  cmd="$cmd --header 'Depth: 1' "
+  cmd="$cmd ${webdav_url}test.txt"
+
+  echo $cmd
+  $SHELL -c "$cmd"
+  ;;
+
 "mkcol-1")
   cmd="curl --include --request MKCOL "
   cmd="$cmd ${webdav_url}abcd"
