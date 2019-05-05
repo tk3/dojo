@@ -1,0 +1,118 @@
+
+apr_ver = '1.7.0'
+
+desc 'apr'
+task "apr" do
+
+  sh "curl -O http://ftp.riken.jp/net/apache//apr/apr-#{apr_ver}.tar.bz2"
+  sh "tar jxf apr-#{apr_ver}.tar.bz2"
+
+  Dir.chdir("./apr-#{apr_ver}") do
+    sh "./configure --prefix=$HOME/opt/apr-#{apr_ver}"
+    sh "make"
+    sh "make install"
+  end
+end
+
+
+apr_util_ver = "1.6.1"
+
+desc 'apr-util'
+task "apr-util" do
+  sh "curl -O http://ftp.riken.jp/net/apache//apr/apr-util-#{apr_util_ver}.tar.bz2"
+  sh "tar jxf apr-util-#{apr_util_ver}.tar.bz2"
+  Dir.chdir("./apr-util-#{apr_util_ver}") do
+    sh "./configure --prefix=$HOME/opt/apr-util-#{apr_util_ver} --with-apr=$HOME/opt/apr-#{apr_ver}/bin"
+    sh "make"
+    sh "make install"
+  end
+end
+
+
+# sudo apt install libpcre3-dev
+apache_ver = "2.4.39"
+
+desc 'apache'
+task 'apache' do
+  sh "curl -O http://ftp.yz.yamagata-u.ac.jp/pub/network/apache//httpd/httpd-#{apache_ver}.tar.bz2"
+  sh "tar jxf httpd-#{apache_ver}.tar.bz2"
+  Dir.chdir("./httpd-#{apache_ver}") do
+    sh "./configure --prefix=$HOME/opt/httpd-#{apache_ver} " +
+       "--with-apr=$HOME/opt/apr-#{apr_ver} " +
+       "--with-apr-util=$HOME/opt/apr-util-#{apr_util_ver} " +
+       "--enable-dav " +
+       "--enable-dav-fs " +
+       "--enable-dav-lock"
+    sh "make"
+    sh "make install"
+  end
+end
+
+
+
+task "start" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "#{apache_home}/bin/httpd -k start"
+end
+
+task "restart" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "#{apache_home}/bin/httpd -k restart"
+end
+
+
+task "stop" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "#{apache_home}/bin/httpd -k stop"
+end
+
+task "clean-logs" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+
+  File.delete("#{apache_home}/logs/access_log") if File.exist?("#{apache_home}/logs/access_log")
+  File.delete("#{apache_home}/logs/error_log")  if File.exist?("#{apache_home}/logs/error_log")
+end
+
+task "edit-config" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  sh "vi #{apache_home}/conf/httpd.conf"
+end
+
+
+task "add-config" do
+  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_conf = "#{apache_home}/conf/httpd.conf"
+  pwd = Dir.pwd
+
+  puts 'DavLockDB "#{pwd}/var/DavLock'
+  puts 'Alias /uploads "#{pwd}/uploads'
+  puts ''
+  puts '<Directory "#{pwd}/uploads">'
+  puts '    Dav On'
+  puts '    Require all granted'
+  puts '</Directory>'
+end
+
+namespace :foo do
+  message = '1.7.0'
+
+  task :build do
+    puts "exec foo::build"
+    puts "exec #{message}"
+  end
+
+  task :clean do
+    puts "exec foo::clean"
+  end
+end
+
+task "nginx-unit" do
+  unit_ver = '1.8.0'
+
+  puts "exec foo::clean"
+  sh "git clone https://github.com/nginx/unit.git unit-#{unit_ver}"
+  Dir.chdir("./unit-#{unit_ver}") do
+    sh "git checkout -b #{unit_ver} refs/tags/#{unit_ver}"
+  end
+end
+
