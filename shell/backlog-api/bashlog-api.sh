@@ -21,3 +21,13 @@ function get_space_diskusage() {
   curl $CURL_OPTIONS $BACKLOG_URL$path?apiKey=$BACKLOG_API_KEY
 }
 
+function get_issues() {
+  local path="/api/v2/issues"
+  curl $CURL_OPTIONS $BACKLOG_URL$path?apiKey=$BACKLOG_API_KEY
+}
+
+function delete_issues() {
+  local path="/api/v2/issues/$1"
+  curl $CURL_OPTIONS --request DELETE $BACKLOG_URL$path?apiKey=$BACKLOG_API_KEY
+}
+
