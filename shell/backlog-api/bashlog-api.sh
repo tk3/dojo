@@ -6,6 +6,11 @@ echo "BACKLOG_API_KEY = $BACKLOG_API_KEY"
 
 CURL_OPTIONS="-s"
 
+function get_statuses() {
+  local path="/api/v2/statuses"
+  curl $CURL_OPTIONS $BACKLOG_URL$path?apiKey=$BACKLOG_API_KEY
+}
+
 function get_space() {
   local path="/api/v2/space"
   curl $CURL_OPTIONS $BACKLOG_URL$path?apiKey=$BACKLOG_API_KEY
