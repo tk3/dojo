@@ -1,6 +1,8 @@
 
 apr_ver = '1.7.0'
 
+install_path = '$HOME/opt'
+
 desc 'apr'
 task "apr" do
 
@@ -8,7 +10,7 @@ task "apr" do
   sh "tar jxf apr-#{apr_ver}.tar.bz2"
 
   Dir.chdir("./apr-#{apr_ver}") do
-    sh "./configure --prefix=$HOME/opt/apr-#{apr_ver}"
+    sh "./configure --prefix=#{install_path}/apr-#{apr_ver}"
     sh "make"
     sh "make install"
   end
@@ -22,7 +24,7 @@ task "apr-util" do
   sh "curl -O http://ftp.riken.jp/net/apache//apr/apr-util-#{apr_util_ver}.tar.bz2"
   sh "tar jxf apr-util-#{apr_util_ver}.tar.bz2"
   Dir.chdir("./apr-util-#{apr_util_ver}") do
-    sh "./configure --prefix=$HOME/opt/apr-util-#{apr_util_ver} --with-apr=$HOME/opt/apr-#{apr_ver}/bin"
+    sh "./configure --prefix=#{install_path}/apr-util-#{apr_util_ver} --with-apr=#{install_path}/apr-#{apr_ver}/bin"
     sh "make"
     sh "make install"
   end
@@ -37,9 +39,9 @@ task 'apache' do
   sh "curl -O http://ftp.yz.yamagata-u.ac.jp/pub/network/apache//httpd/httpd-#{apache_ver}.tar.bz2"
   sh "tar jxf httpd-#{apache_ver}.tar.bz2"
   Dir.chdir("./httpd-#{apache_ver}") do
-    sh "./configure --prefix=$HOME/opt/httpd-#{apache_ver} " +
-       "--with-apr=$HOME/opt/apr-#{apr_ver} " +
-       "--with-apr-util=$HOME/opt/apr-util-#{apr_util_ver} " +
+    sh "./configure --prefix=#{install_path}/httpd-#{apache_ver} " +
+       "--with-apr=#{install_path}/apr-#{apr_ver} " +
+       "--with-apr-util=#{install_path}/apr-util-#{apr_util_ver} " +
        "--enable-dav " +
        "--enable-dav-fs " +
        "--enable-dav-lock"
@@ -51,36 +53,36 @@ end
 
 
 task "start" do
-  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_home = "#{install_path}/httpd-2.4.39"
   sh "#{apache_home}/bin/httpd -k start"
 end
 
 task "restart" do
-  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_home = "#{install_path}/httpd-2.4.39"
   sh "#{apache_home}/bin/httpd -k restart"
 end
 
 
 task "stop" do
-  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_home = "#{install_path}/httpd-2.4.39"
   sh "#{apache_home}/bin/httpd -k stop"
 end
 
 task "clean-logs" do
-  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_home = "#{install_path}/httpd-2.4.39"
 
   File.delete("#{apache_home}/logs/access_log") if File.exist?("#{apache_home}/logs/access_log")
   File.delete("#{apache_home}/logs/error_log")  if File.exist?("#{apache_home}/logs/error_log")
 end
 
 task "edit-config" do
-  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_home = "#{install_path}/httpd-2.4.39"
   sh "vi #{apache_home}/conf/httpd.conf"
 end
 
 
 task "add-config" do
-  apache_home = "#{ENV['HOME']}/opt/httpd-2.4.39"
+  apache_home = "#{install_path}/httpd-2.4.39"
   apache_conf = "#{apache_home}/conf/httpd.conf"
   pwd = Dir.pwd
 
