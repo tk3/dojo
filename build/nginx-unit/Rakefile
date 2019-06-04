@@ -1,0 +1,12 @@
+
+unit_ver = '1.8.0'
+
+namespace "nginx-unit" do
+  task "get-src" do
+    sh "git clone https://github.com/nginx/unit.git unit-#{unit_ver}"
+    Dir.chdir("./unit-#{unit_ver}") do
+      sh "git checkout -b #{unit_ver} refs/tags/#{unit_ver}"
+    end
+  end
+end
+
