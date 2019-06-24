@@ -34,7 +34,6 @@ task "apr-util" do
     Dir.chdir("./apr-util-#{apr_util_ver}") do
       sh "./configure --prefix=#{install_path}/apr-util-#{apr_util_ver} " +
          "--with-apr=#{install_path}/apr-#{apr_ver} "
-#        "--with-apr=#{install_path}/apr-#{apr_ver}/bin"
       sh "make"
       sh "make install"
     end
