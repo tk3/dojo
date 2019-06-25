@@ -1,19 +1,25 @@
+require 'fileutils'
+
+pwd = Dir::pwd
+
+install_path = "#{ENV['HOME']}/opt"
+work_path = "#{pwd}/work"
 
 apr_ver = '1.7.0'
 
-install_path = '$HOME/opt'
-
 desc 'apr'
 task "apr" do
+  FileUtils.mkdir_p(work_path)
+  Dir.chdir("#{work_path}") do
+    sh "curl -O http://ftp.riken.jp/net/apache//apr/apr-#{apr_ver}.tar.bz2"
+    sh "tar jxf apr-#{apr_ver}.tar.bz2"
 
-  sh "curl -O http://ftp.riken.jp/net/apache//apr/apr-#{apr_ver}.tar.bz2"
-  sh "tar jxf apr-#{apr_ver}.tar.bz2"
-
-  Dir.chdir("./apr-#{apr_ver}") do
-    sh "./configure --prefix=#{install_path}/apr-#{apr_ver}"
-    sh "make"
-    sh "make install"
-  end
+    Dir.chdir("./apr-#{apr_ver}") do
+      sh "./configure --prefix=#{install_path}/apr-#{apr_ver}"
+      sh "make"
+      sh "make install"
+    end
+	end
 end
 
 
@@ -21,12 +27,16 @@ apr_util_ver = "1.6.1"
 
 desc 'apr-util'
 task "apr-util" do
-  sh "curl -O http://ftp.riken.jp/net/apache//apr/apr-util-#{apr_util_ver}.tar.bz2"
-  sh "tar jxf apr-util-#{apr_util_ver}.tar.bz2"
-  Dir.chdir("./apr-util-#{apr_util_ver}") do
-    sh "./configure --prefix=#{install_path}/apr-util-#{apr_util_ver} --with-apr=#{install_path}/apr-#{apr_ver}/bin"
-    sh "make"
-    sh "make install"
+  FileUtils.mkdir_p(work_path)
+  Dir.chdir("#{work_path}") do
+    sh "curl -O http://ftp.riken.jp/net/apache//apr/apr-util-#{apr_util_ver}.tar.bz2"
+    sh "tar jxf apr-util-#{apr_util_ver}.tar.bz2"
+    Dir.chdir("./apr-util-#{apr_util_ver}") do
+      sh "./configure --prefix=#{install_path}/apr-util-#{apr_util_ver} " +
+         "--with-apr=#{install_path}/apr-#{apr_ver} "
+      sh "make"
+      sh "make install"
+    end
   end
 end
 
@@ -36,63 +46,61 @@ apache_ver = "2.4.39"
 
 desc 'apache'
 task 'apache' do
-  sh "curl -O http://ftp.yz.yamagata-u.ac.jp/pub/network/apache//httpd/httpd-#{apache_ver}.tar.bz2"
-  sh "tar jxf httpd-#{apache_ver}.tar.bz2"
-  Dir.chdir("./httpd-#{apache_ver}") do
-    sh "./configure --prefix=#{install_path}/httpd-#{apache_ver} " +
-       "--with-apr=#{install_path}/apr-#{apr_ver} " +
-       "--with-apr-util=#{install_path}/apr-util-#{apr_util_ver} " +
-       "--enable-dav " +
-       "--enable-dav-fs " +
-       "--enable-dav-lock"
-    sh "make"
-    sh "make install"
+  FileUtils.mkdir_p(work_path)
+  Dir.chdir("#{work_path}") do
+    sh "curl -O http://ftp.yz.yamagata-u.ac.jp/pub/network/apache//httpd/httpd-#{apache_ver}.tar.bz2"
+    sh "tar jxf httpd-#{apache_ver}.tar.bz2"
+    Dir.chdir("./httpd-#{apache_ver}") do
+      sh "./configure --prefix=#{install_path}/httpd-#{apache_ver} " +
+         "--with-apr=#{install_path}/apr-#{apr_ver} " +
+         "--with-apr-util=#{install_path}/apr-util-#{apr_util_ver} " +
+         "--enable-dav " +
+         "--enable-dav-fs " +
+         "--enable-dav-lock"
+      sh "make"
+      sh "make install"
+    end
   end
 end
 
-
+apache_home = "#{install_path}/httpd-#{apache_ver}"
 
 task "start" do
-  apache_home = "#{install_path}/httpd-2.4.39"
   sh "#{apache_home}/bin/httpd -k start"
 end
 
 task "restart" do
-  apache_home = "#{install_path}/httpd-2.4.39"
   sh "#{apache_home}/bin/httpd -k restart"
 end
 
-
 task "stop" do
-  apache_home = "#{install_path}/httpd-2.4.39"
   sh "#{apache_home}/bin/httpd -k stop"
 end
 
 task "clean-logs" do
-  apache_home = "#{install_path}/httpd-2.4.39"
-
   File.delete("#{apache_home}/logs/access_log") if File.exist?("#{apache_home}/logs/access_log")
   File.delete("#{apache_home}/logs/error_log")  if File.exist?("#{apache_home}/logs/error_log")
 end
 
 task "edit-config" do
-  apache_home = "#{install_path}/httpd-2.4.39"
   sh "vi #{apache_home}/conf/httpd.conf"
 end
 
 
 task "add-config" do
-  apache_home = "#{install_path}/httpd-2.4.39"
   apache_conf = "#{apache_home}/conf/httpd.conf"
-  pwd = Dir.pwd
 
-  puts 'DavLockDB "#{pwd}/var/DavLock'
-  puts 'Alias /uploads "#{pwd}/uploads'
-  puts ''
-  puts '<Directory "#{pwd}/uploads">'
-  puts '    Dav On'
-  puts '    Require all granted'
-  puts '</Directory>'
+	dav_path = "#{pwd}/dav"
+  FileUtils.mkdir_p(dav_path)
+  FileUtils.mkdir_p(dav_path + "/uploads")
+
+  puts %Q{DavLockDB "#{dav_path}/var/DavLock"}
+  puts %Q{Alias /uploads "#{dav_path}/uploads"}
+  puts %Q{}
+  puts %Q{<Directory "#{dav_path}/uploads">}
+  puts %Q{    Dav On}
+  puts %Q{    Require all granted}
+  puts %Q{</Directory>}
 end
 
 namespace :foo do

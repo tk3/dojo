@@ -1,6 +1,6 @@
 #!/bin/bash
 
-webdav_url="http://localhost:18080/uploads/"
+webdav_url="http://localhost:5555/uploads/"
 
 case $1 in
 "propfind")
