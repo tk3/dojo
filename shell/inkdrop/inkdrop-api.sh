@@ -1,0 +1,19 @@
+
+# .env
+#   INKDROP_ACCESS_KEY_ID=
+#   INKDROP_SECRET_ACCESS_KEY=
+#   INKDROP_DATABASE=
+
+test -f ./.env && source ./.env
+
+echo "INKDROP_ACCESS_KEY_ID     = $INKDROP_ACCESS_KEY_ID"
+echo "INKDROP_SECRET_ACCESS_KEY = $INKDROP_SECRET_ACCESS_KEY"
+echo "INKDROP_DATABASE          = $INKDROP_DATABASE"
+
+CURL_OPTIONS="-s"
+
+function get_info() {
+  curl $CURL_OPTIONS "https://db.inkdrop.info/$INKDROP_DATABASE/"  \
+    -u $INKDROP_ACCESS_KEY_ID:$INKDROP_SECRET_ACCESS_KEY
+}
+
