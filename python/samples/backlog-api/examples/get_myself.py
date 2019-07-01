@@ -4,21 +4,18 @@
 from dotenv import load_dotenv
 import os
 import requests
+import json
 
 load_dotenv()
 
 backlog_url = os.getenv('BACKLOG_URL')
 api_key = os.getenv('BACKLOG_API_KEY')
 
-print(backlog_url)
-print(api_key)
+r = requests.get(
+        backlog_url + '/api/v2/users/myself',
+        params={
+            'apiKey': api_key
+            })
 
-payload = { 'apiKey': api_key }
-
-api_space_url = backlog_url + '/api/v2/users/myself'
-
-r = requests.get(api_space_url, params=payload)
-
-print(r)
-print(r.json())
+print(json.dumps(r.json(), indent=4))
 
