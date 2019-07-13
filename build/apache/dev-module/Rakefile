@@ -74,6 +74,11 @@ task "stop" do
   sh "#{apache_home}/bin/httpd -k stop"
 end
 
+task "ping" do
+  sh %Q{curl -i http://localhost:8888/}
+end
+
+
 task "clean-logs" do
   File.delete("#{apache_home}/logs/access_log") if File.exist?("#{apache_home}/logs/access_log")
   File.delete("#{apache_home}/logs/error_log")  if File.exist?("#{apache_home}/logs/error_log")
