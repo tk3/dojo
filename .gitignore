@@ -21,3 +21,6 @@
 /ruby/**/vendor/bundle
 /ruby/**/Gemfile.lock
 
+# for Python
+/python/**/__pycache__/
+
