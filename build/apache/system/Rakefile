@@ -1,5 +1,8 @@
 require 'fileutils'
 
+# dependencies:
+#   sudo apt install libexpat1-dev libpcre3-dev
+
 pwd = Dir::pwd
 
 install_path = "#{ENV['HOME']}/opt"
