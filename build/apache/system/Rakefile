@@ -5,7 +5,7 @@ require 'fileutils'
 
 pwd = Dir::pwd
 
-install_path = "#{ENV['HOME']}/opt"
+install_path = "/usr/local"
 work_path = "#{pwd}/work"
 
 apr_ver = '1.7.0'
@@ -22,7 +22,7 @@ task "apr" do
       sh "make"
       sh "sudo make install"
     end
-	end
+  end
 end
 
 
@@ -65,18 +65,21 @@ task 'apache' do
   end
 end
 
-apache_home = "#{install_path}/httpd-#{apache_ver}"
+apache_home = "#{install_path}/apache2"
 
 task "start" do
-  sh "#{apache_home}/bin/httpd -k start"
+  #sh "#{apache_home}/bin/httpd -k start"
+  sh "sudo #{apache_home}/bin/apachectl start"
 end
 
 task "restart" do
-  sh "#{apache_home}/bin/httpd -k restart"
+  #sh "#{apache_home}/bin/httpd -k restart"
+  sh "sudo #{apache_home}/bin/apachectl restart"
 end
 
 task "stop" do
-  sh "#{apache_home}/bin/httpd -k stop"
+  #sh "#{apache_home}/bin/httpd -k stop"
+  sh "sudo #{apache_home}/bin/apachectl stop"
 end
 
 task "clean-logs" do
@@ -92,7 +95,7 @@ end
 task "add-config" do
   apache_conf = "#{apache_home}/conf/httpd.conf"
 
-	dav_path = "#{pwd}/dav"
+  dav_path = "#{pwd}/dav"
   FileUtils.mkdir_p(dav_path)
   FileUtils.mkdir_p(dav_path + "/uploads")
 
