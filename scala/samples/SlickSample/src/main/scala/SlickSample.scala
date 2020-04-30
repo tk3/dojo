@@ -1,6 +1,8 @@
 
-import slick.dbio.DBIO
+import slick.dbio.{DBIO, Effect}
+import slick.driver.H2Driver
 import slick.driver.H2Driver.api._
+import slick.sql.FixedSqlAction
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -21,6 +23,7 @@ object SlickSample {
     sampleSelectColumns(db)
     sampleSelectForUpdate(db)
     sampleSelectInnerJoin(db)
+    sampleCount(db)
 
     sampleUpdate(db)
   }
@@ -30,21 +33,36 @@ object SlickSample {
       (Authors.schema ++ Publishers.schema ++ Books.schema).create,
 
       Authors ++= Seq(
-        (100, "author user 01", "aaa"),
-        (101, "author user 02", "bbb"),
-        (102, "author user 03", "ccc")
+        (100, "author user 00", "aaa"),
+        (101, "author user 01", "bbb"),
+        (102, "author user 02", "ccc")
       ),
 
       Publishers ++= Seq(
-        (200, "publisher 01", "address aa"),
-        (201, "publisher 02", "address bb"),
-        (202, "publisher 03", "address cc")
+        (200, "publisher 00", "address aa"),
+        (201, "publisher 01", "address bb"),
+        (202, "publisher 02", "address cc")
       ),
 
       Books ++= Seq(
-        (300, "book title 01", 100L, 200L, "1234567890123", 198.0, 280),
-        (301, "book title 01", 100L, 200L, "2234567890123", 1480.0, 480),
-        (302, "book title 01", 100L, 200L, "3234567890123", 1980.0, 315),
+        (300, "book title 00", 100L, 200L, "1034567890123", 198.0, 36),
+        (301, "book title 01", 100L, 200L, "1134567890123", 548.0, 36),
+        (302, "book title 02", 100L, 201L, "1234567890123", 980.0, 8),
+        (303, "book title 03", 100L, 202L, "1334567890123", 500.0, 48),
+        (304, "book title 04", 100L, 202L, "1434567890123", 200.0, 96),
+
+        (305, "book title 05", 101L, 200L, "1534567890123", 168.0, 36),
+        (306, "book title 06", 101L, 201L, "1634567890123", 380.0, 12),
+        (307, "book title 07", 101L, 201L, "1734567890123", 320.0, 84),
+        (308, "book title 08", 101L, 201L, "1834567890123", 220.0, 24),
+        (309, "book title 09", 101L, 202L, "1934567890123", 450.0, 60),
+        (310, "book title 10", 101L, 202L, "2034567890123", 680.0, 72),
+
+        (311, "book title 11", 102L, 201L, "2134567890123", 790.0, 60),
+        (312, "book title 12", 102L, 201L, "2234567890123", 990.0, 48),
+        (313, "book title 13", 102L, 201L, "2334567890123", 120.0, 48),
+        (314, "book title 14", 102L, 202L, "2434567890123", 520.0, 36),
+        (315, "book title 15", 102L, 202L, "2534567890123", 890.0, 24),
       )
     )
     val f = db.run(setup)
@@ -116,5 +134,15 @@ object SlickSample {
     println(s"sql = $sql")
     println(s"result = $result")
     println(s"result = $resultAfterUpdate")
+  }
+
+  def sampleCount(db: Database): Unit = {
+    val s = Books.filter(_.id > 100L).length.result
+    val sql = s.statements.head
+    val result = Await.result(db.run(s), Duration.Inf)
+
+    println("-------- sample select --------")
+    println(s"sql = $sql")
+    println(s"result = $result")
   }
 }
