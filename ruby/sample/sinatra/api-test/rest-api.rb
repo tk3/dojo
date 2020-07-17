@@ -3,76 +3,110 @@
 require "sinatra"
 require "json"
 
-get "/article" do
-  content_type :json
-  {
-    "id": 8,
-    "title": "title",
-    "content": "content",
-    "created": "2017-05-06T15:10:30Z",
-    "updated": "2017-05-10T07:55:37Z",
-    "createdUser": {
-      "id": 345,
-      "userId": "Taro"
-    },
-    "attachmentFiles": [
-      {
-        "id": 6789,
-        "fileName": "image0001.png"
-      },
-      {
-        "id": 7890,
-        "fileName": "image0002.png"
-      }
-    ]
-  }.to_json
+random = Random.new()
+
+books = {}
+
+get "/ping" do
+	content_type :json
+	{
+		"status": "OK"
+	}.to_json
 end
 
-get "/articles" do
-  content_type :json
-  [
-    {
-      "id": 20,
-      "title": "title 01",
-      "content": "content.\ncontent 01.",
-      "created": "2017-07-06T15:10:30Z",
-      "updated": "2018-01-10T07:55:37Z",
-      "createdUser": {
-        "id": 123,
-        "userId": "Bod"
-      },
-      "attachmentFiles": [
-        {
-          "id": 2468,
-          "fileName": "image2201.png"
-        },
-        {
-          "id": 2489,
-          "fileName": "image2202.png"
-        }
-      ]
-    },
-
-    {
-      "id": 22,
-      "title": "title 02",
-      "content": "content02",
-      "created": "2017-08-06T15:10:30Z",
-      "updated": "2017-12-12T08:20:56Z",
-      "createdUser": {
-        "id": 456,
-        "userId": "Mike"
-      },
-      "attachmentFiles": [
-        {
-           "id": 3568,
-          "fileName": "image4301.png"
-        },
-        {
-          "id": 5432,
-          "fileName": "image4302.png"
-        }
-      ]
-    },
-  ].to_json
+get "/books" do
+	status 200
+	content_type :json
+	{
+		"id": books.keys
+	}.to_json
 end
+
+post "/books" do
+	content_type_header = request.env["CONTENT_TYPE"]
+	if !content_type_header.include?("application/json")
+		status 400
+	 	content_type :json
+		return {
+			"error": "invalid content type"
+		}.to_json
+	end
+
+	params = JSON.parse request.body.read
+	if params["title"].nil? || params["author"].nil? || params["price"].nil?
+		status 400
+	 	content_type :json
+		return {
+			"error": "invalid parameters"
+		}.to_json
+	end
+
+	book_id = random.rand(10000)
+
+	books[book_id.to_s] = {}
+
+	content_type :json
+	{
+		"id": book_id
+	}.to_json
+end
+
+put "/books/:id" do |book_id|
+	content_type_header = request.env["CONTENT_TYPE"]
+	if !content_type_header.include?("application/json")
+		status 400
+		content_type :json
+		return {
+			"error": "invalid content type"
+		}.to_json
+	end
+
+	params = JSON.parse request.body.read
+	if params["title"].nil? || params["author"].nil? || params["price"].nil?
+		status 400
+		content_type :json
+		return {
+			"error": "invalid parameters"
+		}.to_json
+	end
+
+	unless books.key?(book_id)
+		status 404
+		content_type :json
+		return {
+			"error": "not found. book_id = #{book_id}"
+		}.to_json
+	end
+
+	content_type :json
+	{
+		"status": "OK"
+	}.to_json
+end
+
+delete "/books/:id" do |book_id|
+	content_type_header = request.env["CONTENT_TYPE"]
+	if !content_type_header.include?("application/json")
+		status 400
+		content_type :json
+		return {
+			"error": "invalid content type"
+		}.to_json
+	end
+
+	unless books.key?(book_id)
+		status 404
+		content_type :json
+		return {
+			"error": "not found"
+		}.to_json
+	end
+
+	books.delete(book_id)
+
+	content_type :json
+	{
+		"status": "OK"
+	}.to_json
+end
+
