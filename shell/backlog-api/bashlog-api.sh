@@ -6,6 +6,11 @@ echo "BACKLOG_API_KEY = $BACKLOG_API_KEY"
 
 CURL_OPTIONS="-s"
 
+function init_backlog_api() {
+  echo "BACKLOG_URL="      >> ./.env
+  echo "BACKLOG_API_KEY="  >> ./.env
+}
+
 function get_statuses() {
   local path="/api/v2/statuses"
   curl $CURL_OPTIONS $BACKLOG_URL$path?apiKey=$BACKLOG_API_KEY
