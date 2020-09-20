@@ -20,7 +20,7 @@ int main() {
   ret = SQLDriverConnect(hdlDbc, NULL, (SQLCHAR *)conn_str, SQL_NTS, NULL, 0,
                          NULL, SQL_DRIVER_NOPROMPT);
   if (!SQL_SUCCEEDED(ret)) {
-    printf("failed. Exiting.\n");
+    printf("failed. not found data source.\n");
     exit(EXIT_FAILURE);
   } else {
     printf("succeeded\n");
@@ -29,7 +29,7 @@ int main() {
   SQLHSTMT hdlStmt;
   SQLAllocHandle(SQL_HANDLE_STMT, hdlDbc, &hdlStmt);
 
-  const char *sql_str = "DSN=PostgreSQL testdb";
+  const char *sql_str = "select * from test;";
   ret = SQLExecDirect(hdlStmt, (SQLCHAR *)sql_str, SQL_NTS);
   if (SQL_SUCCEEDED(ret)) {
     SQLTCHAR node_name[256];
