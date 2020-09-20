@@ -10,8 +10,8 @@ int main() {
   SQLHENV hdlEnv;
 
   ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hdlEnv);
-  ret = SQLSetEnvAttr(hdlEnv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3,
-                      SQL_IS_UINTEGER);
+  ret =
+      SQLSetEnvAttr(hdlEnv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0);
 
   SQLHDBC hdlDbc;
   ret = SQLAllocHandle(SQL_HANDLE_DBC, hdlEnv, &hdlDbc);
