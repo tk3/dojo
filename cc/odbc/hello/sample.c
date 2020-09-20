@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <sql.h>
 #include <sqlext.h>
@@ -10,13 +10,15 @@ int main() {
   SQLHENV hdlEnv;
 
   ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hdlEnv);
-  ret = SQLSetEnvAttr(hdlEnv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, SQL_IS_UINTEGER);
+  ret = SQLSetEnvAttr(hdlEnv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3,
+                      SQL_IS_UINTEGER);
 
   SQLHDBC hdlDbc;
   ret = SQLAllocHandle(SQL_HANDLE_DBC, hdlEnv, &hdlDbc);
 
   const char *conn_str = "DSN=PostgreSQL testdb";
-  ret = SQLDriverConnect(hdlDbc, NULL, (SQLCHAR *)conn_str, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
+  ret = SQLDriverConnect(hdlDbc, NULL, (SQLCHAR *)conn_str, SQL_NTS, NULL, 0,
+                         NULL, SQL_DRIVER_NOPROMPT);
   if (!SQL_SUCCEEDED(ret)) {
     printf("failed. Exiting.\n");
     exit(EXIT_FAILURE);
@@ -31,7 +33,8 @@ int main() {
   ret = SQLExecDirect(hdlStmt, (SQLCHAR *)sql_str, SQL_NTS);
   if (SQL_SUCCEEDED(ret)) {
     SQLTCHAR node_name[256];
-    ret = SQLBindCol(hdlStmt, 1, SQL_C_TCHAR, (SQLPOINTER)node_name, sizeof(node_name), NULL);
+    ret = SQLBindCol(hdlStmt, 1, SQL_C_TCHAR, (SQLPOINTER)node_name,
+                     sizeof(node_name), NULL);
     while (SQL_SUCCEEDED(ret = SQLFetchScroll(hdlStmt, SQL_FETCH_NEXT, 1))) {
       printf("Connected to node \n");
     }
