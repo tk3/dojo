@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <sql.h>
 #include <sqlext.h>
@@ -16,7 +16,8 @@ int main() {
   ret = SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc);
 
   const char *conn_str = "DSN=mysqlitedb";
-  ret = SQLDriverConnect(hDbc, NULL, (SQLCHAR *)conn_str, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
+  ret = SQLDriverConnect(hDbc, NULL, (SQLCHAR *)conn_str, SQL_NTS, NULL, 0,
+                         NULL, SQL_DRIVER_NOPROMPT);
   if (!SQL_SUCCEEDED(ret)) {
     printf("failed. Exiting.\n");
     exit(EXIT_FAILURE);
@@ -30,15 +31,16 @@ int main() {
   const char *sql_str = "select * from books;";
   ret = SQLExecDirect(hStmt, (SQLCHAR *)sql_str, SQL_NTS);
   if (SQL_SUCCEEDED(ret)) {
-	SQLSMALLINT num_resuls;
+    SQLSMALLINT num_resuls;
     {
-		SQLNumResultCols(hStmt, &num_resuls);
+      SQLNumResultCols(hStmt, &num_resuls);
 
-        printf("number of results: %d\n", num_resuls);
-	}
+      printf("number of results: %d\n", num_resuls);
+    }
 
     SQLTCHAR colname[256];
-    ret = SQLBindCol(hStmt, 1, SQL_C_TCHAR, (SQLPOINTER)node_name, sizeof(node_name), NULL);
+    ret = SQLBindCol(hStmt, 1, SQL_C_TCHAR, (SQLPOINTER)node_name,
+                     sizeof(node_name), NULL);
     while (SQL_SUCCEEDED(ret = SQLFetchScroll(hStmt, SQL_FETCH_NEXT, 1))) {
       printf("Connected to node \n");
     }
