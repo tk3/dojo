@@ -14,7 +14,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(INCLUDES) $(CFLAGS) -c $<
 
 format:
-	clang-format-8 -i -style=LLVM sample.c
+	clang-format-10 -i -style=LLVM sample.c
 
 debug:
 	make -f Makefile CFLAGS="-g $(CFLAGS)" LDFLAGS="-g $(LDFLAGS)"
