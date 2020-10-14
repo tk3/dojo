@@ -1,4 +1,5 @@
 CC       = gcc
+FMT      = clang-format-10
 SOURCES  = sample.c
 OBJS     = $(SOURCES:.c=.o)
 INCLUDES =
@@ -14,7 +15,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(INCLUDES) $(CFLAGS) -c $<
 
 format:
-	clang-format-8 -i -style=LLVM sample.c
+	$(FMT) -style=llvm -i $(SOURCES)
 
 debug:
 	make -f Makefile CFLAGS="-g $(CFLAGS)" LDFLAGS="-g $(LDFLAGS)"
