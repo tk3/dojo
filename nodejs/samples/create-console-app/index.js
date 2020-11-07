@@ -3,33 +3,58 @@
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 
-console.log('process.argv');
-console.log(process.argv);
-
 const args = process.argv.slice(2);
 const project_name = args[0];
 
+
 // -----------------------------------------------------------------------------
-// mkdir console-app
-// cd ./console-app/
+
 fs.mkdirSync(project_name);
 process.chdir(project_name);
 
+
 // -----------------------------------------------------------------------------
-// git init
+
 spawnSync('git', ['init'], { stdio: 'inherit' });
+
 
 // -----------------------------------------------------------------------------
 // create a gitignore
 createGitignore();
 
+
 // -----------------------------------------------------------------------------
 
 spawnSync('npm', ['init', '-y'], { stdio: 'inherit' });
-spawnSync('npm', ['install', '--save-dev', 'webpack', 'webpack-cli', 'typescript', 'ts-loader'], { stdio: 'inherit' });
+spawnSync('npm', ['install', '--save-dev', 'webpack'], { stdio: 'inherit' });
+spawnSync('npm', ['install', '--save-dev', 'webpack-cli'], { stdio: 'inherit' });
+spawnSync('npm', ['install', '--save-dev', 'typescript'], { stdio: 'inherit' });
+spawnSync('npm', ['install', '--save-dev', 'ts-loader'], { stdio: 'inherit' });
 spawnSync('npx', ['tsc', '-init'], { stdio: 'inherit' });
 
 
+// -----------------------------------------------------------------------------
+
+const readmeFilename = './README.md';
+const readmeContent = `# ${project_name}
+
+## Usage
+
+### build
+```
+$ npm run build
+```
+
+### execute
+
+```
+$ npm run exec
+```
+
+`;
+
+
+// -----------------------------------------------------------------------------
 
 const webpackConfigFilename = './webpack.config.js';
 const webpackConfigContent = `module.exports = {
@@ -52,6 +77,7 @@ const webpackConfigContent = `module.exports = {
 
 fs.writeFileSync(webpackConfigFilename, webpackConfigContent);
 
+
 // -----------------------------------------------------------------------------
 
 fs.mkdirSync('./src');
@@ -66,6 +92,7 @@ function hello(name: string): string {
 `;
 
 fs.writeFileSync(sourceFilename, sourceContent);
+
 
 // -----------------------------------------------------------------------------
 
@@ -87,6 +114,7 @@ json['scripts']['build'] = 'webpack';
 json['scripts']['exec'] = 'node dist/main.js';
 
 fs.writeFileSync('./package.json.x', JSON.stringify(json, null, 2));
+
 
 // -----------------------------------------------------------------------------
 
