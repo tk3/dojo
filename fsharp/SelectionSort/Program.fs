@@ -1,9 +1,9 @@
 ﻿open System
 
 [<EntryPoint>]
-let main arg =
+let main _ =
     let rnd = Random()
-    let randomArray = [| for i in 1 .. 10 -> rnd.Next(1, 101) |]
+    let randomArray = [| for _ in 1 .. 10 -> rnd.Next(1, 101) |]
 
     for i = 0 to randomArray.Length - 1 do
         let mutable target = i 
