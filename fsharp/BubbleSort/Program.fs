@@ -3,7 +3,7 @@
 [<EntryPoint>]
 let main _ =
     let rnd = Random()
-    let randomArray = [| for _ in 1 .. 10 -> rnd.Next(1, 101) |]
+    let randomArray = [| for _ in 1..10 -> rnd.Next(1, 101) |]
 
     for i = 0 to randomArray.Length - 2 do
         for j = 0 to randomArray.Length - 2 - i do
@@ -14,4 +14,3 @@ let main _ =
 
     printfn "%A" randomArray
     0
-
