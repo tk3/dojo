@@ -63,6 +63,16 @@ let reverse list =
             loop tail newAcc
     loop list Empty
 
+let mapDouble list =
+    let rec loop currentList acc =
+        match currentList with
+        | Empty ->
+            reverse acc
+        | Cons(x, tail) ->
+            let newAcc = Cons(x * 2, acc)
+            loop tail newAcc
+    loop list Empty
+
 
 [<EntryPoint>]
 let main argv =
@@ -90,6 +100,8 @@ let main argv =
     printfn "MaxSome %A" (maxSome Empty)
 
     printfn "Reverse %A" (reverse list5)
+
+    printfn "mapDouble %A" (mapDouble list5)
 
     0
 
