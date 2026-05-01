@@ -83,6 +83,40 @@ let map f list =
             loop tail (Cons(result, acc))
     loop list Empty
 
+let filter f list =
+    let rec loop currentList acc =
+        match currentList with
+        | Empty ->
+            reverse acc
+        | Cons(x, tail) ->
+            if (f x) then
+                loop tail (Cons(x, acc))
+            else
+                loop tail acc
+    loop list Empty
+
+let rec fold f state list =
+    match list with
+    | Empty ->
+        state
+    | Cons(x, tail) ->
+        let newState = f state x
+        fold f newState tail
+
+let foldMap f list =
+    let reversedList = fold (fun acc x -> Cons(f x, acc)) Empty list
+    reverse reversedList
+
+let foldFilter f list =
+    let folded =
+        fold (fun acc x ->
+            if f x then
+                Cons(x, acc)
+            else acc
+        ) Empty list
+
+    reverse folded
+
 
 [<EntryPoint>]
 let main argv =
@@ -114,6 +148,14 @@ let main argv =
     printfn "mapDouble %A" (mapDouble list5)
 
     printfn "map %A" (map (fun x -> x * 10) list5)
+
+    printfn "filter %A" (filter (fun x -> x % 2 = 0) list5)
+
+    printfn "fold(length) %A" (fold (fun acc x -> acc + 1) 0 list5)
+    printfn "fold(sum) %A" (fold (fun acc x -> acc + x) 0 list5)
+    printfn "fold(reverse) %A" (fold (fun acc x -> Cons(x, acc)) Empty list5)
+    printfn "fold(map) %A" (foldMap (fun x -> x + 1) list5)
+    printfn "fold(filter) %A" (foldFilter (fun x -> x = 3) list5)
 
     0
 
