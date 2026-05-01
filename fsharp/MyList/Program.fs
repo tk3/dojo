@@ -73,6 +73,16 @@ let mapDouble list =
             loop tail newAcc
     loop list Empty
 
+let map f list =
+    let rec loop currentList acc =
+        match currentList with
+        | Empty ->
+            reverse acc
+        | Cons(x, tail) ->
+            let result = f x
+            loop tail (Cons(result, acc))
+    loop list Empty
+
 
 [<EntryPoint>]
 let main argv =
@@ -102,6 +112,8 @@ let main argv =
     printfn "Reverse %A" (reverse list5)
 
     printfn "mapDouble %A" (mapDouble list5)
+
+    printfn "map %A" (map (fun x -> x * 10) list5)
 
     0
 
