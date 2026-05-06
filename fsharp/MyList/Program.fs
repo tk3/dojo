@@ -117,6 +117,35 @@ let foldFilter f list =
 
     reverse folded
 
+let tryHead list =
+    match list with
+    | Empty -> None
+    | Cons(x, _) -> Some x
+
+let tryTail list =
+    match list with
+    | Empty -> None
+    | Cons(_, tail) -> Some tail
+
+let rec tryItem idx list =
+    match list with
+    | Empty -> None
+    | Cons(x, tail) ->
+        if idx = 0 then
+            Some(x)
+        else
+            tryItem (idx - 1) tail
+
+let rec removeAt idx list =
+    match list with
+    | Empty -> Empty
+    | Cons(x, tail) ->
+        if idx = 0 then
+            tail
+        else if idx < 0 then
+            Cons(x, tail)
+        else
+            Cons(x, removeAt (idx - 1) tail)
 
 [<EntryPoint>]
 let main argv =
@@ -156,6 +185,23 @@ let main argv =
     printfn "fold(reverse) %A" (fold (fun acc x -> Cons(x, acc)) Empty list5)
     printfn "fold(map) %A" (foldMap (fun x -> x + 1) list5)
     printfn "fold(filter) %A" (foldFilter (fun x -> x = 3) list5)
+
+    printf "tryHead: "
+    match (tryHead list5) with
+    | None -> printfn "None"
+    | Some(x) -> printfn "%d" x
+
+    printfn "tryHead: "
+    match (tryItem 1 list5) with
+    | None -> printfn "Not found"
+    | Some(x) -> printfn "match: %d" x
+
+    printfn "tryTail: "
+    match (tryTail list5) with
+    | None -> printfn "Empty"
+    | Some(tail) -> printfn "%A" tail 
+
+    printfn "removeAt: %A" (removeAt 1 list5)
 
     0
 
