@@ -1,6 +1,6 @@
 ﻿open System
 
-let bubbleSort1 (array: 'T array) =
+let bubbleSort1 (array: 'T []) =
     for i = 0 to array.Length - 2 do
         for j = 0 to array.Length - 2 - i do
             if array[j] > array[j + 1] then
