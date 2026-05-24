@@ -1,16 +1,13 @@
 ﻿open System
 
-let bubbleSort1 =
-    let rnd = Random()
-    let randomArray = [| for _ in 1..10 -> rnd.Next(1, 101) |]
-
-    for i = 0 to randomArray.Length - 2 do
-        for j = 0 to randomArray.Length - 2 - i do
-            if randomArray[j] > randomArray[j + 1] then
-                let tmp = randomArray[j]
-                randomArray[j] <- randomArray[j + 1]
-                randomArray[j + 1] <- tmp
-    printfn "BubbleSort1 result: %A" randomArray
+let bubbleSort1 (array: 'T array) =
+    for i = 0 to array.Length - 2 do
+        for j = 0 to array.Length - 2 - i do
+            if array[j] > array[j + 1] then
+                let tmp = array[j]
+                array[j] <- array[j + 1]
+                array[j + 1] <- tmp
+    ()
 
 let rec bubbleSort2 (list: 'T list) =
     let rec bubblePass lst =
@@ -35,10 +32,13 @@ let rec bubbleSort2 (list: 'T list) =
 [<EntryPoint>]
 let main _ =
 
-    bubbleSort1
-
     let rnd = Random()
     let randomList = [ for _ in 1..10 -> rnd.Next(1, 101) ]
+    let randomArray = Array.ofList randomList
+
+    printfn "bubbleSort1       : %A" randomArray
+    bubbleSort1 randomArray
+    printfn "bubbleSort1 result: %A" randomArray
 
     let sortedList = bubbleSort2 randomList
     printfn "bubbleSort2       : %A" randomList
